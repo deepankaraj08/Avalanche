@@ -1,65 +1,103 @@
-import Image from "next/image";
+'use client';
+
+import { useRef, useState } from 'react'; 
+import { AnimatePresence } from 'framer-motion'; 
+import Navbar from '@/app/components/Navbar';
+import Hero from '@/app/components/Hero';
+import About from '@/app/components/About';
+import Events from '@/app/components/Events';
+import Gallery from '@/app/components/Gallery';
+import Sponsors from '@/app/components/Sponsors';
+import Team from '@/app/components/Team';
+import Alumni from '@/app/components/Alumni';
+import Footer from '@/app/components/Footer';
+import JoinModal from '@/app/components/JoinModal';
+import SponsorModal from '@/app/components/SponsorModal'; // Added SponsorModal
 
 export default function Home() {
+  // 1. State Management for Modals
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
+
+  // 2. Initialize all refs
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const eventsRef = useRef(null);
+  const sponsorsRef = useRef(null);
+  const galleryRef = useRef(null);
+  const teamRef = useRef(null);
+  const alumniRef = useRef(null);
+
+  const allRefs = { 
+    homeRef, 
+    aboutRef, 
+    eventsRef, 
+    sponsorsRef, 
+    galleryRef, 
+    teamRef, 
+    alumniRef 
+  };
+
+  // 3. Smooth Scroll Function
+  const scrollTo = (ref) => {
+    if (ref && ref.current) {
+      const offset = 80; 
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = ref.current.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="bg-[#020617] min-h-screen">
+      {/* Navbar opens the WhatsApp Join Modal */}
+      <Navbar 
+        scrollTo={scrollTo} 
+        refs={allRefs} 
+        openModal={() => setIsJoinModalOpen(true)} 
+      />
+
+      <main>
+        <Hero 
+          ref={homeRef} 
+          scrollTo={scrollTo} 
+          refs={allRefs} 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        <About ref={aboutRef} />
+        <Events ref={eventsRef} />
+        <Gallery ref={galleryRef} />
+        
+        {/* Sponsors gets the function to open the Sponsor Inquiry Form */}
+        <Sponsors 
+          ref={sponsorsRef} 
+          openSponsorModal={() => setIsSponsorModalOpen(true)} 
+        />
+        
+        <Team ref={teamRef} />
+        <Alumni ref={alumniRef} />
       </main>
+
+      <Footer />
+
+      {/* --- Modals Layer --- */}
+      <AnimatePresence>
+        {/* WhatsApp Join Modal */}
+        {isJoinModalOpen && (
+          <JoinModal onClose={() => setIsJoinModalOpen(false)} />
+        )}
+
+        {/* Sponsor Inquiry Form Modal */}
+        {isSponsorModalOpen && (
+          <SponsorModal onClose={() => setIsSponsorModalOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
-}
+};
