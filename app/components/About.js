@@ -1,56 +1,36 @@
 'use client';
 
 import React, { useRef, forwardRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, useSpring } from 'framer-motion';
 import { SpaceStars } from '../../components/ui/meteors';
-
-// ==========================================
-// 1. Content Configuration
-// ==========================================
 
 const ABOUT_CONTENT = [
   {
     id: 'avalanche',
     title: 'About Avalanche',
     subtitle: 'The Heart of Campus Events',
-    description: () => (
-      <>
-        <span className="text-cyan-400 font-semibold">Avalanche</span> is the official event management club of SIT Tumkur, dedicated
-        to creating unforgettable campus experiences. From planning to execution,
-        Avalanche brings together creativity, teamwork, and leadership to organize
-        large-scale events that celebrate talent, culture, and student energy.
-      </>
-    ),
+    description: "Avalanche is the official event management club of SIT Tumkur, dedicated to creating unforgettable campus experiences. From planning to execution, we bring together creativity, teamwork, and leadership to celebrate talent, culture, and student energy.",
     gradientText: 'from-cyan-400 via-blue-400 to-blue-600',
-    spotlightColor: 'rgba(59, 130, 246, 0.15)', // Blue glow
+    spotlightColor: 'rgba(59, 130, 246, 0.2)', 
+    accent: 'bg-blue-500'
   },
   {
     id: 'goonj',
     title: 'GOONJ',
     subtitle: 'Spreading Joy Beyond Borders',
-    description: () => (
-      <>
-        <span className="text-purple-400 font-semibold">Goonj</span> is a social
-        outreach initiative by <span className="text-cyan-400 font-medium">Avalanche</span>,
-        dedicated to spreading joy, kindness, and connection beyond campus.
-        Through visits to orphanages and old-age homes, we spend meaningful time
-        playing, teaching, learning together, and sharing gifts. Goonj strives to
-        create moments of happiness while fostering empathy, compassion, and social
-        responsibility among students.
-      </>
-    ),
+    description: "A social outreach initiative by Avalanche, Goonj is dedicated to spreading joy beyond campus. Through visits to orphanages and old-age homes, we foster empathy and social responsibility by teaching, learning, and sharing moments of happiness.",
     gradientText: 'from-purple-400 via-fuchsia-400 to-pink-500',
-    spotlightColor: 'rgba(168, 85, 247, 0.15)', // Purple glow
+    spotlightColor: 'rgba(168, 85, 247, 0.2)',
+    accent: 'bg-purple-500'
   }
 ];
-
-// ==========================================
-// 2. Interactive Card Sub-Component
-// ==========================================
 
 function InteractiveCard({ item, parallaxY }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+
+  const smoothMouseX = useSpring(mouseX, { stiffness: 500, damping: 50 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 500, damping: 50 });
 
   function handleMouseMove({ currentTarget, clientX, clientY }) {
     const { left, top } = currentTarget.getBoundingClientRect();
@@ -62,15 +42,16 @@ function InteractiveCard({ item, parallaxY }) {
     <motion.article
       style={{ y: parallaxY }}
       onMouseMove={handleMouseMove}
-      className="relative group rounded-[2rem] bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-12 overflow-hidden shadow-2xl transition-all duration-500 hover:border-white/20"
+      className="relative group rounded-[2.5rem] bg-gradient-to-b from-white/[0.05] to-transparent backdrop-blur-2xl border border-white/10 p-8 md:p-14 overflow-hidden shadow-2xl transition-colors duration-500 hover:border-white/20"
     >
-      {/* Dynamic Cursor Spotlight */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden md:block"
         style={{
           background: useMotionTemplate`
             radial-gradient(
-              650px circle at ${mouseX}px ${mouseY}px,
+              600px circle at ${smoothMouseX}px ${smoothMouseY}px,
               ${item.spotlightColor},
               transparent 80%
             )
@@ -78,26 +59,30 @@ function InteractiveCard({ item, parallaxY }) {
         }}
       />
 
-      <div className="relative z-10">
-        <h3 className={`text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r ${item.gradientText} bg-clip-text text-transparent inline-block mb-2`}>
+      <div className="relative z-10 flex flex-col h-full">
+        <div className={`w-12 h-1 rounded-full ${item.accent} mb-8 opacity-50`} />
+        
+        <h3 className={`text-3xl md:text-5xl font-black tracking-tighter bg-gradient-to-r ${item.gradientText} bg-clip-text text-transparent inline-block mb-3`}>
           {item.title}
         </h3>
         
-        <p className="text-gray-400 font-medium tracking-wide text-sm md:text-base uppercase mb-6 border-b border-white/10 pb-4 inline-block">
+        <p className="text-white/50 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase mb-8">
           {item.subtitle}
         </p>
 
-        <p className="text-gray-300 leading-relaxed text-base md:text-lg font-light">
-          {item.description()}
+        <p className="text-gray-300 leading-relaxed text-base md:text-xl font-medium opacity-90">
+          {item.description}
         </p>
+        
+        <div className="mt-10 pt-8 border-t border-white/5">
+           <span className="text-white text-xs font-black tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+             Discover More +
+           </span>
+        </div>
       </div>
     </motion.article>
   );
 }
-
-// ==========================================
-// 3. Main Component
-// ==========================================
 
 const About = forwardRef((props, ref) => {
   const containerRef = useRef(null);
@@ -107,61 +92,66 @@ const About = forwardRef((props, ref) => {
     offset: ['start end', 'end start'],
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [120, -120]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [80, -80]);
 
   return (
     <section
       ref={ref}
-      className="py-24 md:py-32 relative overflow-hidden bg-[#020617] text-white selection:bg-cyan-500/30"
+      className="py-24 md:py-40 relative overflow-hidden bg-[#020617] text-white"
       id="about"
     >
-      {/* ===== Shared Deep Space Background Stack ===== */}
-      <SpaceStars starCount={80} className="absolute inset-0 pointer-events-none" />
+      {/* 1. THE STARS (Ensuring they are high up in visibility) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <SpaceStars starCount={150} className="opacity-60" />
+      </div>
       
-      <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden pointer-events-none">
-        {/* Deep Space Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#020617] to-black" />
+      {/* 2. BACKGROUND POLISH (Using transparent radial gradients to let stars bleed through) */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        {/* Soft center window for stars */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_0%,_#020617_100%)] opacity-40" />
         
-        {/* Subtle Noise Texture */}
-        <div 
-          className="absolute inset-0 opacity-20 brightness-100 contrast-150 mix-blend-overlay"
-          style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
-          aria-hidden="true" 
-        />
-        
-        {/* Ambient Glows */}
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen" />
+        {/* Subtle Ambient Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
       </div>
 
-      {/* ===== Main Content ===== */}
       <div ref={containerRef} className="max-w-7xl mx-auto px-6 relative z-10">
         
-        <div className="text-center mb-16 md:mb-24">
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-cyan-400 text-sm font-bold tracking-[0.2em] uppercase mb-4"
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-28 gap-6">
+          <div className="max-w-2xl">
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="text-cyan-400 text-xs font-black tracking-[0.4em] uppercase mb-4"
+            >
+              Who We Are
+            </motion.p>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]"
+            >
+              The Minds Behind <br/> <span className="text-white/20">The Magic.</span>
+            </motion.h2>
+          </div>
+          
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="hidden lg:block text-gray-500 text-sm font-medium max-w-[200px] text-right"
           >
-            Who We Are
-          </motion.p>
-          <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight"
-          >
-            The Minds Behind The Magic.
-          </motion.h2>
+            SIT Tumkur's Premier Event Management Collective.
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-start">
           <InteractiveCard item={ABOUT_CONTENT[0]} parallaxY={y1} />
           
-          <div className="lg:pt-16">
+          <div className="lg:pt-32">
             <InteractiveCard item={ABOUT_CONTENT[1]} parallaxY={y2} />
           </div>
         </div>

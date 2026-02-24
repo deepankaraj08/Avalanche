@@ -4,123 +4,101 @@ import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { SpaceStars } from '../../components/ui/meteors';
 
-// ==========================================
-// 1. Data Structure with Unsplash Placeholders
-// ==========================================
 const GALLERY_IMAGES = [
-  { id: 1, title: 'Concert Night', size: 'h-80', category: 'Events', url: 'https://images.unsplash.com/photo-1540039155733-d74421cc7438?q=80&w=800&auto=format&fit=crop' },
-  { id: 2, title: 'Tech Workshop', size: 'h-64', category: 'Education', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop' },
-  { id: 3, title: 'Drama Performance', size: 'h-96', category: 'Theatre', url: 'https://images.unsplash.com/photo-1507676184212-d03305a527f4?q=80&w=800&auto=format&fit=crop' },
-  { id: 4, title: 'Dance Face-off', size: 'h-72', category: 'Dance', url: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=800&auto=format&fit=crop' },
-  { id: 5, title: 'Alumni Meet', size: 'h-80', category: 'Network', url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop' },
-  { id: 6, title: 'Fashion Show', size: 'h-64', category: 'Culture', url: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?q=80&w=800&auto=format&fit=crop' },
-  { id: 7, title: 'Hackathon', size: 'h-72', category: 'Tech', url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop' },
+  { id: 1, title: 'Concert Night', size: 'h-[300px] md:h-[400px]', category: 'Events', url: 'https://images.unsplash.com/photo-1540039155733-d74421cc7438?q=80&w=800&auto=format&fit=crop' },
+  { id: 2, title: 'Tech Workshop', size: 'h-[250px] md:h-[350px]', category: 'Education', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop' },
+  { id: 3, title: 'Drama Performance', size: 'h-[400px] md:h-[550px]', category: 'Theatre', url: 'https://images.unsplash.com/photo-1507676184212-d03305a527f4?q=80&w=800&auto=format&fit=crop' },
+  { id: 4, title: 'Dance Face-off', size: 'h-[300px] md:h-[450px]', category: 'Dance', url: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=800&auto=format&fit=crop' },
+  { id: 5, title: 'Alumni Meet', size: 'h-[280px] md:h-[400px]', category: 'Network', url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop' },
+  { id: 6, title: 'Fashion Show', size: 'h-[250px] md:h-[380px]', category: 'Culture', url: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?q=80&w=800&auto=format&fit=crop' },
+  { id: 7, title: 'Hackathon', size: 'h-[320px] md:h-[480px]', category: 'Tech', url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800&auto=format&fit=crop' },
 ];
-
-// ==========================================
-// 2. Main Component
-// ==========================================
 
 const Gallery = forwardRef((props, ref) => {
   return (
-    <section ref={ref} className="py-24 md:py-32 relative overflow-hidden bg-[#020617] text-white selection:bg-cyan-500/30">
+    <section ref={ref} className="py-24 md:py-44 relative overflow-hidden bg-[#020617] text-white">
       
-      {/* ===== Shared Deep Space Background Stack (Exact match to Home) ===== */}
-      <SpaceStars starCount={120} className="absolute inset-0 pointer-events-none" />
-      
-      <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden pointer-events-none">
-        {/* Deep Space Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-[#020617] to-black" />
+      {/* 1. THE STARS (Increased count and visibility) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <SpaceStars starCount={150} className="opacity-60" />
+      </div>
+
+      {/* 2. ATMOSPHERIC LAYERS (Gradients shifted to -z-10 to stay behind content) */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        {/* Transparent radial window for stars */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_100%)] opacity-50" />
         
-        {/* Noise Overlay */}
-        <div 
-          className="absolute inset-0 opacity-20 brightness-100 contrast-150 mix-blend-overlay"
-          style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
-          aria-hidden="true" 
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(168,85,247,0.1),_transparent_50%)]" />
         
-        {/* Ambient Glows (Matched to Hero) */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] mix-blend-screen" />
+        {/* Subtle Noise for Depth */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-overlay" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        {/* ===== Section Header (Synced with Design System) ===== */}
-        <header className="mb-16 md:mb-24 flex flex-col items-center text-center">
+        {/* ===== Header ===== */}
+        <header className="mb-20 md:mb-32 flex flex-col items-center text-center">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="flex items-center gap-4 mb-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="px-4 py-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/5 mb-6 backdrop-blur-md"
           >
-            <div className="h-[2px] w-8 bg-gradient-to-r from-transparent to-cyan-500" />
-            <span className="text-cyan-400 font-bold tracking-widest uppercase text-sm">Visual Legacy</span>
-            <div className="h-[2px] w-8 bg-gradient-to-l from-transparent to-cyan-500" />
+            <span className="text-cyan-400 font-black tracking-[0.4em] uppercase text-[9px] md:text-[10px]">Visual Legacy</span>
           </motion.div>
           
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight"
+            className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-none"
           >
-            Moments In <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent italic pr-2">Motion</span>
+            Moments In <br className="md:hidden" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 italic pr-2">Motion</span>
           </motion.h2>
           
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-6 text-gray-400 text-lg md:text-xl font-light max-w-2xl"
-          >
-            A visual journey through the soul of Avalanche. The energy, the people, and the unforgettable memories.
+          <motion.p className="mt-8 text-gray-500 text-sm md:text-lg font-bold max-w-xl uppercase tracking-[0.15em] opacity-80">
+            A visual journey through the soul of Avalanche.
           </motion.p>
         </header>
 
-        {/* ===== Pro Masonry Grid ===== */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        {/* ===== Masonry Grid (All Device Friendly) ===== */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-10 space-y-6 md:space-y-10">
           {GALLERY_IMAGES.map((img, i) => (
             <motion.div
               key={img.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: (i % 3) * 0.15, duration: 0.6, ease: "easeOut" }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
               viewport={{ once: true, margin: "-50px" }}
-              className="break-inside-avoid relative group"
+              className="break-inside-avoid relative group cursor-pointer"
             >
-              {/* Image Wrapper */}
-              <div className={`relative overflow-hidden rounded-[2rem] border border-white/10 ${img.size} bg-black/40 backdrop-blur-xl transition-all duration-500 group-hover:border-cyan-500/30 group-hover:shadow-[0_0_40px_rgba(6,182,212,0.15)]`}>
+              {/* Card - Lowered background opacity for star bleed-through */}
+              <div className={`relative overflow-hidden rounded-[2.5rem] border border-white/5 ${img.size} bg-[#020617]/40 backdrop-blur-xl transition-all duration-700 ease-out group-hover:border-white/20 group-hover:shadow-[0_0_60px_rgba(0,0,0,0.6)]`}>
                 
-                {/* The Image */}
                 <img 
                   src={img.url} 
                   alt={img.title}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale-[40%] group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
                 />
 
-                {/* Dark Vignette Overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-70 group-hover:opacity-50 transition-opacity" />
 
-                {/* Glassmorphism Info Overlay */}
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                  <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-2xl p-5 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-                    <span className="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-1.5 block drop-shadow-md">
+                <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+                  <div className="mb-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                    <span className="px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-white/80">
                       {img.category}
                     </span>
-                    <h3 className="text-white font-bold text-xl md:text-2xl drop-shadow-lg tracking-tight">
-                      {img.title}
-                    </h3>
                   </div>
+
+                  <h3 className="text-xl md:text-3xl font-black text-white tracking-tighter translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-150">
+                    {img.title}
+                  </h3>
                 </div>
 
-                {/* Expand Icon (Top Right) */}
-                <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100 shadow-xl">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                <div className="absolute top-6 right-6 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-500 shadow-2xl">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
 
