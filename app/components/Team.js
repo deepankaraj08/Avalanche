@@ -101,7 +101,7 @@ const TeamCard = ({ member }) => {
 };
 
 const Team = forwardRef((props, ref) => {
-  // UseMemo to prevent re-calculating the doubled list on every render
+  // Doubling the list allows for a perfect "infinite" illusion when we translate to -50%
   const scrollList = useMemo(() => [...TEAM_MEMBERS, ...TEAM_MEMBERS], []);
 
   return (
@@ -142,22 +142,23 @@ const Team = forwardRef((props, ref) => {
 
       {/* Infinite Marquee Wrapper */}
       <div className="relative w-full overflow-hidden flex items-center">
-        {/* Premium Edge Fades */}
-        <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-[#020617] to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-[#020617] to-transparent z-20 pointer-events-none" />
+        {/* Premium Edge Fades - Higher Z-index to stay on top */}
+        <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
 
         <motion.div 
-          className="flex gap-4 md:gap-8 will-change-transform hover:[animation-play-state:paused]"
-          animate={{ x: [0, -2500] }} 
+          className="flex gap-4 md:gap-8 will-change-transform"
+          initial={{ x: 0 }}
+          animate={{ x: "-50%" }} 
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 45, // Adjust for speed
+              duration: 95, // Increased for a smoother pace with 48+ members
               ease: "linear",
             },
           }}
-          style={{ width: "max-content" }}
+          style={{ width: "max-content", display: "flex" }}
         >
           {scrollList.map((member, i) => (
             <TeamCard key={`${member.name}-${i}`} member={member} />
@@ -166,7 +167,7 @@ const Team = forwardRef((props, ref) => {
       </div>
 
       <div className="mt-16 text-center opacity-30 select-none">
-        <p className="text-xs uppercase tracking-[0.4em] font-medium">Scroll to explore the team</p>
+        <p className="text-xs uppercase tracking-[0.4em] font-medium italic">Continuous Innovation</p>
       </div>
     </section>
   );
