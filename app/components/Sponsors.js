@@ -60,12 +60,13 @@ const SponsorCard = ({ sponsor }) => (
 );
 
 const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
+  // Use duplicated data for a seamless CSS-like infinite loop
   const scrollData = useMemo(() => [...SPONSORS_DATA, ...SPONSORS_DATA, ...SPONSORS_DATA, ...SPONSORS_DATA], []);
   const [duration, setDuration] = useState(30);
 
   useEffect(() => {
     const handleResize = () => {
-      setDuration(window.innerWidth < 768 ? 25 : 45); // Slower speed on mobile to reduce frame skipping
+      setDuration(window.innerWidth < 768 ? 20 : 40); // Optimized speeds for mobile vs desktop
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -74,8 +75,8 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
 
   return (
     <section ref={ref} className="py-16 md:py-40 relative overflow-hidden bg-[#020617] text-white" id="sponsors">
-      {/* Reduced star count for mobile marquee performance */}
-      <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 40 : 80} className="absolute inset-0 pointer-events-none opacity-30 transform-gpu" />
+      {/* Reduced star count specifically for mobile marquee stability */}
+      <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 30 : 80} className="absolute inset-0 pointer-events-none opacity-20 md:opacity-30" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <header className="text-center mb-10 md:mb-24">
@@ -90,7 +91,7 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
             </span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-[clamp(2.5rem,8vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-none"
@@ -100,9 +101,9 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
         </header>
 
         <div className="relative w-full">
-          {/* HIGH PERFORMANCE EDGE MASKS (Replaces heavy linear-gradient masking) */}
-          <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-[#020617] to-transparent z-20 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-[#020617] to-transparent z-20 pointer-events-none" />
+          {/* Static Gradient Masks - 0% CPU cost compared to CSS Mask-Image */}
+          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#020617] to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#020617] to-transparent z-20 pointer-events-none" />
 
           <div className="relative flex overflow-hidden select-none touch-pan-x">
             <motion.div 
@@ -130,9 +131,9 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="mt-12 md:mt-20 flex flex-col items-center"
+          className="mt-12 md:mt-24 flex flex-col items-center"
         >
-          <div className="w-full max-w-lg bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] backdrop-blur-md text-center transform-gpu">
+          <div className="w-full max-w-lg bg-white/[0.01] border border-white/5 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] backdrop-blur-md text-center transform-gpu">
             <p className="text-gray-400 text-sm md:text-lg mb-8 md:mb-10 font-medium tracking-tight leading-relaxed">
               Fuel the next generation of builders. <br className="hidden sm:block" />
               Join the Avalanche ecosystem today.
