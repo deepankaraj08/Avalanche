@@ -4,6 +4,7 @@ import React, { forwardRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { SpaceStars } from '../../components/ui/meteors';
+
 const TEAM_MEMBERS = [
   { name: 'Anmol Sharan', linkedin: '#', instagram: '#', image: '/team/anmol.jpg' },
   { name: 'Chinmayee Bhatt', linkedin: '#', instagram: '#', image: '/team/chinmayee.jpg' },
@@ -64,10 +65,7 @@ const TeamCard = ({ member }) => {
         
         <div className="relative z-10 flex flex-col items-center">
           <div className="relative w-20 h-20 md:w-32 md:h-32 mb-4">
-            {/* Glow Effect */}
             <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/30 transition-all duration-500 scale-75 group-hover:scale-110" />
-            
-            {/* Image Border */}
             <div className="relative w-full h-full rounded-full bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-600 p-[2px] transform transition-transform duration-700 group-hover:rotate-6">
               <div className="w-full h-full rounded-full bg-[#020617] flex items-center justify-center overflow-hidden border-2 border-[#020617]">
                 {member.image ? (
@@ -80,7 +78,6 @@ const TeamCard = ({ member }) => {
               </div>
             </div>
             
-            {/* Social Icons: Persistent on Mobile, Animated on Desktop */}
             <div className="absolute -inset-1.5 md:-inset-2 flex justify-between items-end pointer-events-none">
               <a 
                 href={member.instagram} 
@@ -101,7 +98,6 @@ const TeamCard = ({ member }) => {
             </div>
           </div>
           
-          {/* Team Name + Animated Indicator */}
           <div className="text-center mt-2 flex flex-col items-center gap-1">
             <div className="flex items-center gap-1.5 group/name">
               <h3 className="text-sm md:text-lg font-bold text-white tracking-tight group-hover:text-cyan-400 transition-colors duration-300 line-clamp-1 leading-tight">
@@ -134,7 +130,6 @@ const Team = forwardRef((props, ref) => {
     <section ref={ref} className="py-20 md:py-32 relative overflow-hidden bg-[#020617] text-white" id="team">
       <SpaceStars starCount={80} className="absolute inset-0 pointer-events-none opacity-40" />
       
-      {/* Background Atmosphere */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none transform-gpu">
         <div className="absolute top-1/4 left-1/4 w-48 md:w-64 h-48 md:h-64 bg-cyan-500/10 rounded-full blur-[80px] md:blur-[120px]" />
         <div className="absolute bottom-1/4 right-1/4 w-48 md:w-64 h-48 md:h-64 bg-purple-500/10 rounded-full blur-[80px] md:blur-[120px]" />
@@ -148,24 +143,25 @@ const Team = forwardRef((props, ref) => {
 
       <div className="relative w-full group/container overflow-hidden py-6">
         
-        {/* TURBO BOOST BUTTONS - Visible on Mobile + Laptop */}
+        {/* TURBO BOOST BUTTONS */}
         <button 
           onMouseEnter={() => setBoost(true)} onMouseLeave={() => setBoost(false)}
-          onTouchStart={() => setBoost(true)} onTouchEnd={() => setBoost(false)}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl"
+          onPointerDown={() => setBoost(true)} onPointerUp={() => setBoost(false)}
+          onPointerLeave={() => setBoost(false)}
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none"
         >
           <span className="text-lg md:text-2xl font-bold">«</span>
         </button>
 
         <button 
           onMouseEnter={() => setBoost(true)} onMouseLeave={() => setBoost(false)}
-          onTouchStart={() => setBoost(true)} onTouchEnd={() => setBoost(false)}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl"
+          onPointerDown={() => setBoost(true)} onPointerUp={() => setBoost(false)}
+          onPointerLeave={() => setBoost(false)}
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none"
         >
           <span className="text-lg md:text-2xl font-bold">»</span>
         </button>
 
-        {/* Dynamic Edge Masks */}
         <div className="absolute inset-y-0 left-0 w-20 md:w-64 bg-gradient-to-r from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-20 md:w-64 bg-gradient-to-l from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
 
@@ -177,7 +173,7 @@ const Team = forwardRef((props, ref) => {
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: boost ? 35 : 180, // High-performance duration logic
+              duration: boost ? 35 : 180,
               ease: "linear",
             },
           }}
