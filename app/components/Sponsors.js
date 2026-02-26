@@ -40,7 +40,7 @@ const SPONSORS_DATA = [
 ];
 
 const SponsorCard = ({ sponsor }) => (
-  <div className={`relative flex-shrink-0 flex flex-col items-center justify-center w-[180px] h-32 md:w-[280px] md:h-48 bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] group transition-all duration-500 hover:-translate-y-2 active:scale-95 md:active:scale-100 will-change-transform ${sponsor.glow}`}>
+  <div className={`relative flex-shrink-0 flex flex-col items-center justify-center w-[180px] h-32 md:w-[280px] md:h-48 bg-white/[0.02] backdrop-blur-md md:backdrop-blur-xl border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] group transition-all duration-500 hover:-translate-y-2 active:scale-95 md:active:scale-100 will-change-transform transform-gpu ${sponsor.glow}`}>
     <div className={`absolute top-0 inset-x-8 h-px bg-gradient-to-r ${sponsor.color} opacity-20 group-hover:opacity-100 transition-opacity`} />
     
     <div className="relative z-10 flex flex-col items-center px-4">
@@ -60,13 +60,12 @@ const SponsorCard = ({ sponsor }) => (
 );
 
 const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
-  // Use duplicated data for a seamless CSS-like infinite loop
   const scrollData = useMemo(() => [...SPONSORS_DATA, ...SPONSORS_DATA, ...SPONSORS_DATA, ...SPONSORS_DATA], []);
   const [duration, setDuration] = useState(30);
 
   useEffect(() => {
     const handleResize = () => {
-      setDuration(window.innerWidth < 768 ? 20 : 35);
+      setDuration(window.innerWidth < 768 ? 25 : 45); // Slower speed on mobile to reduce frame skipping
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -75,7 +74,8 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
 
   return (
     <section ref={ref} className="py-16 md:py-40 relative overflow-hidden bg-[#020617] text-white" id="sponsors">
-      <SpaceStars starCount={80} className="absolute inset-0 pointer-events-none opacity-30" />
+      {/* Reduced star count for mobile marquee performance */}
+      <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 40 : 80} className="absolute inset-0 pointer-events-none opacity-30 transform-gpu" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <header className="text-center mb-10 md:mb-24">
@@ -90,7 +90,7 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
             </span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-[clamp(2.5rem,8vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-none"
@@ -99,17 +99,14 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
           </motion.h2>
         </header>
 
-        {/* Improved Marquee with Masking */}
         <div className="relative w-full">
-          <div 
-            className="relative flex overflow-hidden select-none touch-pan-x"
-            style={{
-              maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
-            }}
-          >
+          {/* HIGH PERFORMANCE EDGE MASKS (Replaces heavy linear-gradient masking) */}
+          <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-[#020617] to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-[#020617] to-transparent z-20 pointer-events-none" />
+
+          <div className="relative flex overflow-hidden select-none touch-pan-x">
             <motion.div 
-              className="flex gap-4 md:gap-8 py-6 md:py-12 will-change-transform"
+              className="flex gap-4 md:gap-8 py-6 md:py-12 will-change-transform transform-gpu"
               animate={{ x: ["0%", "-50%"] }} 
               transition={{
                 x: {
@@ -119,7 +116,7 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
                   ease: "linear",
                 },
               }}
-              whileHover={{ animationPlayState: 'paused' }}
+              style={{ translateZ: 0 }}
             >
               {scrollData.map((sponsor, idx) => (
                 <SponsorCard key={idx} sponsor={sponsor} />
@@ -129,20 +126,20 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
         </div>
 
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="mt-12 md:mt-24 flex flex-col items-center"
+          className="mt-12 md:mt-20 flex flex-col items-center"
         >
-          <div className="w-full max-w-lg bg-white/[0.02] border border-white/5 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] backdrop-blur-md text-center">
-            <p className="text-gray-400 text-sm md:text-lg mb-6 md:mb-10 font-medium tracking-tight leading-relaxed">
+          <div className="w-full max-w-lg bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] backdrop-blur-md text-center transform-gpu">
+            <p className="text-gray-400 text-sm md:text-lg mb-8 md:mb-10 font-medium tracking-tight leading-relaxed">
               Fuel the next generation of builders. <br className="hidden sm:block" />
               Join the Avalanche ecosystem today.
             </p>
             <button 
               onClick={openSponsorModal} 
-              className="w-full sm:w-auto px-8 md:px-12 py-3.5 md:py-4 bg-white text-black rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all duration-300 active:scale-95"
+              className="w-full sm:w-auto px-10 md:px-14 py-4 md:py-5 bg-white text-black rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all duration-300 active:scale-95 shadow-2xl"
             >
               Become a Sponsor
             </button>

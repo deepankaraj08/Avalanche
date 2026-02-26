@@ -39,9 +39,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      // Adaptive offset based on screen size for better section tracking
-      const offset = window.innerWidth < 768 ? 100 : 150;
-      const scrollPosition = window.scrollY + offset;
+      const scrollPosition = window.scrollY + 150;
 
       const current = navItems.find((item) => {
         if (item.ref?.current) {
@@ -63,17 +61,15 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        // Added translateZ(0) for GPU promotion
-        className={`fixed top-0 w-full z-[100] transition-all duration-500 ease-in-out will-change-transform ${
+        className={`fixed top-0 w-full z-[100] transition-all duration-500 ease-in-out ${
           scrolled || mobileMenuOpen
             ? `py-3 ${
                 mobileMenuOpen
-                  ? 'bg-[#020617]'
+                  ? 'bg-black'
                   : 'bg-[#020617]/80 backdrop-blur-2xl'
               } border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.3)]`
-            : 'py-5 md:py-6 bg-transparent'
+            : 'py-6 bg-transparent'
         }`}
-        style={{ transform: 'translateZ(0)' }}
       >
         {/* Top Progress Bar */}
         <motion.div
@@ -81,7 +77,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
           style={{ scaleX }}
         />
 
-        <div className="max-w-7xl mx-auto px-5 md:px-10 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
           
           {/* Brand */}
           <div
@@ -97,13 +93,13 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
             </div>
           </div>
 
-          {/* Desktop Navigation - Fluid background indicator */}
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1 bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/10 px-2 py-1.5">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollTo(item.ref)}
-                className={`relative px-4 py-2 text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 ${
+                className={`relative px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
                   activeSection === item.name
                     ? 'text-white'
                     : 'text-gray-400 hover:text-white'
@@ -122,19 +118,19 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
           </div>
 
           {/* Action Area */}
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={openModal}
-              className="hidden sm:flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-xl bg-white text-black font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-colors shadow-lg shadow-white/5"
+              className="hidden sm:flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white text-black font-black text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-colors shadow-lg shadow-white/5"
             >
               Join Now
             </motion.button>
 
-            {/* Mobile Toggle - Improved hit target */}
+            {/* Mobile Toggle */}
             <button
-              className="lg:hidden relative z-[110] p-2.5 text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors"
+              className="lg:hidden relative z-[110] p-3 text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <AnimatePresence mode="wait">
@@ -168,30 +164,30 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#020617] z-[105] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)] lg:hidden flex flex-col will-change-transform"
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-[#020617] z-[105] border-l border-white/10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)] lg:hidden flex flex-col"
               >
-                <div className="flex flex-col pt-28 md:pt-32 px-8 md:px-10 space-y-1">
-                  <span className="text-[9px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-4 md:mb-6 opacity-50">
+                <div className="flex flex-col pt-32 px-10 space-y-2">
+                  <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-6 opacity-50">
                     Navigation
                   </span>
 
                   {navItems.map((item, i) => (
                     <motion.button
                       key={item.name}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05, ease: "easeOut" }}
+                      transition={{ delay: i * 0.08, ease: "easeOut" }}
                       onClick={() => {
                         scrollTo(item.ref);
                         setMobileMenuOpen(false);
                       }}
-                      className="group flex items-center justify-between py-4 md:py-5 border-b border-white/5 text-left active:bg-white/5 transition-colors"
+                      className="group flex items-center justify-between py-5 border-b border-white/5 text-left"
                     >
                       <span
-                        className={`text-2xl md:text-3xl font-black uppercase tracking-tighter transition-all duration-300 ${
+                        className={`text-3xl font-black uppercase tracking-tighter transition-all duration-300 ${
                           activeSection === item.name
-                            ? 'text-cyan-400 translate-x-2'
+                            ? 'text-cyan-400 scale-105 origin-left'
                             : 'text-gray-500 group-hover:text-white'
                         }`}
                       >
@@ -201,7 +197,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                       {activeSection === item.name && (
                         <motion.div
                           layoutId="m-active"
-                          className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_15px_#22d3ee]"
+                          className="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_15px_#22d3ee]"
                         />
                       )}
                     </motion.button>
@@ -210,22 +206,22 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                   <motion.button
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 0.6 }}
                     onClick={() => {
                       setMobileMenuOpen(false);
                       openModal();
                     }}
-                    className="mt-8 md:mt-10 py-4 md:py-5 rounded-2xl bg-cyan-500 text-[#020617] font-black uppercase tracking-widest text-[10px] md:text-xs shadow-2xl shadow-cyan-500/20 active:scale-95 transition-transform"
+                    className="mt-10 py-5 rounded-2xl bg-cyan-500 text-[#020617] font-black uppercase tracking-widest text-xs shadow-2xl shadow-cyan-500/20 active:scale-95 transition-transform"
                   >
                     Launch Application
                   </motion.button>
                 </div>
 
-                <div className="mt-auto p-8 md:p-10 border-t border-white/5 bg-white/[0.01]">
-                  <p className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+                <div className="mt-auto p-10 border-t border-white/5 bg-white/[0.01]">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
                     SIT Tumakuru
                   </p>
-                  <p className="text-[9px] text-gray-600 mt-2 font-black uppercase tracking-widest">
+                  <p className="text-[10px] text-gray-600 mt-2">
                     v2.0 • Avalanche Club
                   </p>
                 </div>

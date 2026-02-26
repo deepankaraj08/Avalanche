@@ -1,39 +1,46 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion'; // Ensure consistency with your framer-motion version
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion'; 
 import { HiX } from 'react-icons/hi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export default function JoinModal({ onClose }) {
-  // Replace this with your actual WhatsApp Group Invite Link
+  // Prevent background scroll on mount
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = originalStyle; };
+  }, []);
+
   const WHATSAPP_LINK = "https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t";
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-      {/* Backdrop: Smoother blur and darker overlay */}
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+      {/* Backdrop: Optimized for mobile GPU */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer"
+        className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer transform-gpu touch-none"
       />
 
-      {/* Modal Content: Adjusted to match #020617 and your card styles */}
+      {/* Modal Content */}
       <motion.div 
-        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        initial={{ scale: 0.9, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        className="relative w-full max-w-md bg-[#020617] border border-white/10 rounded-[2.5rem] p-8 md:p-10 overflow-hidden shadow-[0_0_50px_-10px_rgba(0,0,0,0.5)]"
+        exit={{ scale: 0.9, opacity: 0, y: 30 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+        className="relative w-full max-w-md bg-[#020617] border border-white/10 rounded-[2.5rem] p-7 md:p-10 shadow-2xl transform-gpu will-change-transform"
       >
         {/* Animated Glow Effect */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none transform-gpu" />
 
-        {/* Close Button with better hover state */}
+        {/* Close Button - Larger touch target for mobile */}
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300 z-20"
+          className="absolute top-5 right-5 p-3 rounded-full bg-white/5 text-gray-400 hover:text-white transition-all z-20 active:scale-90"
           aria-label="Close Modal"
         >
           <HiX size={20} />
@@ -41,21 +48,22 @@ export default function JoinModal({ onClose }) {
 
         <div className="text-center relative z-10">
           {/* WhatsApp Brand Icon */}
-          <div className="w-16 h-16 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-green-500 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
-            <FaWhatsapp size={32} />
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 md:mb-6 text-green-500">
+            <FaWhatsapp size={28} className="md:w-8 md:h-8" />
           </div>
 
-          <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Join Avalanche</h3>
-          <p className="text-gray-400 text-sm mb-8 font-light leading-relaxed">
-            Scan the QR code below to join our official WhatsApp community and stay updated with the latest events.
+          <h3 className="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight">Join Avalanche</h3>
+          <p className="text-gray-400 text-[13px] md:text-sm mb-6 md:mb-8 font-medium leading-relaxed px-2">
+            Scan the QR code to join our official WhatsApp community and stay updated.
           </p>
 
-          {/* QR Code Container with subtle outer glow */}
-          <div className="bg-white p-4 rounded-3xl inline-block shadow-[0_0_40px_rgba(34,211,238,0.15)] group transition-transform duration-500 hover:scale-[1.02]">
+          {/* QR Code Container - Responsive Scaling */}
+          <div className="bg-white p-3 md:p-4 rounded-3xl inline-block shadow-2xl group transition-transform duration-500 transform-gpu">
             <img 
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t`} 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(WHATSAPP_LINK)}`} 
               alt="WhatsApp QR Code"
-              className="w-48 h-48 select-none"
+              className="w-40 h-40 md:w-48 md:h-48 select-none"
+              loading="eager"
             />
           </div>
 
@@ -64,9 +72,9 @@ export default function JoinModal({ onClose }) {
               href={WHATSAPP_LINK} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-cyan-400 font-bold text-xs hover:text-cyan-300 transition-colors tracking-[0.2em] uppercase"
+              className="inline-flex items-center gap-2 text-cyan-400 font-black text-[10px] md:text-xs hover:text-cyan-300 transition-colors tracking-[0.2em] uppercase active:scale-95"
             >
-              Or click here to join directly
+              Or join directly via link
               <span className="text-lg">→</span>
             </a>
           </div>

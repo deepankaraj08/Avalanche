@@ -4,7 +4,6 @@ import React, { forwardRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { SpaceStars } from '../../components/ui/meteors';
-
 const TEAM_MEMBERS = [
   { name: 'Anmol Sharan', linkedin: '#', instagram: '#', image: '/team/anmol.jpg' },
   { name: 'Chinmayee Bhatt', linkedin: '#', instagram: '#', image: '/team/chinmayee.jpg' },
@@ -60,7 +59,7 @@ const TEAM_MEMBERS = [
 const TeamCard = ({ member }) => {
   return (
     <div className="relative flex-shrink-0 w-[190px] md:w-[280px] group select-none transform-gpu">
-      <div className="relative overflow-hidden bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[1.8rem] md:rounded-[2rem] p-5 md:p-8 transition-all duration-500 hover:border-cyan-500/50 hover:bg-white/[0.06] hover:-translate-y-2 shadow-2xl">
+      <div className="relative overflow-hidden bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[1.8rem] md:rounded-[2rem] p-5 md:p-8 transition-all duration-500 hover:border-cyan-500/50 hover:bg-white/[0.06] hover:-translate-y-2 shadow-2xl will-change-transform">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         <div className="relative z-10 flex flex-col items-center">
@@ -79,20 +78,10 @@ const TeamCard = ({ member }) => {
             </div>
             
             <div className="absolute -inset-1.5 md:-inset-2 flex justify-between items-end pointer-events-none">
-              <a 
-                href={member.instagram} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="pointer-events-auto w-7 h-7 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center shadow-lg transition-all duration-300 z-20 hover:scale-110 active:scale-90 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:-translate-x-3 lg:translate-y-3 lg:group-hover:translate-x-0 lg:group-hover:translate-y-0"
-              >
+              <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="pointer-events-auto w-7 h-7 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center shadow-lg transition-all duration-300 z-20 hover:scale-110 active:scale-90 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:-translate-x-3 lg:translate-y-3 lg:group-hover:translate-x-0 lg:group-hover:translate-y-0">
                 <FaInstagram size={12} className="md:w-[14px]" />
               </a>
-              <a 
-                href={member.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="pointer-events-auto w-7 h-7 md:w-10 md:h-10 rounded-full bg-[#0077b5] text-white flex items-center justify-center shadow-lg transition-all duration-300 z-20 hover:scale-110 active:scale-90 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-x-3 lg:translate-y-3 lg:group-hover:translate-x-0 lg:group-hover:translate-y-0"
-              >
+              <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="pointer-events-auto w-7 h-7 md:w-10 md:h-10 rounded-full bg-[#0077b5] text-white flex items-center justify-center shadow-lg transition-all duration-300 z-20 hover:scale-110 active:scale-90 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-x-3 lg:translate-y-3 lg:group-hover:translate-x-0 lg:group-hover:translate-y-0">
                 <FaLinkedinIn size={12} className="md:w-[14px]" />
               </a>
             </div>
@@ -103,17 +92,9 @@ const TeamCard = ({ member }) => {
               <h3 className="text-sm md:text-lg font-bold text-white tracking-tight group-hover:text-cyan-400 transition-colors duration-300 line-clamp-1 leading-tight">
                 {member.name}
               </h3>
-              <motion.span 
-                className="text-cyan-500 text-xs md:text-sm font-bold" 
-                animate={{ x: [0, 4, 0] }} 
-                transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-              >
-                →
-              </motion.span>
+              <motion.span className="text-cyan-500 text-xs md:text-sm font-bold" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}>→</motion.span>
             </div>
-            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-500/50 transition-colors">
-              Core Member
-            </span>
+            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/20 group-hover:text-cyan-500/50 transition-colors uppercase">Core Member</span>
           </div>
         </div>
       </div>
@@ -128,13 +109,8 @@ const Team = forwardRef((props, ref) => {
 
   return (
     <section ref={ref} className="py-20 md:py-32 relative overflow-hidden bg-[#020617] text-white" id="team">
-      <SpaceStars starCount={80} className="absolute inset-0 pointer-events-none opacity-40" />
+      <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 40 : 80} className="absolute inset-0 pointer-events-none opacity-40" />
       
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none transform-gpu">
-        <div className="absolute top-1/4 left-1/4 w-48 md:w-64 h-48 md:h-64 bg-cyan-500/10 rounded-full blur-[80px] md:blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 md:w-64 h-48 md:h-64 bg-purple-500/10 rounded-full blur-[80px] md:blur-[120px]" />
-      </div>
-
       <div className="max-w-7xl mx-auto px-6 relative z-10 mb-16 flex flex-col items-center text-center">
         <motion.h2 className="text-[clamp(2.5rem,8vw,4.5rem)] md:text-7xl font-black tracking-tighter leading-none">
           Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 italic">Avalanche</span>
@@ -143,29 +119,35 @@ const Team = forwardRef((props, ref) => {
 
       <div className="relative w-full group/container overflow-hidden py-6">
         
-        {/* TURBO BOOST BUTTONS */}
+        {/* LEFT BOOST BUTTON */}
         <button 
-          onMouseEnter={() => setBoost(true)} onMouseLeave={() => setBoost(false)}
-          onPointerDown={() => setBoost(true)} onPointerUp={() => setBoost(false)}
+          onPointerDown={() => setBoost(true)} 
+          onPointerUp={() => setBoost(false)}
           onPointerLeave={() => setBoost(false)}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none"
+          onMouseEnter={() => setBoost(true)} 
+          onMouseLeave={() => setBoost(false)}
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-300 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none select-none"
         >
-          <span className="text-lg md:text-2xl font-bold">«</span>
+          <span className="text-xl font-bold">«</span>
         </button>
 
+        {/* RIGHT BOOST BUTTON */}
         <button 
-          onMouseEnter={() => setBoost(true)} onMouseLeave={() => setBoost(false)}
-          onPointerDown={() => setBoost(true)} onPointerUp={() => setBoost(false)}
+          onPointerDown={() => setBoost(true)} 
+          onPointerUp={() => setBoost(false)}
           onPointerLeave={() => setBoost(false)}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-500 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none"
+          onMouseEnter={() => setBoost(true)} 
+          onMouseLeave={() => setBoost(false)}
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center text-cyan-500 transition-all duration-300 hover:bg-cyan-500 hover:text-black hover:scale-110 active:scale-90 shadow-2xl touch-none select-none"
         >
-          <span className="text-lg md:text-2xl font-bold">»</span>
+          <span className="text-xl font-bold">»</span>
         </button>
 
         <div className="absolute inset-y-0 left-0 w-20 md:w-64 bg-gradient-to-r from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-20 md:w-64 bg-gradient-to-l from-[#020617] via-[#020617]/80 to-transparent z-20 pointer-events-none" />
 
         <motion.div 
+          layout // Added layout for smooth transitions between speed states
           className="flex gap-4 md:gap-8 will-change-transform"
           initial={{ x: 0 }}
           animate={{ x: isPaused ? undefined : "-50%" }}
@@ -173,7 +155,7 @@ const Team = forwardRef((props, ref) => {
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: boost ? 35 : 180,
+              duration: boost ? 30 : 180, // Slightly faster boost (30s)
               ease: "linear",
             },
           }}
