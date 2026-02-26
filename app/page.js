@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react'; 
+import { useRef, useState, useEffect } from 'react'; 
 import { AnimatePresence } from 'framer-motion'; 
 import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
@@ -12,7 +12,7 @@ import Team from '@/app/components/Team';
 import Alumni from '@/app/components/Alumni';
 import Footer from '@/app/components/Footer';
 import JoinModal from '@/app/components/JoinModal';
-import SponsorModal from '@/app/components/SponsorModal'; // Added SponsorModal
+import SponsorModal from '@/app/components/SponsorModal';
 
 export default function Home() {
   // 1. State Management for Modals
@@ -38,10 +38,12 @@ export default function Home() {
     alumniRef 
   };
 
-  // 3. Smooth Scroll Function
+  // 3. Optimized Smooth Scroll Function
   const scrollTo = (ref) => {
     if (ref && ref.current) {
-      const offset = 80; 
+      // Responsive offset: Smaller offset for mobile to maximize viewable area
+      const offset = window.innerWidth < 768 ? 60 : 80; 
+      
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = ref.current.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -54,16 +56,26 @@ export default function Home() {
     }
   };
 
+  // Prevent scroll-chaining when modals are open
+  useEffect(() => {
+    if (isJoinModalOpen || isSponsorModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isJoinModalOpen, isSponsorModalOpen]);
+
   return (
-    <div className="bg-[#020617] min-h-screen">
-      {/* Navbar opens the WhatsApp Join Modal */}
+    // Optimized background and scroll container
+    <div className="bg-[#020617] min-h-[100dvh] w-full selection:bg-cyan-500/30">
+      
       <Navbar 
         scrollTo={scrollTo} 
         refs={allRefs} 
         openModal={() => setIsJoinModalOpen(true)} 
       />
 
-      <main>
+      <main className="relative">
         <Hero 
           ref={homeRef} 
           scrollTo={scrollTo} 
@@ -74,7 +86,6 @@ export default function Home() {
         <Events ref={eventsRef} />
         <Gallery ref={galleryRef} />
         
-        {/* Sponsors gets the function to open the Sponsor Inquiry Form */}
         <Sponsors 
           ref={sponsorsRef} 
           openSponsorModal={() => setIsSponsorModalOpen(true)} 
@@ -86,18 +97,16 @@ export default function Home() {
 
       <Footer />
 
-      {/* --- Modals Layer --- */}
-      <AnimatePresence>
-        {/* WhatsApp Join Modal */}
+      {/* --- Modals Layer - AnimatePresence ensures smooth exit transitions --- */}
+      <AnimatePresence mode="wait">
         {isJoinModalOpen && (
-          <JoinModal onClose={() => setIsJoinModalOpen(false)} />
+          <JoinModal key="join-modal" onClose={() => setIsJoinModalOpen(false)} />
         )}
 
-        {/* Sponsor Inquiry Form Modal */}
         {isSponsorModalOpen && (
-          <SponsorModal onClose={() => setIsSponsorModalOpen(false)} />
+          <SponsorModal key="sponsor-modal" onClose={() => setIsSponsorModalOpen(false)} />
         )}
       </AnimatePresence>
     </div>
   );
-};
+}
