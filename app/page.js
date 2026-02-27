@@ -9,7 +9,6 @@ import Events from '@/app/components/Events';
 import Gallery from '@/app/components/Gallery';
 import Sponsors from '@/app/components/Sponsors';
 import Team from '@/app/components/Team';
-import Alumni from '@/app/components/Alumni';
 import Footer from '@/app/components/Footer';
 import JoinModal from '@/app/components/JoinModal';
 import SponsorModal from '@/app/components/SponsorModal';
@@ -26,7 +25,6 @@ export default function Home() {
   const sponsorsRef = useRef(null);
   const galleryRef = useRef(null);
   const teamRef = useRef(null);
-  const alumniRef = useRef(null);
 
   const allRefs = { 
     homeRef, 
@@ -34,8 +32,7 @@ export default function Home() {
     eventsRef, 
     sponsorsRef, 
     galleryRef, 
-    teamRef, 
-    alumniRef 
+    teamRef,
   };
 
   // 3. Optimized Smooth Scroll Function
@@ -92,7 +89,6 @@ export default function Home() {
         />
         
         <Team ref={teamRef} />
-        <Alumni ref={alumniRef} />
       </main>
 
       <Footer />

@@ -22,7 +22,6 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
     { name: 'Events', ref: refs.eventsRef },
     { name: 'Gallery', ref: refs.galleryRef },
     { name: 'Team', ref: refs.teamRef },
-    { name: 'Alumni', ref: refs.alumniRef },
     { name: 'Sponsors', ref: refs.sponsorsRef },
   ], [refs]);
 
@@ -59,14 +58,14 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
         className={`fixed top-0 w-full z-[100] transition-all duration-700 ease-in-out ${
           scrolled || mobileMenuOpen
             ? `py-3 ${
+                // Reduced blur for a cleaner glass look
                 mobileMenuOpen
-                  ? 'bg-[#020617]/50 backdrop-blur-2xl'
-                  : 'bg-[#020617]/40 backdrop-blur-xl'
-              } border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]`
+                  ? 'bg-transparent' 
+                  : 'bg-[#020617]/50 backdrop-blur-lg'
+              } border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]`
             : 'py-6 bg-transparent'
         }`}
       >
-        {/* Scroll Progress Line */}
         <motion.div
           className="absolute top-0 left-0 right-0 h-[2px] bg-cyan-500 origin-left z-[101]"
           style={{ scaleX }}
@@ -82,12 +81,8 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
             }}
           >
             <div className="text-xl md:text-2xl font-black tracking-tighter text-white flex items-center gap-1">
-              <span className="group-hover:text-cyan-400 transition-colors duration-300">
-                AVA
-              </span>
-              <span className="bg-cyan-500 text-[#020617] px-1 rounded-sm shadow-[0_0_15px_rgba(6,182,212,0.6)]">
-                LANCHE
-              </span>
+              <span className="group-hover:text-cyan-400 transition-colors duration-300">AVA</span>
+              <span className="bg-cyan-500 text-[#020617] px-1 rounded-sm shadow-[0_0_15px_rgba(6,182,212,0.6)]">LANCHE</span>
             </div>
           </div>
 
@@ -98,13 +93,10 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                 key={item.name}
                 onClick={() => scrollTo(item.ref)}
                 className={`relative px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
-                  activeSection === item.name
-                    ? 'text-white'
-                    : 'text-gray-400 hover:text-white'
+                  activeSection === item.name ? 'text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <span className="relative z-10">{item.name}</span>
-
                 {activeSection === item.name && (
                   <motion.div
                     layoutId="activeNav"
@@ -116,7 +108,6 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
             ))}
           </div>
 
-          {/* Right Section */}
           <div className="flex items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -151,25 +142,25 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
         <AnimatePresence>
           {mobileMenuOpen && (
             <>
-              {/* Blurred Overlay */}
+              {/* MODERATED BLUR OVERLAY */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setMobileMenuOpen(false)}
-                className="fixed inset-0 bg-black/50 backdrop-blur-md lg:hidden z-[101]"
+                className="fixed inset-0 bg-black/40 backdrop-blur-md lg:hidden z-[101]"
               />
 
-              {/* Glass Panel */}
+              {/* Glass Panel - Reduced Blur for Clarity */}
               <motion.div
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 220 }}
                 className="fixed top-0 right-0 h-full w-[80%] max-w-sm
-                bg-gradient-to-b from-white/10 to-white/5
-                backdrop-blur-3xl
-                border-l border-white/20
+                bg-white/[0.05]
+                backdrop-blur-[24px] 
+                border-l border-white/10
                 shadow-[-10px_0_40px_rgba(0,0,0,0.5)]
                 lg:hidden flex flex-col z-[105]"
               >
@@ -218,7 +209,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                   </motion.button>
                 </div>
 
-                <div className="mt-auto p-10 border-t border-white/10 bg-white/[0.04]">
+                <div className="mt-auto p-10 border-t border-white/10 bg-white/[0.02]">
                   <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em]">
                     SIT Tumakuru
                   </p>

@@ -14,7 +14,10 @@ const GALLERY_IMAGES = [
   { id: 7, image: '/gallery/seven.jpeg' },
   { id: 8, image: '/gallery/nine1.png' },
   { id: 9, image: '/gallery/ten.jpeg' },
-  { id: 10, image: '/gallery/eleven.jpeg' },
+  { id: 10, image: '/gallery/dmc.jpeg' },
+  { id: 11, image: '/gallery/vdc.png' },
+  { id: 12, image: '/gallery/aurora.png' },
+  { id: 13, image: '/gallery/black.png' },
 ];
 
 const Gallery = forwardRef((props, ref) => {

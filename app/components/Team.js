@@ -24,7 +24,7 @@ const TEAM_MEMBERS = [
   { name: 'Babul Kumar', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b', instagram: 'https://www.instagram.com/babulkr328', image: '/photo/babul.jpeg' },
   { name: 'Deeksha', linkedin: '#', instagram: '#', image: '/photo/deeksha.jpeg' },
   { name: 'Deepankar Raj', linkedin: 'https://www.linkedin.com/in/deepankaraj', instagram: 'https://www.instagram.com/deepankaraj', image: '/photo/deepankar.jpeg' },
-  { name: 'Dhruthi M', linkedin: 'https://www.linkedin.com/in/dhruthi-m-940bb6385', instagram: 'https://www.instagram.com/dhruthi_dru', image: '/photo/dhruthi.jpeg' },
+  { name: 'Dhruthi M', linkedin: 'https://www.linkedin.com/in/dhruthi-m-940bb6385', instagram: 'https://www.instagram.com/dhruthi__m', image: '/photo/dhruthi.jpeg' },
   { name: 'Keerthi Pai', linkedin: '#', instagram: '#', image: '/photo/keerthi.jpeg' },
   { name: 'Nanditha LM', linkedin: '#', instagram: '#', image: '/photo/nanditha.jpeg' },
   { name: 'Saket Sinha', linkedin: '#', instagram: '#', image: '/photo/saket.jpeg' },
