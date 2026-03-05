@@ -71,13 +71,13 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 w-full z-[100] transition-all duration-700 ease-in-out ${scrolled || mobileMenuOpen
-            ? `py-3 ${
-            // Reduced blur for a cleaner glass look
-            mobileMenuOpen
-              ? 'bg-transparent'
-              : 'bg-[#020617]/50 backdrop-blur-lg'
-            } border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]`
-            : 'py-6 bg-transparent'
+          ? `py-3 ${
+          // Reduced blur for a cleaner glass look
+          mobileMenuOpen
+            ? 'bg-transparent'
+            : 'bg-[#020617]/50 backdrop-blur-lg'
+          } border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]`
+          : 'py-6 bg-transparent'
           }`}
       >
         <motion.div
@@ -88,15 +88,14 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
         <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
           {/* Logo */}
           <div
-            className="relative z-[110] cursor-pointer group"
+            className="relative z-[110] cursor-pointer group flex items-center gap-3"
             onClick={() => {
               scrollTo(refs.homeRef);
               setMobileMenuOpen(false);
             }}
           >
-            <div className="text-xl md:text-2xl font-black tracking-tighter text-white flex items-center gap-1">
-              <span className="group-hover:text-cyan-400 transition-colors duration-300">AVA</span>
-              <span className="bg-cyan-500 text-[#020617] px-1 rounded-sm shadow-[0_0_15px_rgba(6,182,212,0.6)]">LANCHE</span>
+            <div className="relative flex items-center justify-center p-1.5 rounded-full bg-white/80 dark:bg-white dark:shadow-[0_0_25px_rgba(255,255,255,0.8)] backdrop-blur-md transition-all duration-300">
+              <img src="/gallery/Avalanche%20Logo.png" alt="Avalanche Logo" className="w-12 h-12 md:w-20 md:h-20 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
             </div>
           </div>
 
@@ -219,8 +218,8 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                     >
                       <span
                         className={`text-3xl font-black uppercase tracking-tighter transition-all duration-300 ${activeSection === item.name
-                            ? 'text-white scale-105 origin-left'
-                            : 'text-white/40 group-hover:text-white/90'
+                          ? 'text-white scale-105 origin-left'
+                          : 'text-white/40 group-hover:text-white/90'
                           }`}
                       >
                         {item.name}

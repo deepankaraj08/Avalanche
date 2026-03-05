@@ -1,42 +1,64 @@
 'use client';
 
 import React, { forwardRef, useRef, useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import { SpaceStars } from '../../components/ui/meteors';
 
 const EVENT_DATA = [
   {
     id: '01',
-    title: 'ADVENTO',
-    subtitle: 'The Freshman Genesis',
-    description: 'A week-long high-octane extravaganza designed to welcome new talent. From technical workshops to electrifying concert nights, this is where your journey begins.',
-    tags: ['1 Day', 'Concert'],
-    color: 'from-blue-600/30 to-cyan-400/30',
-    accent: 'text-blue-400',
-    border: 'group-hover:border-blue-500/50',
-    glow: 'rgba(59, 130, 246, 0.4)'
-  },
-  {
-    id: '02',
-    title: 'RADIANCE',
+    title: 'Radiance',
     subtitle: 'The Cultural Epicenter',
     description: 'The definitive stage for performers. A grand showcase of dance, music, drama, and fashion where campus legends are born and the spotlight never fades.',
     tags: ['Annual', 'Cultural', '3 DAYS'],
     color: 'from-cyan-400/30 to-sky-500/30',
     accent: 'text-cyan-400',
-    border: 'group-hover:border-cyan-500/50',
-    glow: 'rgba(34, 211, 238, 0.4)'
+    border: 'group-hover:border-cyan-500/40',
+    glow: 'rgba(34, 211, 238, 0.25)'
+  },
+  {
+    id: '02',
+    title: 'Advento',
+    subtitle: 'The Freshman Genesis',
+    description: 'A week-long high-octane extravaganza designed to welcome new talent. From technical workshops to electrifying concert nights, this is where your journey begins.',
+    tags: ['1 Day', 'Concert'],
+    color: 'from-blue-600/30 to-indigo-500/30',
+    accent: 'text-indigo-400',
+    border: 'group-hover:border-indigo-500/40',
+    glow: 'rgba(99, 102, 241, 0.25)'
   }
 ];
+
+// Staggered Title Animation
+const AnimatedTitle = ({ text, className, delay = 0 }) => {
+  const words = text.split(" ");
+  const container = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({ opacity: 1, transition: { staggerChildren: 0.1, delayChildren: delay } }),
+  };
+  const child = {
+    visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { type: "spring", damping: 14, stiffness: 100 } },
+    hidden: { opacity: 0, y: 30, scale: 0.9, filter: "blur(5px)" },
+  };
+
+  return (
+    <motion.div variants={container} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className={`flex flex-wrap gap-x-[0.3em] gap-y-2 ${className}`}>
+      {words.map((word, index) => (
+        <motion.span variants={child} key={index} className="inline-block relative">
+          {word}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+};
 
 const TiltCard = ({ event, index }) => {
   const ref = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia("(max-width: 1024px)").matches);
-    };
+    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 1024px)").matches);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -45,12 +67,12 @@ const TiltCard = ({ event, index }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+  // Smooth, premium spring physics
+  const mouseXSpring = useSpring(x, { stiffness: 120, damping: 25 });
+  const mouseYSpring = useSpring(y, { stiffness: 120, damping: 25 });
 
-  // Completely disable rotation values on mobile to save CPU
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], isMobile ? ["0deg", "0deg"] : ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], isMobile ? ["0deg", "0deg"] : ["-10deg", "10deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], isMobile ? ["0deg", "0deg"] : ["12deg", "-12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], isMobile ? ["0deg", "0deg"] : ["-12deg", "12deg"]);
 
   const handleMouseMove = (e) => {
     if (isMobile || !ref.current) return;
@@ -60,6 +82,7 @@ const TiltCard = ({ event, index }) => {
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     x.set(0);
     y.set(0);
   };
@@ -68,55 +91,83 @@ const TiltCard = ({ event, index }) => {
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-      viewport={{ once: true, margin: "-20px" }}
-      className="group relative perspective-[1500px] transform-gpu will-change-transform"
+      transition={{ delay: index * 0.2, duration: 0.8, type: "spring", damping: 20 }}
+      viewport={{ once: true, margin: "-50px" }}
+      className="group relative perspective-[1500px] transform-gpu w-full h-full"
     >
-      {/* Dynamic Glow Layer - Reduced blur for mobile performance */}
+      {/* Deep Shadow Glow behind the card */}
       <div
-        className={`absolute -inset-[2px] rounded-[3rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-xl md:blur-2xl transition-opacity duration-700 pointer-events-none`}
+        className={`absolute -inset-2 rounded-[3.5rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-1000 pointer-events-none`}
       />
 
-      {/* Main Card */}
-      <div className={`relative bg-white/90 dark:bg-[#020617]/70 backdrop-blur-xl md:backdrop-blur-3xl rounded-[2.5rem] md:rounded-[2.8rem] p-7 md:p-14 h-full flex flex-col border border-slate-200 dark:border-white/5 transition-all duration-500 overflow-hidden ${event.border}`}>
+      {/* Main Glass Card */}
+      <div className={`relative bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-3xl rounded-[3rem] p-10 md:p-16 h-full flex flex-col border border-white/60 dark:border-white/10 transition-all duration-700 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.2)] ${event.border}`}>
 
-        {/* ID Number: Simplified animation for mobile */}
-        <span className="absolute -right-6 -top-10 text-[8rem] md:text-[14rem] font-black text-white/[0.02] select-none group-hover:text-white/[0.05] transition-all duration-1000 leading-none">
+        {/* Dynamic Inner Spotlight */}
+        <motion.div
+          className="pointer-events-none absolute -inset-px rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+          style={{
+            background: useMotionTemplate`
+              radial-gradient(
+                700px circle at ${useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"])},
+                ${event.glow},
+                transparent 70%
+              )
+            `,
+          }}
+        />
+
+        {/* Ambient Noise Texture */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+
+        {/* Liquid Glint Animation */}
+        <motion.div
+          animate={{ x: ['-200%', '300%'], skewX: -25 }}
+          transition={{ repeat: Infinity, duration: 8, ease: "linear", repeatDelay: event.id === '01' ? 1 : 4 }}
+          className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none"
+        />
+
+        {/* ID Number Watermark */}
+        <span className="absolute -right-10 -top-16 text-[12rem] md:text-[20rem] font-black text-slate-100 dark:text-white/[0.02] select-none group-hover:text-slate-200 dark:group-hover:text-white/[0.05] transition-colors duration-1000 leading-none">
           {event.id}
         </span>
 
-        {/* Content Container: Removed translateZ on mobile to prevent "stair-step" lag */}
-        <div className="relative z-10 flex flex-col h-full" style={{ transform: isMobile ? "none" : "translateZ(50px)" }}>
-          <div className="flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-10">
+        {/* Interactive 3D Content Container */}
+        <div className="relative z-10 flex flex-col h-full transform-gpu transition-transform duration-500 ease-out" style={{ transform: isHovered && !isMobile ? "translateZ(60px) scale(1.02)" : "translateZ(0px)" }}>
+
+          <div className="flex flex-wrap gap-3 mb-10 w-full">
             {event.tags.map((tag) => (
-              <span key={tag} className="px-3 py-1 md:px-5 md:py-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[8px] md:text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">
+              <span key={tag} className="px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] md:text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.25em] shadow-sm">
                 {tag}
               </span>
             ))}
           </div>
 
-          <h3 className={`text-[clamp(2.5rem,8vw,4.5rem)] font-black mb-3 md:mb-4 tracking-tighter leading-none ${event.accent}`}>
+          <h3 className={`text-[clamp(3.5rem,10vw,6rem)] font-black mb-4 tracking-tighter leading-none italic ${event.accent} drop-shadow-sm`}>
             {event.title}
           </h3>
 
-          <p className="text-base md:text-2xl font-bold text-slate-800 dark:text-white/90 mb-5 md:mb-8 italic tracking-tight">
+          <p className="text-lg md:text-2xl font-bold text-slate-800 dark:text-white/90 mb-8 tracking-widest uppercase text-[10px] md:text-xs">
             {event.subtitle}
           </p>
 
-          <p className="text-slate-500 dark:text-gray-400 text-sm md:text-lg leading-relaxed font-medium opacity-80 max-w-md">
+          <p className="text-slate-600 dark:text-gray-300 text-sm md:text-lg leading-relaxed font-medium opacity-90 max-w-md">
             {event.description}
           </p>
 
-          <div className="mt-auto pt-8 md:pt-12 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
-            <span className="text-[10px] md:text-xs font-black tracking-widest uppercase text-slate-400 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+          <div className="mt-auto pt-14 border-t border-slate-200 dark:border-white/10 flex items-center justify-between cursor-pointer group/btn">
+            <span className="text-xs font-black tracking-widest uppercase text-slate-800 dark:text-white opacity-60 group-hover/btn:opacity-100 transition-opacity">
               Explore Timeline
             </span>
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-slate-300 dark:border-white/10 flex items-center justify-center group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all">
-              →
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border border-slate-300 dark:border-white/20 group-hover/btn:bg-slate-900 group-hover/btn:dark:bg-white group-hover/btn:text-white group-hover/btn:dark:text-slate-900 group-hover/btn:scale-110 shadow-lg`}>
+              <svg className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </div>
           </div>
         </div>
@@ -127,41 +178,70 @@ const TiltCard = ({ event, index }) => {
 
 const Events = forwardRef((props, ref) => {
   return (
-    <section ref={ref} className="py-20 md:py-44 relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden" id="events">
+    <section ref={ref} className="py-32 md:py-52 relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden" id="events">
 
-      {/* 1. THE STARS - Optimized count for mobile */}
+      {/* 1. HIGH-END AMBIENT BACKGROUND */}
       <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
-        <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 80 : 180} className="opacity-40" />
+        <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 100 : 250} className="opacity-50" />
+
+        {/* Soft, moving gradient orbs */}
+        <motion.div
+          animate={{ x: [0, -50, 0], y: [0, 40, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/3"
+        />
+        <motion.div
+          animate={{ x: [0, 60, 0], y: [0, -50, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen translate-y-1/4 -translate-x-1/4"
+        />
       </div>
 
-      {/* 2. BACKGROUND POLISH */}
-      <div className="absolute inset-0 -z-10 pointer-events-none transform-gpu hidden dark:block">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_10%,_#020617_90%)] opacity-50" />
+      {/* Light Mode Specific Ambient Blobs */}
+      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden">
+        <div className="absolute top-[10%] left-0 w-[600px] h-[600px] bg-cyan-100/60 rounded-full blur-[100px] -translate-x-1/3" />
+        <div className="absolute bottom-[10%] right-0 w-[700px] h-[700px] bg-indigo-100/60 rounded-full blur-[120px] translate-x-1/3" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <header className="mb-14 md:mb-24 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-4 md:space-y-6">
+      <div className="max-w-[90rem] mx-auto px-6 md:px-12 relative z-10">
+
+        {/* Designer Header */}
+        <header className="mb-24 md:mb-40 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+          <div className="space-y-6 md:space-y-8 max-w-4xl w-full">
             <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: "50px" }}
-              viewport={{ once: true }}
-              className="h-[2px] bg-cyan-500"
+              initial={{ opacity: 0, width: 0 }}
+              whileInView={{ opacity: 1, width: "100%" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex items-center gap-4"
+            >
+              <div className="h-[2px] w-12 bg-gradient-to-r from-cyan-400 to-transparent" />
+              <p className="text-cyan-600 dark:text-cyan-400 text-[10px] md:text-xs font-black tracking-[0.6em] uppercase">
+                The Core Experiences
+              </p>
+            </motion.div>
+
+            <AnimatedTitle
+              text="Flagship Events."
+              className="text-[clamp(4rem,10vw,8rem)] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]"
             />
-            <h2 className="text-[clamp(3rem,10vw,6rem)] font-black text-white tracking-tighter leading-[0.9]">
-              Flagship <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 italic">Events</span>
-            </h2>
           </div>
 
-          <p className="text-slate-400 dark:text-gray-500 max-w-[280px] md:max-w-sm lg:text-right font-bold text-[10px] md:text-base leading-relaxed tracking-widest uppercase">
-            WE DEFINE THE SPIRIT OF THE CAMPUS THROUGH TWO LEGENDARY EXPERIENCES.
-          </p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-slate-500 xl:text-right font-bold text-xs md:text-sm leading-relaxed tracking-[0.2em] uppercase max-w-[320px] shrink-0 pb-4"
+          >
+            We define the spirit of the campus through two legendary, meticulously crafted experiences.
+          </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20">
+        {/* Premium Event Layout Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 md:gap-20 items-stretch">
           {EVENT_DATA.map((event, idx) => (
-            <TiltCard key={event.id} event={event} index={idx} />
+            <div key={event.id} className={idx === 1 ? "xl:mt-32" : ""}>
+              <TiltCard event={event} index={idx} />
+            </div>
           ))}
         </div>
       </div>

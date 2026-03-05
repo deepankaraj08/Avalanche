@@ -39,8 +39,13 @@ const Footer = () => {
 
           {/* ===== 1. Brand Column ===== */}
           <div className="space-y-6 md:space-y-8">
-            <div className="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent inline-block">
-              AVALANCHE
+            <div className="flex items-center gap-4">
+              <div className="relative flex items-center justify-center p-1.5 rounded-full bg-white/80 dark:bg-white dark:shadow-[0_0_25px_rgba(255,255,255,0.8)] backdrop-blur-md transition-all duration-300">
+                <img src="/gallery/Avalanche%20Logo.png" alt="Avalanche Logo" className="w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
+              </div>
+              <div className="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent inline-block">
+                AVALANCHE
+              </div>
             </div>
             <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed max-w-xs font-bold uppercase tracking-wide opacity-80">
               Siddaganga Institute of Technology's premier cultural and technical hub.
