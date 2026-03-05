@@ -77,13 +77,13 @@ const TiltCard = ({ event, index }) => {
       className="group relative perspective-[1500px] transform-gpu will-change-transform"
     >
       {/* Dynamic Glow Layer - Reduced blur for mobile performance */}
-      <div 
-        className={`absolute -inset-[2px] rounded-[3rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-xl md:blur-2xl transition-opacity duration-700 pointer-events-none`} 
+      <div
+        className={`absolute -inset-[2px] rounded-[3rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-xl md:blur-2xl transition-opacity duration-700 pointer-events-none`}
       />
 
       {/* Main Card */}
-      <div className={`relative bg-[#020617]/70 backdrop-blur-xl md:backdrop-blur-3xl rounded-[2.5rem] md:rounded-[2.8rem] p-7 md:p-14 h-full flex flex-col border border-white/5 transition-all duration-500 overflow-hidden ${event.border}`}>
-        
+      <div className={`relative bg-white/90 dark:bg-[#020617]/70 backdrop-blur-xl md:backdrop-blur-3xl rounded-[2.5rem] md:rounded-[2.8rem] p-7 md:p-14 h-full flex flex-col border border-slate-200 dark:border-white/5 transition-all duration-500 overflow-hidden ${event.border}`}>
+
         {/* ID Number: Simplified animation for mobile */}
         <span className="absolute -right-6 -top-10 text-[8rem] md:text-[14rem] font-black text-white/[0.02] select-none group-hover:text-white/[0.05] transition-all duration-1000 leading-none">
           {event.id}
@@ -93,7 +93,7 @@ const TiltCard = ({ event, index }) => {
         <div className="relative z-10 flex flex-col h-full" style={{ transform: isMobile ? "none" : "translateZ(50px)" }}>
           <div className="flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-10">
             {event.tags.map((tag) => (
-              <span key={tag} className="px-3 py-1 md:px-5 md:py-2 rounded-full bg-white/5 border border-white/10 text-[8px] md:text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">
+              <span key={tag} className="px-3 py-1 md:px-5 md:py-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[8px] md:text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">
                 {tag}
               </span>
             ))}
@@ -103,19 +103,19 @@ const TiltCard = ({ event, index }) => {
             {event.title}
           </h3>
 
-          <p className="text-base md:text-2xl font-bold text-white/90 mb-5 md:mb-8 italic tracking-tight">
+          <p className="text-base md:text-2xl font-bold text-slate-800 dark:text-white/90 mb-5 md:mb-8 italic tracking-tight">
             {event.subtitle}
           </p>
 
-          <p className="text-gray-400 text-sm md:text-lg leading-relaxed font-medium opacity-80 max-w-md">
+          <p className="text-slate-500 dark:text-gray-400 text-sm md:text-lg leading-relaxed font-medium opacity-80 max-w-md">
             {event.description}
           </p>
 
-          <div className="mt-auto pt-8 md:pt-12 border-t border-white/5 flex items-center justify-between">
-            <span className="text-[10px] md:text-xs font-black tracking-widest uppercase text-white/40 group-hover:text-white transition-colors">
+          <div className="mt-auto pt-8 md:pt-12 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
+            <span className="text-[10px] md:text-xs font-black tracking-widest uppercase text-slate-400 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
               Explore Timeline
             </span>
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-slate-300 dark:border-white/10 flex items-center justify-center group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all">
               →
             </div>
           </div>
@@ -127,26 +127,26 @@ const TiltCard = ({ event, index }) => {
 
 const Events = forwardRef((props, ref) => {
   return (
-    <section ref={ref} className="py-20 md:py-44 relative bg-[#020617] text-white overflow-hidden" id="events">
-      
+    <section ref={ref} className="py-20 md:py-44 relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden" id="events">
+
       {/* 1. THE STARS - Optimized count for mobile */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu">
+      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
         <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 80 : 180} className="opacity-40" />
       </div>
-      
+
       {/* 2. BACKGROUND POLISH */}
-      <div className="absolute inset-0 -z-10 pointer-events-none transform-gpu">
+      <div className="absolute inset-0 -z-10 pointer-events-none transform-gpu hidden dark:block">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_10%,_#020617_90%)] opacity-50" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <header className="mb-14 md:mb-24 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-4 md:space-y-6">
-            <motion.div 
+            <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "50px" }}
               viewport={{ once: true }}
-              className="h-[2px] bg-cyan-500" 
+              className="h-[2px] bg-cyan-500"
             />
             <h2 className="text-[clamp(3rem,10vw,6rem)] font-black text-white tracking-tighter leading-[0.9]">
               Flagship <br />
@@ -154,7 +154,7 @@ const Events = forwardRef((props, ref) => {
             </h2>
           </div>
 
-          <p className="text-gray-500 max-w-[280px] md:max-w-sm lg:text-right font-bold text-[10px] md:text-base leading-relaxed tracking-widest uppercase">
+          <p className="text-slate-400 dark:text-gray-500 max-w-[280px] md:max-w-sm lg:text-right font-bold text-[10px] md:text-base leading-relaxed tracking-widest uppercase">
             WE DEFINE THE SPIRIT OF THE CAMPUS THROUGH TWO LEGENDARY EXPERIENCES.
           </p>
         </header>

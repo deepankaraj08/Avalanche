@@ -67,10 +67,10 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-[#020617] text-white pt-20"
+      className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white pt-20"
     >
       {/* 1. LAYERED BACKGROUND EFFECTS */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu">
+      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
         <SpaceStars starCount={isMobile ? 60 : 200} />
         {/* Hardware-accelerated Nebula Glows */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse" />
@@ -83,7 +83,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
       {/* 2. CONTENT CONTAINER */}
       <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center">
-        
+
         {/* Main Typography */}
         <div className="text-center mb-12 select-none">
           <motion.h1
@@ -104,14 +104,14 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
               — We Create Moments.
             </span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 1 }}
-            className="mt-8 text-gray-400 max-w-2xl mx-auto text-sm md:text-xl font-light tracking-wide leading-relaxed"
+            className="mt-8 text-slate-500 dark:text-gray-400 max-w-2xl mx-auto text-sm md:text-xl font-light tracking-wide leading-relaxed"
           >
-            Organizing <span className="text-white font-bold">Radiance & Advento</span> — 
+            Organizing <span className="text-slate-900 dark:text-white font-bold">Radiance & Advento</span> —
             where premium talent meets immersive production.
           </motion.p>
         </div>
@@ -128,8 +128,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
           <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-blue-600/20 to-purple-600/20 rounded-[2.5rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000" />
 
           {/* Card Body */}
-          <div className="relative overflow-hidden bg-[#0a0f1e]/60 backdrop-blur-[30px] border border-white/[0.08] rounded-[2.5rem] p-8 md:p-16 shadow-2xl">
-            
+          <div className="relative overflow-hidden bg-white/90 dark:bg-[#0a0f1e]/60 backdrop-blur-[30px] border border-slate-200 dark:border-white/[0.08] rounded-[2.5rem] p-8 md:p-16 shadow-2xl">
+
             {/* Liquid Glint Animation */}
             <motion.div
               animate={{ x: ['-150%', '300%'], skewX: -25 }}
@@ -150,7 +150,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                 </div>
               </div>
 
-              <h3 className="text-[clamp(3.5rem,14vw,8rem)] font-black italic tracking-tighter text-white leading-none">
+              <h3 className="text-[clamp(3.5rem,14vw,8rem)] font-black italic tracking-tighter text-slate-900 dark:text-white leading-none">
                 Radiance
               </h3>
 
@@ -164,7 +164,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                   whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(34, 211, 238, 0.4)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => scrollTo(refs.eventsRef)}
-                  className="px-12 py-5 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest transition-all"
+                  className="px-12 py-5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl font-black text-xs uppercase tracking-widest transition-all"
                 >
                   Check Events
                 </motion.button>
@@ -173,7 +173,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                   whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.08)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => scrollTo(refs.teamRef)}
-                  className="px-12 py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-xs uppercase tracking-widest backdrop-blur-xl transition-all"
+                  className="px-12 py-5 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-black text-xs uppercase tracking-widest backdrop-blur-xl transition-all"
                 >
                   Meet the Team
                 </motion.button>

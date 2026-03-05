@@ -5,31 +5,31 @@ import { motion } from 'framer-motion';
 import { SpaceStars } from '../../components/ui/meteors';
 
 const SPONSORS_DATA = [
-  { 
+  {
     name: 'TechCorp',
     image: '/gallery/#',
     isCTA: false,
-    color: 'from-cyan-400 to-blue-500', 
+    color: 'from-cyan-400 to-blue-500',
     glow: 'group-hover:shadow-cyan-500/20 group-hover:border-cyan-500/40',
   },
-  { 
-    name: 'InnovateX', 
+  {
+    name: 'InnovateX',
     image: '/gallery/#',
     isCTA: false,
-    color: 'from-purple-400 to-fuchsia-500', 
+    color: 'from-purple-400 to-fuchsia-500',
     glow: 'group-hover:shadow-purple-500/20 group-hover:border-purple-500/40',
   },
-  { 
+  {
     name: 'It Could Be Your Turn',
     image: '',
     isCTA: true,
-    color: 'from-yellow-400 to-orange-500', 
+    color: 'from-yellow-400 to-orange-500',
     glow: 'group-hover:shadow-yellow-500/20 group-hover:border-yellow-500/40',
   },
 ];
 
 const SponsorCard = ({ sponsor }) => (
-  <div className={`relative flex-shrink-0 flex flex-col items-center justify-center w-[180px] h-32 md:w-[280px] md:h-48 bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-[2rem] group transition-all duration-500 hover:-translate-y-2 ${sponsor.glow}`}>
+  <div className={`relative flex-shrink-0 flex flex-col items-center justify-center w-[180px] h-32 md:w-[280px] md:h-48 bg-white dark:bg-white/[0.02] backdrop-blur-xl border border-slate-200 dark:border-white/5 rounded-[2rem] group transition-all duration-500 hover:-translate-y-2 shadow-sm dark:shadow-none ${sponsor.glow}`}>
 
     <div className={`absolute top-0 inset-x-8 h-px bg-gradient-to-r ${sponsor.color} opacity-30`} />
 
@@ -47,7 +47,7 @@ const SponsorCard = ({ sponsor }) => (
           </div>
 
           {/* Sponsor Name */}
-          <span className="mt-4 text-sm md:text-lg font-bold text-white/70 group-hover:text-white transition">
+          <span className="mt-4 text-sm md:text-lg font-bold text-slate-600 dark:text-white/70 group-hover:text-slate-900 dark:group-hover:text-white transition">
             {sponsor.name}
           </span>
         </>
@@ -86,12 +86,15 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
   }, []);
 
   return (
-    <section ref={ref} className="py-20 md:py-40 relative overflow-hidden bg-[#020617] text-white" id="sponsors">
+    <section ref={ref} className="py-20 md:py-40 relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white" id="sponsors">
 
-      <SpaceStars 
-        starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 30 : 80} 
-        className="absolute inset-0 pointer-events-none opacity-20"
-      />
+      <div className="hidden dark:block">
+        <SpaceStars
+          starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 30 : 80}
+          className="absolute inset-0 pointer-events-none opacity-20"
+        />
+      </div>
+
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
 
@@ -105,10 +108,10 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
         {/* Marquee */}
         <div className="relative w-full overflow-hidden">
 
-          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#020617] to-transparent z-20 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#020617] to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-slate-50 dark:from-[#020617] to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 dark:from-[#020617] to-transparent z-20 pointer-events-none" />
 
-          <motion.div 
+          <motion.div
             className="flex gap-6 md:gap-10 py-8"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
@@ -125,7 +128,7 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
 
         {/* CTA Section */}
         <div className="mt-16 md:mt-24 text-center">
-          <button 
+          <button
             onClick={openSponsorModal}
             className="px-12 py-4 bg-white text-black rounded-2xl font-bold uppercase tracking-widest hover:bg-cyan-400 transition-all duration-300 active:scale-95"
           >

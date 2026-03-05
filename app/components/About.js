@@ -11,7 +11,7 @@ const ABOUT_CONTENT = [
     subtitle: 'The Heart of Campus Events',
     description: "Avalanche is the official event management club of SIT Tumkur, dedicated to creating unforgettable campus experiences. From planning to execution, we bring together creativity, teamwork, and leadership to celebrate talent, culture, and student energy.",
     gradientText: 'from-cyan-400 via-blue-400 to-blue-600',
-    spotlightColor: 'rgba(59, 130, 246, 0.2)', 
+    spotlightColor: 'rgba(59, 130, 246, 0.2)',
     accent: 'bg-blue-500'
   },
   {
@@ -42,7 +42,7 @@ function InteractiveCard({ item, parallaxY }) {
     <motion.article
       style={{ y: parallaxY }}
       onMouseMove={handleMouseMove}
-      className="relative group rounded-[2.5rem] bg-gradient-to-b from-white/[0.05] to-transparent backdrop-blur-2xl border border-white/10 p-8 md:p-14 overflow-hidden shadow-2xl transition-colors duration-500 hover:border-white/20"
+      className="relative group rounded-[2.5rem] bg-gradient-to-b from-white dark:from-white/[0.05] to-white/80 dark:to-transparent backdrop-blur-2xl border border-slate-200 dark:border-white/10 p-8 md:p-14 overflow-hidden shadow-2xl transition-colors duration-500 hover:border-slate-300 dark:hover:border-white/20"
     >
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
@@ -61,23 +61,23 @@ function InteractiveCard({ item, parallaxY }) {
 
       <div className="relative z-10 flex flex-col h-full">
         <div className={`w-12 h-1 rounded-full ${item.accent} mb-8 opacity-50`} />
-        
+
         <h3 className={`text-3xl md:text-5xl font-black tracking-tighter bg-gradient-to-r ${item.gradientText} bg-clip-text text-transparent inline-block mb-3`}>
           {item.title}
         </h3>
-        
-        <p className="text-white/50 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase mb-8">
+
+        <p className="text-slate-400 dark:text-white/50 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase mb-8">
           {item.subtitle}
         </p>
 
-        <p className="text-gray-300 leading-relaxed text-base md:text-xl font-medium opacity-90">
+        <p className="text-slate-600 dark:text-gray-300 leading-relaxed text-base md:text-xl font-medium opacity-90">
           {item.description}
         </p>
-        
-        <div className="mt-10 pt-8 border-t border-white/5">
-           <span className="text-white text-xs font-black tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-             Discover More +
-           </span>
+
+        <div className="mt-10 pt-8 border-t border-slate-200 dark:border-white/5">
+          <span className="text-slate-800 dark:text-white text-xs font-black tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            Discover More +
+          </span>
         </div>
       </div>
     </motion.article>
@@ -98,29 +98,29 @@ const About = forwardRef((props, ref) => {
   return (
     <section
       ref={ref}
-      className="py-24 md:py-40 relative overflow-hidden bg-[#020617] text-white"
+      className="py-24 md:py-40 relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white"
       id="about"
     >
       {/* 1. THE STARS (Ensuring they are high up in visibility) */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none hidden dark:block">
         <SpaceStars starCount={150} className="opacity-60" />
       </div>
-      
+
       {/* 2. BACKGROUND POLISH (Using transparent radial gradients to let stars bleed through) */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
+      <div className="absolute inset-0 -z-10 pointer-events-none hidden dark:block">
         {/* Soft center window for stars */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_0%,_#020617_100%)] opacity-40" />
-        
+
         {/* Subtle Ambient Glows */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
       </div>
 
       <div ref={containerRef} className="max-w-7xl mx-auto px-6 relative z-10">
-        
+
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-28 gap-6">
           <div className="max-w-2xl">
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -128,21 +128,21 @@ const About = forwardRef((props, ref) => {
             >
               Who We Are
             </motion.p>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]"
+              className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]"
             >
-              The Minds Behind <br/> <span className="text-white/20">The Magic.</span>
+              The Minds Behind <br /> <span className="text-slate-300 dark:text-white/20">The Magic.</span>
             </motion.h2>
           </div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="hidden lg:block text-gray-500 text-sm font-medium max-w-[200px] text-right"
+            className="hidden lg:block text-slate-400 dark:text-gray-500 text-sm font-medium max-w-[200px] text-right"
           >
             SIT Tumkur's Premier Event Management Collective.
           </motion.div>
@@ -150,7 +150,7 @@ const About = forwardRef((props, ref) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-start">
           <InteractiveCard item={ABOUT_CONTENT[0]} parallaxY={y1} />
-          
+
           <div className="lg:pt-32">
             <InteractiveCard item={ABOUT_CONTENT[1]} parallaxY={y2} />
           </div>

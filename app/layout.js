@@ -17,13 +17,13 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body 
-        className="relative bg-[#020617] text-white overflow-x-hidden antialiased selection:bg-cyan-500/30"
+      <body
+        className="relative bg-white dark:bg-[#020617] text-slate-900 dark:text-white overflow-x-hidden antialiased selection:bg-cyan-500/30 transition-colors duration-400"
       >
         {/* Global animated background: 
             Ensuring it is fixed and promoted to its own GPU layer for smooth movement 
         */}
-        <div className="fixed inset-0 z-0 pointer-events-none transform-gpu">
+        <div className="fixed inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
           <GlobalBackground />
         </div>
 
