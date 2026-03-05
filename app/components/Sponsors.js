@@ -159,21 +159,33 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
   }, []);
 
   return (
-    <section ref={ref} className="py-32 md:py-48 relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white" id="sponsors">
+    <section ref={ref} className={`${isMobile ? 'py-20 mt-[-10px]' : 'py-32 md:py-48 mt-[-2px]'} relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white`} id="sponsors">
 
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
         <SpaceStars starCount={isMobile ? 50 : 150} className="opacity-30" />
 
         {/* Soft elegant glows */}
         <motion.div
-          animate={{ x: [0, -40, 0], y: [0, 20, 0] }}
+          animate={isMobile ? {} : { x: [0, -40, 0], y: [0, 20, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           className="absolute top-[20%] right-0 w-[600px] h-[600px] bg-cyan-600/5 rounded-full blur-[120px] mix-blend-screen"
         />
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}
-      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none block dark:hidden"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
         <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-cyan-100/50 rounded-full blur-[100px]" />
       </div>
 

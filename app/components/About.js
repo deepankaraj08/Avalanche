@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, forwardRef } from 'react';
+import React, { useRef, useState, useEffect, forwardRef } from 'react';
 import {
   motion,
   useScroll,
@@ -113,13 +113,18 @@ function InteractiveCard({ item, parallaxY }) {
   return (
     <motion.div
       ref={cardRef}
-      style={{ y: parallaxY, rotateX, rotateY, transformStyle: "preserve-3d" }}
+      style={{
+        y: parallaxY,
+        rotateX: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateX,
+        rotateY: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateY,
+        transformStyle: "preserve-3d"
+      }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="relative group perspective-[1200px]"
+      className="relative group perspective-[1200px] transform-gpu"
     >
-      <article className="relative h-full w-full rounded-[2.5rem] bg-white/60 dark:bg-[#0b1121]/80 backdrop-blur-[40px] border border-white/60 dark:border-white/10 p-10 md:p-14 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_-20px_rgba(0,0,0,0.3)] transition-colors duration-700 hover:border-slate-300 dark:hover:border-white/20">
+      <article className="relative h-full w-full rounded-[2.5rem] bg-white/60 dark:bg-[#0b1121]/80 backdrop-blur-[20px] md:backdrop-blur-[40px] border border-white/60 dark:border-white/10 p-8 md:p-14 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_-20px_rgba(0,0,0,0.3)] transition-colors duration-700 hover:border-slate-300 dark:hover:border-white/20">
 
         {/* Animated Gradient Border Overlay */}
         <div className="absolute inset-0 rounded-[2.5rem] p-[1px] bg-gradient-to-br from-white/40 to-transparent dark:from-white/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{ maskImage: 'linear-gradient(white, white)', maskComposite: 'exclude' }} />
@@ -231,6 +236,15 @@ const About = forwardRef((props, ref) => {
     offset: ['start end', 'end start'],
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Balanced parallax offsets with a scale effect for extra depth
   const y1 = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const y2 = useTransform(scrollYProgress, [0, 1], [120, -120]);
@@ -240,29 +254,41 @@ const About = forwardRef((props, ref) => {
   return (
     <section
       ref={ref}
-      className="mt-[-2px] pt-0 pb-32 md:pb-60 relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white"
+      className={`${isMobile ? 'mt-[-10px]' : 'mt-[-2px]'} pt-0 pb-32 md:pb-60 relative overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white`}
       id="about"
     >
       {/* High-End Background Atmosphere */}
-      <div className="absolute inset-0 z-0 pointer-events-none hidden dark:block">
-        <SpaceStars starCount={250} className="opacity-40" />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none hidden dark:block"
+        style={{
+          maskImage: `linear-gradient(to top, black ${isMobile ? '80%' : '95%'}, transparent 100%)`,
+          WebkitMaskImage: `linear-gradient(to top, black ${isMobile ? '80%' : '95%'}, transparent 100%)`
+        }}
+      >
+        <SpaceStars starCount={isMobile ? 80 : 250} className="opacity-40" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(56,189,248,0.08)_0%,_transparent_60%)]" />
 
         {/* Animated ambient blobs */}
         <motion.div
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
+          animate={isMobile ? {} : { x: [0, 50, 0], y: [0, 30, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           className="absolute top-[20%] right-[10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] mix-blend-screen"
         />
         <motion.div
-          animate={{ x: [0, -60, 0], y: [0, 40, 0] }}
+          animate={isMobile ? {} : { x: [0, -60, 0], y: [0, 40, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-[20%] left-[5%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[100px] mix-blend-screen"
         />
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}
-      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden overflow-x-hidden w-full h-full max-w-full">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden overflow-x-hidden w-full h-full max-w-full"
+        style={{
+          maskImage: `linear-gradient(to top, black ${isMobile ? '85%' : '90%'}, transparent 100%)`,
+          WebkitMaskImage: `linear-gradient(to top, black ${isMobile ? '85%' : '90%'}, transparent 100%)`
+        }}
+      >
         <motion.div
           animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}

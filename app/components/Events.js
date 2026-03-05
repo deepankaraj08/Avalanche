@@ -93,7 +93,11 @@ const TiltCard = ({ event, index }) => {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      style={{
+        rotateX: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateX,
+        rotateY: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateY,
+        transformStyle: "preserve-3d"
+      }}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.2, duration: 0.8, type: "spring", damping: 20 }}
@@ -106,7 +110,7 @@ const TiltCard = ({ event, index }) => {
       />
 
       {/* Main Glass Card */}
-      <div className={`relative bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-3xl rounded-[3rem] p-10 md:p-16 h-full flex flex-col border border-white/60 dark:border-white/10 transition-all duration-700 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.2)] ${event.border}`}>
+      <div className={`relative bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-xl md:backdrop-blur-3xl rounded-[3rem] p-8 md:p-16 h-full flex flex-col border border-white/60 dark:border-white/10 transition-all duration-700 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.2)] ${event.border}`}>
 
         {/* Dynamic Inner Spotlight */}
         <motion.div
@@ -177,28 +181,49 @@ const TiltCard = ({ event, index }) => {
 };
 
 const Events = forwardRef((props, ref) => {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <section ref={ref} className="py-32 md:py-52 relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden" id="events">
+    <section ref={ref} className={`${isMobile ? 'py-20 mt-[-10px]' : 'py-32 md:py-52 mt-[-2px]'} relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden`} id="events">
 
       {/* 1. HIGH-END AMBIENT BACKGROUND */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
-        <SpaceStars starCount={typeof window !== 'undefined' && window.innerWidth < 768 ? 100 : 250} className="opacity-50" />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
+        <SpaceStars starCount={isMobile ? 60 : 250} className="opacity-50" />
 
         {/* Soft, moving gradient orbs */}
         <motion.div
-          animate={{ x: [0, -50, 0], y: [0, 40, 0] }}
+          animate={isMobile ? {} : { x: [0, -50, 0], y: [0, 40, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/3"
         />
         <motion.div
-          animate={{ x: [0, 60, 0], y: [0, -50, 0] }}
+          animate={isMobile ? {} : { x: [0, 60, 0], y: [0, -50, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen translate-y-1/4 -translate-x-1/4"
         />
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}
-      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none block dark:hidden"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
         <div className="absolute top-[10%] left-0 w-[600px] h-[600px] bg-cyan-100/60 rounded-full blur-[100px] -translate-x-1/3" />
         <div className="absolute bottom-[10%] right-0 w-[700px] h-[700px] bg-indigo-100/60 rounded-full blur-[120px] translate-x-1/3" />
       </div>

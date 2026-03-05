@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
@@ -118,7 +118,7 @@ const FloatingMember = ({ member, style }) => (
     viewport={{ once: true, margin: '-5%' }}
     transition={{ duration: 0.8, delay: style.entryDelay, type: "spring", damping: 20 }}
     style={{ top: style.top, left: style.left }}
-    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer"
+    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 hover:z-50 group cursor-pointer"
   >
     {/* Float wrapper */}
     <motion.div
@@ -142,13 +142,13 @@ const FloatingMember = ({ member, style }) => (
             src={member.image}
             alt={member.name}
             loading="lazy"
-            className="w-full h-full object-cover grayscale-[40%] mix-blend-luminosity group-hover:mix-blend-normal group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
           />
         </div>
       </div>
 
       {/* Social icons */}
-      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100 pointer-events-none group-hover:pointer-events-auto z-40">
+      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-2 transition-all duration-500 delay-100 pointer-events-none group-hover:pointer-events-auto z-50">
         <a
           href={member.instagram}
           target="_blank"
@@ -172,8 +172,8 @@ const FloatingMember = ({ member, style }) => (
       </div>
 
       {/* Name badge */}
-      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 delay-150 z-50 pointer-events-none">
-        <div className="bg-white/90 dark:bg-[#060b18]/90 backdrop-blur-md text-slate-800 dark:text-white px-4 py-1.5 rounded-full text-[9px] font-black shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)] whitespace-nowrap border border-slate-200 dark:border-white/10 tracking-[0.2em] uppercase">
+      <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 delay-150 z-[60] pointer-events-none">
+        <div className="bg-slate-900 dark:bg-black/90 backdrop-blur-md text-white px-5 py-2 rounded-full text-[10px] font-black shadow-2xl whitespace-nowrap border border-white/20 tracking-[0.2em] uppercase">
           {member.name}
         </div>
       </div>
@@ -185,22 +185,37 @@ const Team = forwardRef((props, ref) => {
   const [activeIdx, setActiveIdx] = useState(null);
   const activeMember = activeIdx !== null ? ALL_MEMBERS[activeIdx] : null;
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <section
       ref={ref}
-      className="relative w-full bg-slate-50 dark:bg-[#020617] overflow-hidden min-h-[110vh]"
+      className={`${isMobile ? 'mt-[-10px]' : 'mt-[-2px]'} relative w-full bg-slate-50 dark:bg-[#020617] overflow-hidden min-h-[110vh]`}
       id="team"
     >
       {/* 1. LAYERED BACKGROUND EFFECTS */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block overflow-hidden">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block overflow-hidden"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
         {/* Deep ambient background glows */}
         <motion.div
-          animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
+          animate={isMobile ? {} : { x: [0, 60, 0], y: [0, 40, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="absolute top-1/2 left-1/4 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 -translate-x-1/2"
         />
         <motion.div
-          animate={{ x: [0, -50, 0], y: [0, -60, 0] }}
+          animate={isMobile ? {} : { x: [0, -50, 0], y: [0, -60, 0] }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/2"
         />
@@ -290,7 +305,7 @@ const Team = forwardRef((props, ref) => {
             >
               <div className="w-full aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-md group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-shadow duration-500">
                 <div className="w-full h-full rounded-full overflow-hidden border border-white dark:border-[#020617] bg-slate-900">
-                  <img src={member.image} alt={member.name} loading="lazy" className="w-full h-full object-cover filter grayscale-[40%] group-hover:grayscale-0 transition-all duration-500" />
+                  <img src={member.image} alt={member.name} loading="lazy" className="w-full h-full object-cover transition-all duration-500" />
                 </div>
               </div>
               <span className="text-[9px] sm:text-[10px] font-black text-slate-600 dark:text-white/60 uppercase tracking-widest line-clamp-1 text-center w-full">
@@ -350,7 +365,7 @@ const Team = forwardRef((props, ref) => {
                       onClick={e => activeMember.instagram === '#' && e.preventDefault()}
                       className="flex-1 flex items-center justify-center gap-3 px-5 py-4 rounded-[1.2rem] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white text-xs font-black shadow-lg hover:shadow-xl active:scale-95 transition-all"
                     >
-                      <FaInstagram size={18} /> InstaSGRAM
+                      <FaInstagram size={18} /> Instagram
                     </a>
                     <a
                       href={activeMember.linkedin}

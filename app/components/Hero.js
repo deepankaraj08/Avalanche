@@ -117,16 +117,16 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
     background: { color: "transparent" },
     fpsLimit: 60,
     particles: {
-      number: { value: isMobile ? 20 : 50, density: { enable: true, area: 1000 } },
+      number: { value: isMobile ? 15 : 50, density: { enable: true, area: 1000 } },
       color: { value: ["#22d3ee", "#818cf8", "#c084fc"] },
       links: {
-        enable: true,
+        enable: !isMobile,
         distance: 140,
         color: "#818cf8",
         opacity: 0.15,
         width: 1
       },
-      move: { enable: true, speed: 0.8, random: true },
+      move: { enable: true, speed: isMobile ? 0.4 : 0.8, random: true },
       opacity: { value: { min: 0.1, max: 0.5 } },
       size: { value: { min: 1, max: 2.5 } }
     },
@@ -141,7 +141,13 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white pt-24 pb-0"
     >
       {/* 1. LAYERED BACKGROUND EFFECTS */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
+        style={{
+          maskImage: `linear-gradient(to bottom, black ${isMobile ? '80%' : '90%'}, transparent 100%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, black ${isMobile ? '80%' : '90%'}, transparent 100%)`
+        }}
+      >
         <SpaceStars starCount={isMobile ? 80 : 250} className="opacity-60" />
 
         {/* Deep ambient glows */}
@@ -161,7 +167,13 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}
-      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden"
+        style={{
+          maskImage: `linear-gradient(to bottom, black ${isMobile ? '85%' : '94%'}, transparent 100%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, black ${isMobile ? '85%' : '94%'}, transparent 100%)`
+        }}
+      >
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-100/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-100/50 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3" />
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
@@ -202,11 +214,15 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
         {/* 3. THE "PRO" FEATURED CARD */}
         <motion.div
-          style={{ rotateX, rotateY, perspective: 1200 }}
+          style={{
+            rotateX: isMobile ? 0 : rotateX,
+            rotateY: isMobile ? 0 : rotateY,
+            transformStyle: "preserve-3d",
+          }}
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 1, type: "spring", damping: 20 }}
-          className="relative w-full max-w-4xl group transform-gpu z-30"
+          className="relative w-full max-w-5xl rounded-[3rem] bg-white/60 dark:bg-[#0b1121]/80 backdrop-blur-[40px] border border-white/60 dark:border-white/10 p-8 md:p-16 overflow-hidden shadow-2xl transition-colors duration-700 hover:border-slate-300 dark:hover:border-white/20 transform-gpu"
         >
           {/* Card Body */}
           <div className="relative overflow-hidden bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-[40px] border border-white/50 dark:border-white/10 rounded-[3rem] p-10 md:p-20 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.5)] transition duration-700 group-hover:border-cyan-500/30">

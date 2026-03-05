@@ -102,17 +102,23 @@ const Gallery = forwardRef((props, ref) => {
     <section
       ref={ref}
       id="gallery"
-      className="py-32 md:py-48 relative overflow-hidden bg-slate-50 dark:bg-[#020617] min-h-[100dvh] flex flex-col justify-center"
+      className={`${isMobile ? 'py-20 mt-[-10px]' : 'py-32 md:py-48 mt-[-2px]'} relative overflow-hidden bg-slate-50 dark:bg-[#020617] min-h-[100dvh] flex flex-col justify-center`}
     >
       {/* Premium Ambient Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
+        style={{
+          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
+          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+        }}
+      >
         <motion.div
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
+          animate={isMobile ? {} : { x: [0, 50, 0], y: [0, 30, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="absolute top-[20%] right-[10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[140px] mix-blend-screen"
         />
         <motion.div
-          animate={{ x: [0, -60, 0], y: [0, 40, 0] }}
+          animate={isMobile ? {} : { x: [0, -60, 0], y: [0, 40, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-[20%] left-[5%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen"
         />

@@ -14,16 +14,31 @@ const SOCIAL_LINKS = [
 ];
 
 const Footer = () => {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const openWhatsApp = () => {
     window.open('https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t', '_blank');
   };
 
   return (
-    <footer className="relative bg-slate-100 dark:bg-[#0f172a] border-t border-slate-200 dark:border-white/5 pt-16 md:pt-24 pb-10 overflow-hidden text-slate-800 dark:text-white" id="footer">
+    <footer className={`${isMobile ? 'mt-[-10px]' : 'mt-[-2px]'} relative bg-slate-50 dark:bg-[#020617] pt-16 md:pt-24 pb-10 overflow-hidden text-slate-800 dark:text-white`} id="footer">
 
       {/* ===== Background Atmosphere - Performance Optimized ===== */}
       <div className="absolute inset-0 -z-10 pointer-events-none transform-gpu">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-100 dark:from-[#0f172a] via-slate-200 dark:via-[#1e293b] to-slate-300 dark:to-black" />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-slate-50 dark:from-[#020617] via-slate-100 dark:via-[#0f172a] to-slate-200 dark:to-black"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent, black 15%, black)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black)'
+          }}
+        />
 
         {/* Glow: Reduced blur for mobile GPU stability */}
         <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[300px] md:h-[500px] bg-cyan-600/5 rounded-[100%] blur-[60px] md:blur-[120px] will-change-transform" />
