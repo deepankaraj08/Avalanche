@@ -126,8 +126,10 @@ const TiltCard = ({ event, index }) => {
           }}
         />
 
-        {/* Ambient Noise Texture */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        {/* Ambient Noise Texture — desktop only */}
+        {!isMobile && (
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        )}
 
         {/* Liquid Glint Animation */}
         <motion.div

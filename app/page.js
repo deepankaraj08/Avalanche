@@ -1,17 +1,22 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react'; 
-import { AnimatePresence } from 'framer-motion'; 
+import { useRef, useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
-import About from '@/app/components/About';
-import Events from '@/app/components/Events';
-import Gallery from '@/app/components/Gallery';
-import Sponsors from '@/app/components/Sponsors';
-import Team from '@/app/components/Team';
-import Footer from '@/app/components/Footer';
-import JoinModal from '@/app/components/JoinModal';
-import SponsorModal from '@/app/components/SponsorModal';
+
+// Below-fold sections: lazy-loaded so their JS is NOT in the initial bundle
+const About = dynamic(() => import('@/app/components/About'), { ssr: false, loading: () => null });
+const Events = dynamic(() => import('@/app/components/Events'), { ssr: false, loading: () => null });
+const Gallery = dynamic(() => import('@/app/components/Gallery'), { ssr: false, loading: () => null });
+const Sponsors = dynamic(() => import('@/app/components/Sponsors'), { ssr: false, loading: () => null });
+const Team = dynamic(() => import('@/app/components/Team'), { ssr: false, loading: () => null });
+const Footer = dynamic(() => import('@/app/components/Footer'), { ssr: false, loading: () => null });
+
+// Modals: load only when actually opened
+const JoinModal = dynamic(() => import('@/app/components/JoinModal'), { ssr: false, loading: () => null });
+const SponsorModal = dynamic(() => import('@/app/components/SponsorModal'), { ssr: false, loading: () => null });
 
 export default function Home() {
   // 1. State Management for Modals
@@ -26,12 +31,12 @@ export default function Home() {
   const galleryRef = useRef(null);
   const teamRef = useRef(null);
 
-  const allRefs = { 
-    homeRef, 
-    aboutRef, 
-    eventsRef, 
-    sponsorsRef, 
-    galleryRef, 
+  const allRefs = {
+    homeRef,
+    aboutRef,
+    eventsRef,
+    sponsorsRef,
+    galleryRef,
     teamRef,
   };
 
@@ -39,8 +44,8 @@ export default function Home() {
   const scrollTo = (ref) => {
     if (ref && ref.current) {
       // Responsive offset: Smaller offset for mobile to maximize viewable area
-      const offset = window.innerWidth < 768 ? 60 : 80; 
-      
+      const offset = window.innerWidth < 768 ? 60 : 80;
+
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = ref.current.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -65,29 +70,29 @@ export default function Home() {
   return (
     // Optimized background and scroll container
     <div className="bg-[#020617] min-h-[100dvh] w-full selection:bg-cyan-500/30">
-      
-      <Navbar 
-        scrollTo={scrollTo} 
-        refs={allRefs} 
-        openModal={() => setIsJoinModalOpen(true)} 
+
+      <Navbar
+        scrollTo={scrollTo}
+        refs={allRefs}
+        openModal={() => setIsJoinModalOpen(true)}
       />
 
       <main className="relative">
-        <Hero 
-          ref={homeRef} 
-          scrollTo={scrollTo} 
-          refs={allRefs} 
+        <Hero
+          ref={homeRef}
+          scrollTo={scrollTo}
+          refs={allRefs}
         />
 
         <About ref={aboutRef} />
         <Events ref={eventsRef} />
         <Gallery ref={galleryRef} />
-        
-        <Sponsors 
-          ref={sponsorsRef} 
-          openSponsorModal={() => setIsSponsorModalOpen(true)} 
+
+        <Sponsors
+          ref={sponsorsRef}
+          openSponsorModal={() => setIsSponsorModalOpen(true)}
         />
-        
+
         <Team ref={teamRef} />
       </main>
 

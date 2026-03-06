@@ -14,8 +14,8 @@ const GALLERY_IMAGES = [
   { id: 8, src: '/gallery/nine1.png', title: 'Motion' },
 ];
 
-// Magnetic Button Component for Controls
-function MagneticButton({ children, className, onClick }) {
+// Magnetic Button Component for Controls — desktop only (avoids spring math on mobile)
+function MagneticButton({ children, className, onClick, isMobile }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -34,6 +34,18 @@ function MagneticButton({ children, className, onClick }) {
   function handleMouseLeave() {
     x.set(0);
     y.set(0);
+  }
+
+  // On mobile skip the physics — just a plain button
+  if (isMobile) {
+    return (
+      <button
+        onClick={onClick}
+        className={`relative inline-flex items-center justify-center ${className}`}
+      >
+        {children}
+      </button>
+    );
   }
 
   return (
@@ -122,8 +134,10 @@ const Gallery = forwardRef((props, ref) => {
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-[20%] left-[5%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen"
         />
-        {/* Grain Overlay */}
-        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        {/* Grain Overlay — desktop only */}
+        {!isMobile && (
+          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        )}
       </div>
 
       <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden">
@@ -167,7 +181,7 @@ const Gallery = forwardRef((props, ref) => {
               const absOffset = Math.abs(offset);
               const isCenter = i === index;
 
-              if (absOffset > 2) return null;
+              if (absOffset > (isMobile ? 1 : 2)) return null;
 
               return (
                 <motion.div
@@ -199,6 +213,7 @@ const Gallery = forwardRef((props, ref) => {
                       src={img.src}
                       alt={img.title}
                       draggable={false}
+                      loading="lazy"
                       className="max-h-full w-auto object-contain rounded-[2.5rem] md:rounded-[3rem] shadow-2xl dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] filter transition-all duration-700 group-hover:brightness-110"
                     />
 
@@ -223,7 +238,7 @@ const Gallery = forwardRef((props, ref) => {
       {/* Premium Controls */}
       <div className="mt-12 md:mt-24 flex flex-col items-center gap-10 relative z-30 px-6">
         <div className="flex items-center gap-8 md:gap-14 bg-white/50 dark:bg-white/5 p-3 md:p-4 rounded-full backdrop-blur-xl border border-white/60 dark:border-white/10 shadow-xl">
-          <MagneticButton onClick={prev} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-white dark:hover:bg-white hover:text-cyan-500 dark:text-white text-slate-800 transition-colors shadow-sm">
+          <MagneticButton isMobile={isMobile} onClick={prev} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-white dark:hover:bg-white hover:text-cyan-500 dark:text-white text-slate-800 transition-colors shadow-sm">
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -239,7 +254,7 @@ const Gallery = forwardRef((props, ref) => {
             ))}
           </div>
 
-          <MagneticButton onClick={next} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-white dark:hover:bg-white hover:text-cyan-500 dark:text-white text-slate-800 transition-colors shadow-sm">
+          <MagneticButton isMobile={isMobile} onClick={next} className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-100 dark:bg-white/10 hover:bg-white dark:hover:bg-white hover:text-cyan-500 dark:text-white text-slate-800 transition-colors shadow-sm">
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>

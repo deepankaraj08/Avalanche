@@ -181,11 +181,14 @@ const FloatingMember = ({ member, style }) => (
   </motion.div>
 );
 
+const MOBILE_INITIAL_COUNT = 20;
+
 const Team = forwardRef((props, ref) => {
   const [activeIdx, setActiveIdx] = useState(null);
   const activeMember = activeIdx !== null ? ALL_MEMBERS[activeIdx] : null;
 
   const [isMobile, setIsMobile] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -193,6 +196,11 @@ const Team = forwardRef((props, ref) => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // On mobile, only show a paginated slice of members until "Show More" is tapped
+  const mobileVisibleMembers = isMobile && !showAll
+    ? ALL_MEMBERS.slice(0, MOBILE_INITIAL_COUNT)
+    : ALL_MEMBERS;
 
   return (
     <section
@@ -220,8 +228,10 @@ const Team = forwardRef((props, ref) => {
           className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/2"
         />
 
-        {/* Grain Overlay */}
-        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        {/* Grain Overlay — desktop only */}
+        {!isMobile && (
+          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        )}
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}
@@ -291,16 +301,16 @@ const Team = forwardRef((props, ref) => {
           </p>
         </div>
 
-        {/* 3-column grid */}
+        {/* 3-column grid — paginated on mobile */}
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-6">
-          {ALL_MEMBERS.map((member, idx) => (
+          {mobileVisibleMembers.map((member, idx) => (
             <motion.button
               key={idx}
-              initial={{ opacity: 0, scale: 0.7, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: "50px" }}
-              transition={{ delay: (idx % 10) * 0.05, type: "spring", damping: 20 }}
-              onClick={() => setActiveIdx(idx)}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: '60px' }}
+              transition={{ duration: 0.3, delay: (idx % 6) * 0.04 }}
+              onClick={() => setActiveIdx(ALL_MEMBERS.indexOf(member))}
               className="flex flex-col items-center gap-3 group active:scale-95 transition-transform"
             >
               <div className="w-full aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-md group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-shadow duration-500">
@@ -314,6 +324,18 @@ const Team = forwardRef((props, ref) => {
             </motion.button>
           ))}
         </div>
+
+        {/* Show More button — only visible when list is truncated */}
+        {!showAll && ALL_MEMBERS.length > MOBILE_INITIAL_COUNT && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => setShowAll(true)}
+              className="px-8 py-3 rounded-full bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-[10px] font-black text-slate-600 dark:text-white/60 uppercase tracking-[0.3em] shadow-sm active:scale-95 transition-transform hover:border-cyan-500/40 hover:text-cyan-500 dark:hover:text-cyan-400"
+            >
+              Show More · {ALL_MEMBERS.length - MOBILE_INITIAL_COUNT} remaining
+            </button>
+          </div>
+        )}
 
         {/* ── Bottom-sheet popup ── */}
         <AnimatePresence>

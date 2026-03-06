@@ -102,8 +102,8 @@ const SponsorCard = ({ sponsor }) => (
 
     <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent dark:from-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-    {/* Noise Texture */}
-    <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay rounded-[2.5rem]" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+    {/* Noise Texture — hidden on mobile via CSS */}
+    <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay rounded-[2.5rem] hidden md:block" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
 
     <div className="relative z-10 flex flex-col items-center px-4">
 
@@ -222,20 +222,39 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
           <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-slate-50 dark:from-[#020617] to-transparent z-20 pointer-events-none" />
           <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-slate-50 dark:from-[#020617] to-transparent z-20 pointer-events-none" />
 
-          {/* Marquee Track */}
-          <motion.div
-            className="flex gap-6 md:gap-12 py-10 pl-6"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{
-              repeat: Infinity,
-              duration: duration,
-              ease: "linear",
-            }}
-          >
-            {scrollData.map((sponsor, idx) => (
-              <SponsorCard key={idx} sponsor={sponsor} />
-            ))}
-          </motion.div>
+          {/* Marquee Track — CSS animation on mobile (compositor thread), JS animation on desktop */}
+          {isMobile ? (
+            <>
+              <style>{`
+                @keyframes marquee-scroll {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+                .marquee-track {
+                  animation: marquee-scroll ${duration}s linear infinite;
+                }
+              `}</style>
+              <div className="flex gap-6 py-10 pl-6 marquee-track">
+                {scrollData.map((sponsor, idx) => (
+                  <SponsorCard key={idx} sponsor={sponsor} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <motion.div
+              className="flex gap-6 md:gap-12 py-10 pl-6"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: duration,
+                ease: "linear",
+              }}
+            >
+              {scrollData.map((sponsor, idx) => (
+                <SponsorCard key={idx} sponsor={sponsor} />
+              ))}
+            </motion.div>
+          )}
         </div>
 
         {/* CTA Section */}

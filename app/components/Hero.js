@@ -115,7 +115,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
   const particlesOptions = useMemo(() => ({
     fullScreen: { enable: false },
     background: { color: "transparent" },
-    fpsLimit: 60,
+    fpsLimit: isMobile ? 30 : 60,
     particles: {
       number: { value: isMobile ? 15 : 50, density: { enable: true, area: 1000 } },
       color: { value: ["#22d3ee", "#818cf8", "#c084fc"] },
@@ -152,18 +152,20 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
         {/* Deep ambient glows */}
         <motion.div
-          animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+          animate={isMobile ? {} : { x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
           className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[140px] mix-blend-screen"
         />
         <motion.div
-          animate={{ x: [0, -40, 0], y: [0, 50, 0] }}
+          animate={isMobile ? {} : { x: [0, -40, 0], y: [0, 50, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[120px] mix-blend-screen"
         />
 
-        {/* Grain Overlay */}
-        <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        {/* Grain Overlay — only on desktop (external URL not worth fetching on mobile) */}
+        {!isMobile && (
+          <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        )}
       </div>
 
       {/* Light Mode Specific Ambient Blobs */}

@@ -143,8 +143,10 @@ function InteractiveCard({ item, parallaxY }) {
           }}
         />
 
-        {/* Noise Texture Overlay for Premium Feel */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        {/* Noise Texture Overlay for Premium Feel — desktop only */}
+        {typeof window !== 'undefined' && window.innerWidth >= 768 && (
+          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+        )}
 
         {/* Content with 3D Z-translation POP */}
         <div className="relative z-10 flex flex-col h-full transform-gpu transition-transform duration-500 ease-out" style={{ transform: isHovered ? "translateZ(50px) scale(1.02)" : "translateZ(0px) scale(1)" }}>
@@ -290,12 +292,12 @@ const About = forwardRef((props, ref) => {
         }}
       >
         <motion.div
-          animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+          animate={isMobile ? {} : { x: [0, 30, 0], y: [0, 20, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
           className="absolute -top-40 right-10 w-[500px] h-[500px] bg-cyan-200/40 rounded-full blur-[80px]"
         />
         <motion.div
-          animate={{ x: [0, -40, 0], y: [0, -20, 0] }}
+          animate={isMobile ? {} : { x: [0, -40, 0], y: [0, -20, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-20 -left-20 w-[600px] h-[600px] bg-indigo-100/60 rounded-full blur-[100px]"
         />
@@ -341,10 +343,10 @@ const About = forwardRef((props, ref) => {
         {/* Dynamic Asymmetric Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-start pb-20 max-w-full overflow-hidden">
           <div className="lg:col-span-6 w-full lg:sticky lg:top-40 z-20">
-            <InteractiveCard item={ABOUT_CONTENT[0]} parallaxY={y1} />
+            <InteractiveCard item={ABOUT_CONTENT[0]} parallaxY={isMobile ? 0 : y1} />
           </div>
           <div className="lg:col-span-6 lg:mt-64 w-full z-10">
-            <InteractiveCard item={ABOUT_CONTENT[1]} parallaxY={y2} />
+            <InteractiveCard item={ABOUT_CONTENT[1]} parallaxY={isMobile ? 0 : y2} />
           </div>
         </div>
 

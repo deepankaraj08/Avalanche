@@ -6,15 +6,17 @@ import { cn } from "../../lib/utils";
 export function SpaceStars({ className, starCount = 180 }) {
   const [stars, setStars] = useState([]);
   const [shootingStars, setShootingStars] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const timeoutsRef = useRef(new Set());
   const spawnTimeoutRef = useRef(null);
 
-  /* ==============================
-     1️⃣ Static Stars (More Depth)
-  ============================== */
   useEffect(() => {
-    const generatedStars = Array.from({ length: starCount }).map((_, i) => ({
+    const mobile = window.innerWidth < 768;
+    setIsMobile(mobile);
+    // On mobile, use fewer static stars to reduce DOM node count
+    const count = mobile ? Math.floor(starCount / 2) : starCount;
+    const generatedStars = Array.from({ length: count }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       top: Math.random() * 100,
@@ -27,9 +29,12 @@ export function SpaceStars({ className, starCount = 180 }) {
   }, [starCount]);
 
   /* ==============================
-     2️⃣ Shooting Stars (Upgraded)
+     2️⃣ Shooting Stars — desktop only
   ============================== */
   useEffect(() => {
+    // Skip on mobile — the recursive setTimeout loop is too expensive
+    if (isMobile) return;
+
     const spawnStar = () => {
       const id = Date.now();
       const duration = 1000 + Math.random() * 800; // random speed
@@ -104,22 +109,22 @@ export function SpaceStars({ className, starCount = 180 }) {
 
       {/* ⭐ Static Stars */}
       {/* ⭐ Static Stars (Your Original Style Restored) */}
-{stars.map((star) => (
-  <span
-    key={star.id}
-    className="absolute rounded-full bg-slate-400"
-    style={{
-      top: `${star.top}%`,
-      left: `${star.left}%`,
-      width: `${star.size}px`,
-      height: `${star.size}px`,
-      opacity: star.opacity,
-      animation: `twinkle ${star.duration}s ease-in-out infinite`,
-      animationDelay: `${star.delay}s`,
-      boxShadow: "0 0 4px rgba(148,163,184,0.6)", // subtle glow only
-    }}
-  />
-))}
+      {stars.map((star) => (
+        <span
+          key={star.id}
+          className="absolute rounded-full bg-slate-400"
+          style={{
+            top: `${star.top}%`,
+            left: `${star.left}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            opacity: star.opacity,
+            animation: `twinkle ${star.duration}s ease-in-out infinite`,
+            animationDelay: `${star.delay}s`,
+            boxShadow: "0 0 4px rgba(148,163,184,0.6)", // subtle glow only
+          }}
+        />
+      ))}
 
       {/* 🌠 Shooting Stars */}
       {shootingStars.map((star) => (
