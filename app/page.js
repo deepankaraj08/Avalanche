@@ -10,33 +10,29 @@ import Hero from '@/app/components/Hero';
 const About = dynamic(() => import('@/app/components/About'), { ssr: false, loading: () => null });
 const Events = dynamic(() => import('@/app/components/Events'), { ssr: false, loading: () => null });
 const Gallery = dynamic(() => import('@/app/components/Gallery'), { ssr: false, loading: () => null });
-const Sponsors = dynamic(() => import('@/app/components/Sponsors'), { ssr: false, loading: () => null });
 const Team = dynamic(() => import('@/app/components/Team'), { ssr: false, loading: () => null });
 const Footer = dynamic(() => import('@/app/components/Footer'), { ssr: false, loading: () => null });
 
 // Modals: load only when actually opened
 const JoinModal = dynamic(() => import('@/app/components/JoinModal'), { ssr: false, loading: () => null });
-const SponsorModal = dynamic(() => import('@/app/components/SponsorModal'), { ssr: false, loading: () => null });
-
 export default function Home() {
   // 1. State Management for Modals
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-  const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
 
   // 2. Initialize all refs
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
   const eventsRef = useRef(null);
-  const sponsorsRef = useRef(null);
   const galleryRef = useRef(null);
+  const sponsorsRef = useRef(null);
   const teamRef = useRef(null);
 
   const allRefs = {
     homeRef,
     aboutRef,
     eventsRef,
-    sponsorsRef,
     galleryRef,
+    sponsorsRef,
     teamRef,
   };
 
@@ -55,17 +51,27 @@ export default function Home() {
         top: offsetPosition,
         behavior: 'smooth'
       });
+
+      // Highlight the sponsors box with a glowing boundary momentarily
+      if (ref === sponsorsRef) {
+        ref.current.classList.add('!border-cyan-400', '!shadow-[0_0_40px_rgba(34,211,238,0.4)]');
+        setTimeout(() => {
+          if (ref.current) {
+            ref.current.classList.remove('!border-cyan-400', '!shadow-[0_0_40px_rgba(34,211,238,0.4)]');
+          }
+        }, 2000);
+      }
     }
   };
 
   // Prevent scroll-chaining when modals are open
   useEffect(() => {
-    if (isJoinModalOpen || isSponsorModalOpen) {
+    if (isJoinModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [isJoinModalOpen, isSponsorModalOpen]);
+  }, [isJoinModalOpen]);
 
   return (
     // Optimized background and scroll container
@@ -88,11 +94,6 @@ export default function Home() {
         <Events ref={eventsRef} />
         <Gallery ref={galleryRef} />
 
-        <Sponsors
-          ref={sponsorsRef}
-          openSponsorModal={() => setIsSponsorModalOpen(true)}
-        />
-
         <Team ref={teamRef} />
       </main>
 
@@ -104,9 +105,6 @@ export default function Home() {
           <JoinModal key="join-modal" onClose={() => setIsJoinModalOpen(false)} />
         )}
 
-        {isSponsorModalOpen && (
-          <SponsorModal key="sponsor-modal" onClose={() => setIsSponsorModalOpen(false)} />
-        )}
       </AnimatePresence>
     </div>
   );

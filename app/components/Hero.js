@@ -272,14 +272,12 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-60 w-60 sm:h-80 sm:w-80 rounded-full bg-cyan-500/15 blur-[80px] sm:blur-[100px] pointer-events-none" />
 
-          <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem]">
+          <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem] hidden lg:block">
             <div 
               className="w-full h-full"
               style={{
-                transform: isMobile
-                  ? 'scale(0.75) translateY(55%) translateX(0%)'
-                  : 'scale(1.5) translateY(12px) translateX(8px)',
-                transformOrigin: isMobile ? 'bottom center' : 'center',
+                transform: 'scale(1.5) translateY(12px) translateX(8px)',
+                transformOrigin: 'center',
               }}
             >
               <InteractiveRobotSpline 
@@ -322,7 +320,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </motion.div>
 
         {/* Marquee Card */}
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 py-6 sm:py-8 w-full max-w-[650px] lg:w-[480px] xl:w-[650px] backdrop-blur-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors duration-700 hover:border-zinc-300 dark:hover:border-white/20 mx-auto lg:mx-0">
+        <div ref={refs?.sponsorsRef} className="relative overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 py-6 sm:py-8 w-full max-w-[650px] lg:w-[480px] xl:w-[650px] backdrop-blur-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-700 hover:border-zinc-300 dark:hover:border-white/20 mx-auto lg:mx-0">
           <h1 className="mb-4 sm:mb-6 px-6 sm:px-8 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 text-center lg:text-left align-center justify-center">Sponsors</h1>
           
           <div 

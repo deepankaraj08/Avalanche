@@ -143,7 +143,7 @@ const About = forwardRef((props, ref) => {
 
           {/* Core Identity */}
           <BentoCard 
-            className="md:col-span-4 lg:col-span-4 row-span-2 group/card text-white" 
+            className="md:col-span-4 lg:col-start-2 lg:col-span-4 row-span-2 group/card text-white" 
             glowColor="rgba(56, 189, 248, 0.2)"
             bgImage="/gallery/12.jpeg"
           >
