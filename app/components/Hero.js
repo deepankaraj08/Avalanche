@@ -23,12 +23,12 @@ import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
 
 // --- MOCK BRANDS for the Marquee ---
 const CLIENTS = [
-  { name: "Acme Corp", icon: Hexagon },
-  { name: "Quantum", icon: Triangle },
-  { name: "Command+Z", icon: CommandIcon },
-  { name: "Phantom", icon: Ghost },
-  { name: "Ruby", icon: Gem },
-  { name: "Chipset", icon: Cpu },
+  { name: "x", icon: Hexagon },
+  { name: "y", icon: Triangle },
+  { name: "z", icon: CommandIcon },
+  { name: "a", icon: Ghost },
+  { name: "b", icon: Gem },
+  { name: "c", icon: Cpu },
 ];
 
 // Reusable Magnetic Button Component
@@ -315,7 +315,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
         {/* Marquee Card */}
         <div className="relative overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 py-6 sm:py-8 w-full max-w-[650px] lg:w-[480px] xl:w-[650px] backdrop-blur-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors duration-700 hover:border-zinc-300 dark:hover:border-white/20 mx-auto lg:mx-0">
-          <h3 className="mb-4 sm:mb-6 px-6 sm:px-8 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 text-center lg:text-left">Trusted by Industry Leaders</h3>
+          <h1 className="mb-4 sm:mb-6 px-6 sm:px-8 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 text-center lg:text-left align-center justify-center">Sponsors</h1>
           
           <div 
             className="relative flex overflow-hidden w-full"
