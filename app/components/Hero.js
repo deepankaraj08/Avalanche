@@ -273,7 +273,15 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-60 w-60 sm:h-80 sm:w-80 rounded-full bg-cyan-500/15 blur-[80px] sm:blur-[100px] pointer-events-none" />
 
           <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem]">
-            <div className="w-full h-full scale-[1.2] sm:scale-[1.5] origin-center translate-y-12 translate-x-4 sm:translate-x-8">
+            <div 
+              className="w-full h-full"
+              style={{
+                transform: isMobile
+                  ? 'scale(0.75) translateY(55%) translateX(0%)'
+                  : 'scale(1.5) translateY(12px) translateX(8px)',
+                transformOrigin: isMobile ? 'bottom center' : 'center',
+              }}
+            >
               <InteractiveRobotSpline 
                 scene="https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode"
                 className="w-full h-full"

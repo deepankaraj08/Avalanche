@@ -163,26 +163,7 @@ const About = forwardRef((props, ref) => {
           </BentoCard>
 
           {/* Stats Box 1 */}
-          <BentoCard className="md:col-span-2 lg:col-span-2 flex flex-col justify-center items-center text-center">
-             <div className="p-3 rounded-full bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 mb-6">
-                <Users className="w-6 h-6" />
-             </div>
-             <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white mb-2">
-               <Counter value={12} suffix="k+" />
-             </div>
-             <p className="text-xs font-black tracking-widest uppercase text-slate-500">Attendees Reached</p>
-          </BentoCard>
 
-          {/* Stats Box 2 */}
-          <BentoCard className="md:col-span-2 lg:col-span-2 flex flex-col justify-center items-center text-center">
-             <div className="p-3 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 mb-6">
-                <Sparkles className="w-6 h-6" />
-             </div>
-             <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white mb-2">
-               <Counter value={50} suffix="+" />
-             </div>
-             <p className="text-xs font-black tracking-widest uppercase text-slate-500">Flagship Events</p>
-          </BentoCard>
 
           {/* GOONJ - Social Initiative */}
           <BentoCard className="md:col-span-4 lg:col-span-6 row-span-1 bg-gradient-to-br from-fuchsia-500/5 to-rose-500/5" glowColor="rgba(217, 70, 239, 0.15)">
