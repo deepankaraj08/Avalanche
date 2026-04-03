@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useMemo, useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { SpaceStars } from '../../components/ui/meteors';
+
 
 const SPONSORS_DATA = [
   {
@@ -168,7 +168,7 @@ const Sponsors = forwardRef(({ openSponsorModal }, ref) => {
           WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
         }}
       >
-        <SpaceStars starCount={isMobile ? 50 : 150} className="opacity-30" />
+
 
         {/* Soft elegant glows */}
         <motion.div

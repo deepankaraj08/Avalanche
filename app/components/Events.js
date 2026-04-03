@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
-import { SpaceStars } from '../../components/ui/meteors';
+
 
 const EVENT_DATA = [
   {
@@ -203,7 +203,7 @@ const Events = forwardRef((props, ref) => {
           WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
         }}
       >
-        <SpaceStars starCount={isMobile ? 60 : 250} className="opacity-50" />
+
 
         {/* Soft, moving gradient orbs */}
         <motion.div

@@ -10,7 +10,7 @@ import {
   useSpring,
   AnimatePresence
 } from 'framer-motion';
-import { SpaceStars } from '../../components/ui/meteors';
+
 
 const ABOUT_CONTENT = [
   {
@@ -267,7 +267,7 @@ const About = forwardRef((props, ref) => {
           WebkitMaskImage: `linear-gradient(to top, black ${isMobile ? '80%' : '95%'}, transparent 100%)`
         }}
       >
-        <SpaceStars starCount={isMobile ? 80 : 250} className="opacity-40" />
+
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(56,189,248,0.08)_0%,_transparent_60%)]" />
 
         {/* Animated ambient blobs */}

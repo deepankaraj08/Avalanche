@@ -1,10 +1,45 @@
 'use client';
 
 import React, { forwardRef, useEffect, useState, useMemo, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useMotionTemplate } from 'framer-motion';
-import Particles, { initParticlesEngine } from '@tsparticles/react';
-import { loadSlim } from '@tsparticles/slim';
-import { SpaceStars } from '../../components/ui/meteors';
+import { 
+  motion, 
+  useMotionValue, 
+  useSpring, 
+  useTransform, 
+  useMotionTemplate 
+} from 'framer-motion';
+import { 
+  ArrowRight, 
+  Play, 
+  Target, 
+  Crown, 
+  Star,
+  Hexagon,
+  Triangle,
+  Command as CommandIcon,
+  Ghost,
+  Gem,
+  Cpu
+} from "lucide-react";
+import { InteractiveRobotSpline } from '@/components/ui/interactive-3d-robot';
+
+// --- MOCK BRANDS for the Marquee ---
+const CLIENTS = [
+  { name: "Acme Corp", icon: Hexagon },
+  { name: "Quantum", icon: Triangle },
+  { name: "Command+Z", icon: CommandIcon },
+  { name: "Phantom", icon: Ghost },
+  { name: "Ruby", icon: Gem },
+  { name: "Chipset", icon: Cpu },
+];
+
+// --- SUB-COMPONENTS ---
+const StatItem = ({ value, label }) => (
+  <div className="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
+    <span className="text-xl font-bold text-white sm:text-2xl">{value}</span>
+    <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium sm:text-xs">{label}</span>
+  </div>
+);
 
 // Reusable Magnetic Button Component
 function MagneticButton({ children, className, onClick }) {
@@ -47,53 +82,20 @@ function MagneticButton({ children, className, onClick }) {
   );
 }
 
-// Letter animation component
-const AnimatedTitle = ({ text, className, delay = 0 }) => {
-  const words = text.split(" ");
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.08, delayChildren: delay },
-    }),
-  };
-
-  const child = {
-    visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { type: "spring", damping: 12, stiffness: 100 } },
-    hidden: { opacity: 0, y: 30, scale: 0.9, filter: "blur(5px)" },
-  };
-
-  return (
-    <motion.div variants={container} initial="hidden" animate="visible" className={`flex flex-wrap justify-center gap-x-[0.3em] gap-y-2 ${className}`}>
-      {words.map((word, index) => (
-        <motion.span variants={child} key={index} className="inline-block relative">
-          {word}
-        </motion.span>
-      ))}
-    </motion.div>
-  );
-};
-
-
 const Hero = forwardRef(({ scrollTo, refs }, ref) => {
-  const [init, setInit] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Mouse tilt logic for "Pro" depth effect on the Featured Card
+  // Mouse tilt logic for "Pro" depth effect on cards
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x, { stiffness: 100, damping: 30 });
   const mouseYSpring = useSpring(y, { stiffness: 100, damping: 30 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["6deg", "-6deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-6deg", "6deg"]);
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => setInit(true));
   }, []);
 
   const handleMouseMove = (e) => {
@@ -112,198 +114,242 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
     y.set(0);
   };
 
-  const particlesOptions = useMemo(() => ({
-    fullScreen: { enable: false },
-    background: { color: "transparent" },
-    fpsLimit: isMobile ? 30 : 60,
-    particles: {
-      number: { value: isMobile ? 15 : 50, density: { enable: true, area: 1000 } },
-      color: { value: ["#22d3ee", "#818cf8", "#c084fc"] },
-      links: {
-        enable: !isMobile,
-        distance: 140,
-        color: "#818cf8",
-        opacity: 0.15,
-        width: 1
-      },
-      move: { enable: true, speed: isMobile ? 0.4 : 0.8, random: true },
-      opacity: { value: { min: 0.1, max: 0.5 } },
-      size: { value: { min: 1, max: 2.5 } }
-    },
-    detectRetina: true
-  }), [isMobile]);
-
   return (
-    <section
+    <section 
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white pt-24 pb-0"
+      className="relative min-h-[100dvh] w-full bg-zinc-950 text-white overflow-hidden font-sans"
     >
-      {/* 1. LAYERED BACKGROUND EFFECTS */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
-        style={{
-          maskImage: `linear-gradient(to bottom, black ${isMobile ? '80%' : '90%'}, transparent 100%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, black ${isMobile ? '80%' : '90%'}, transparent 100%)`
-        }}
-      >
-        <SpaceStars starCount={isMobile ? 80 : 250} className="opacity-60" />
+      {/* 
+        SCOPED ANIMATIONS 
+      */}
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .animate-fade-in {
+          animation: fadeSlideIn 0.8s ease-out forwards;
+          opacity: 0;
+        }
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+      `}</style>
 
-        {/* Deep ambient glows */}
+      {/* Background Image with Gradient Mask */}
+      <div 
+        className="absolute inset-0 z-0 bg-[url(/hero-bg.png)] bg-cover bg-center opacity-40 transform-gpu"
+        style={{
+          maskImage: "linear-gradient(180deg, transparent, black 10%, black 80%, transparent)",
+          WebkitMaskImage: "linear-gradient(180deg, transparent, black 10%, black 80%, transparent)",
+        }}
+      />
+
+      {/* Ambient Lights (from current theme) */}
+      <div className="absolute inset-0 z-0 pointer-events-none transform-gpu overflow-hidden">
         <motion.div
           animate={isMobile ? {} : { x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[140px] mix-blend-screen"
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[140px] mix-blend-screen"
         />
         <motion.div
           animate={isMobile ? {} : { x: [0, -40, 0], y: [0, 50, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[120px] mix-blend-screen"
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] mix-blend-screen"
         />
-
-        {/* Grain Overlay — only on desktop (external URL not worth fetching on mobile) */}
-        {!isMobile && (
-          <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
-        )}
       </div>
 
-      {/* Light Mode Specific Ambient Blobs */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden"
-        style={{
-          maskImage: `linear-gradient(to bottom, black ${isMobile ? '85%' : '94%'}, transparent 100%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, black ${isMobile ? '85%' : '94%'}, transparent 100%)`
-        }}
-      >
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-100/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-100/50 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3" />
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
-      </div>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-24 pb-12 sm:px-6 md:pt-32 md:pb-20 lg:px-8 ml-auto ">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8 items-start">
+          
+          {/* --- LEFT COLUMN --- */}
+          <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-center space-y-8 pt-8">
+            
+            {/* Badge */}
+            <div className="animate-fade-in delay-100">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-md transition-colors hover:bg-white/10">
+                <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
+                  The Official Event Powerhouse
+                  <Star className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" />
+                </span>
+              </div>
+            </div>
 
-      {init && (
-        <Particles className="absolute inset-0 opacity-50 z-[1] pointer-events-none" options={particlesOptions} />
-      )}
+            {/* Heading */}
+            <h1 
+              className="animate-fade-in delay-200 text-[clamp(2.5rem,8vw,5rem)] font-bold tracking-tighter leading-[0.95] text-white"
+              style={{
+                maskImage: "linear-gradient(180deg, black 0%, black 80%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(180deg, black 0%, black 80%, transparent 100%)"
+              }}
+            >
+              We Don’t Just<br />
+              Organize Events<br />
+              <span className="bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent italic">
+                — We Create Moments.
+              </span>
+            </h1>
 
-      {/* 2. CONTENT CONTAINER */}
-      <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center">
-
-        {/* Main Typography */}
-        <div className="text-center mb-16 select-none relative z-20">
-          <AnimatedTitle
-            text="We Don’t Just Organize Events"
-            className="text-[clamp(2.5rem,8vw,5.5rem)] font-black tracking-tighter leading-[1.05] text-slate-800 dark:text-white"
-          />
-          <AnimatedTitle
-            text="— We Create Moments."
-            delay={0.6}
-            className="text-[clamp(2.5rem,8vw,5.5rem)] font-black tracking-tighter mt-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(34,211,238,0.3)] pb-2"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ delay: 1.2, duration: 1, ease: "easeOut" }}
-            className="mt-8 relative inline-block group"
-          >
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/30 to-indigo-500/30 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <p className="relative px-8 py-3 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md text-slate-600 dark:text-slate-300 text-sm md:text-lg font-medium tracking-wide shadow-sm">
-              Organizing <span className="text-slate-900 dark:text-white font-black">Radiance & Advento</span> —
-              where premium talent meets immersive production.
+            {/* Description */}
+            <p className="animate-fade-in delay-300 max-w-xl text-lg text-zinc-400 leading-relaxed font-medium">
+              SIT Tumkur’s premiere event management collective, architecture 
+              unforgettable campus experiences through raw talent & immersive production.
             </p>
-          </motion.div>
-        </div>
 
-        {/* 3. THE "PRO" FEATURED CARD */}
-        <motion.div
+            {/* CTA Buttons */}
+            <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4">
+              <MagneticButton 
+                onClick={() => scrollTo(refs.eventsRef)}
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-10 py-5 text-sm font-black text-zinc-950 uppercase tracking-widest transition-all hover:scale-[1.02] hover:bg-zinc-200 active:scale-[0.98] shadow-lg shadow-cyan-500/10"
+              >
+                Check Events
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </MagneticButton>
+              
+              <MagneticButton 
+                onClick={() => scrollTo(refs.teamRef)}
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-10 py-5 text-sm font-black text-white uppercase tracking-widest backdrop-blur-md transition-colors hover:bg-white/10 hover:border-white/20"
+              >
+                <Play className="w-4 h-4 fill-current" />
+                Meet the Team
+              </MagneticButton>
+            </div>
+          </div>
+
+          {/* --- RIGHT COLUMN --          {/* --- RIGHT COLUMN (Empty now, moved to absolute corner stack) --- */}
+          <div className="lg:col-span-6 xl:col-span-7" />
+        </div>
+      </div>
+
+      {/* --- CORNER STACK: Radiance + Sponsors --- */}
+      <div className="animate-fade-in delay-500 absolute top-1/2 -translate-y-1/2 right-8 z-30 flex flex-col items-end gap-6 pointer-events-auto">
+        
+        {/* Featured Event Card (Radiance) */}
+        <motion.div 
           style={{
             rotateX: isMobile ? 0 : rotateX,
             rotateY: isMobile ? 0 : rotateY,
             transformStyle: "preserve-3d",
           }}
-          initial={{ opacity: 0, scale: 0.9, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 1, type: "spring", damping: 20 }}
-          className="relative w-full max-w-5xl rounded-[3rem] bg-white/60 dark:bg-[#0b1121]/80 backdrop-blur-[40px] border border-white/60 dark:border-white/10 p-8 md:p-16 overflow-hidden shadow-2xl transition-colors duration-700 hover:border-slate-300 dark:hover:border-white/20 transform-gpu"
+          className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 p-12 min-h-[600px] w-[650px] flex flex-col justify-between backdrop-blur-2xl shadow-[0_0_80px_rgba(34,211,238,0.15)] transition-all duration-700 hover:border-cyan-500/40 transform-gpu group"
         >
-          {/* Card Body */}
-          <div className="relative overflow-hidden bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-[40px] border border-white/50 dark:border-white/10 rounded-[3rem] p-10 md:p-20 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.5)] transition duration-700 group-hover:border-cyan-500/30">
+          {/* --- HOLOGRAPHIC HUD OVERLAYS --- */}
+          <div className="absolute inset-10 pointer-events-none z-20">
+            <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-cyan-500/30 rounded-tr-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-cyan-500/30 rounded-bl-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-cyan-500/30 rounded-br-2xl transition-all duration-700 group-hover:border-cyan-400" />
+          </div>
 
-            {/* Dynamic Spotlight inside the card */}
-            <motion.div
-              className="absolute -inset-px rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-              style={{
-                background: useMotionTemplate`
-                  radial-gradient(
-                    800px circle at ${useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"])},
-                    rgba(34, 211, 238, 0.15),
-                    transparent 60%
-                  )
-                `,
-              }}
-            />
+          <motion.div 
+            animate={{ top: ["5%", "95%", "5%"] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-x-0 h-px z-20 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent shadow-[0_0_20px_rgba(34,211,238,0.5)] pointer-events-none"
+          />
 
-            {/* Liquid Glint Animation */}
-            <motion.div
-              animate={{ x: ['-200%', '300%'], skewX: -25 }}
-              transition={{ repeat: Infinity, duration: 8, ease: "linear", repeatDelay: 2 }}
-              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent pointer-events-none"
-            />
+          <div className="absolute inset-0 z-10 pointer-events-none transform-gpu overflow-hidden">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ 
+                  x: [Math.random() * 40 - 20, Math.random() * 40 - 20], 
+                  y: [Math.random() * 40 - 20, Math.random() * 40 - 20] 
+                }}
+                transition={{ duration: 3 + i, repeat: Infinity, repeatType: "mirror" }}
+                className="absolute h-1.5 w-1.5 bg-cyan-400 rounded-full shadow-[0_0_12px_rgba(34,211,238,0.8)]"
+                style={{ 
+                  top: `${10 + Math.random() * 80}%`, 
+                  left: `${10 + Math.random() * 80}%` 
+                }}
+              />
+            ))}
+          </div>
 
-            <div className="relative z-10 text-center flex flex-col items-center" style={{ transform: "translateZ(50px)" }}>
-              <div className="flex justify-center mb-8">
-                <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 shadow-[0_0_20px_rgba(34,211,238,0.15)]">
-                  <span className="relative flex h-2.5 w-2.5 items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,1)]"></span>
-                  </span>
-                  <span className="text-cyan-600 dark:text-cyan-400 text-[10px] md:text-xs font-black tracking-[0.4em] uppercase">
-                    Upcoming // Mar 22, 2026
-                  </span>
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 h-80 w-80 rounded-full bg-cyan-500/15 blur-[100px] pointer-events-none" />
+
+          <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem]">
+            <div className="w-full h-full scale-[1.5] origin-center translate-y-12 translate-x-8">
+              <InteractiveRobotSpline 
+                scene="https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+
+          <div className="relative z-20" style={{ transform: "translateZ(80px)" }}>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/20 backdrop-blur-sm">
+                <Target className="h-6 w-6 text-cyan-400" />
+              </div>
+              <div>
+                <div className="text-4xl font-black italic tracking-tight text-white uppercase leading-none shadow-sm">Radiance</div>
+                <div className="text-[10px] text-cyan-500/80 font-black uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
+                   System Active: v2.0
                 </div>
               </div>
-
-              <h3 className="text-[clamp(4rem,18vw,10rem)] font-black italic tracking-tighter text-slate-900 dark:text-white leading-none drop-shadow-xl bg-clip-text">
-                Radiance
-              </h3>
-
-              <p className="mt-6 text-slate-500 dark:text-cyan-400/70 uppercase text-xs md:text-sm font-black tracking-[0.6em] md:tracking-[0.8em]">
-                Where Talent Shines Brightest
-              </p>
-
-              {/* Action Buttons */}
-              <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center w-full max-w-lg mx-auto">
-                <MagneticButton
-                  onClick={() => scrollTo(refs.eventsRef)}
-                  className="w-full sm:w-1/2 group/btn"
-                >
-                  <div className="relative overflow-hidden px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 border border-transparent rounded-[1.25rem] font-black text-xs uppercase tracking-widest transition-all shadow-xl group-hover/btn:shadow-cyan-500/25">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-indigo-500 opacity-0 group-hover/btn:opacity-10 transition-opacity" />
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      Check Events
-                      <svg className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </span>
-                  </div>
-                </MagneticButton>
-
-                <MagneticButton
-                  onClick={() => scrollTo(refs.teamRef)}
-                  className="w-full sm:w-1/2 group/btn2"
-                >
-                  <div className="relative overflow-hidden px-8 py-5 bg-white/50 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-[1.25rem] text-slate-800 dark:text-white font-black text-xs uppercase tracking-widest backdrop-blur-xl transition-all shadow-lg hover:border-slate-400 dark:hover:border-white/20">
-                    <span className="relative z-10">Meet the Team</span>
-                  </div>
-                </MagneticButton>
+            </div>
+            <div className="space-y-4 mb-4 max-w-[200px]">
+              <div className="flex justify-between text-[10px] uppercase tracking-widest font-black">
+                <span className="text-zinc-500">Scan Status</span>
+                <span className="text-cyan-400">92%</span>
+              </div>
+              <div className="h-1 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
+                <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-cyan-400 to-indigo-600" />
               </div>
             </div>
           </div>
+
+          <div className="relative z-20 self-end pointer-events-none flex flex-col items-end gap-1 opacity-50 font-black italic text-[10px] uppercase tracking-tighter" style={{ transform: "translateZ(40px)" }}>
+             <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 bg-red-500 rounded-full animate-pulse" />
+                Live Interaction Mode
+             </div>
+             <div className="text-zinc-500 tracking-widest">SIT-PROD-2026-X</div>
+          </div>
         </motion.div>
+
+        {/* Marquee Card (Sponsors Placeholder) - Positioned below Radiance */}
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 py-8 w-[650px] backdrop-blur-xl transition-colors duration-700 hover:border-white/20">
+          <h3 className="mb-6 px-8 text-[10px] font-black uppercase tracking-widest text-zinc-400">Trusted by Industry Leaders</h3>
+          
+          <div 
+            className="relative flex overflow-hidden"
+            style={{
+              maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)"
+            }}
+          >
+            <div className="animate-marquee flex gap-12 whitespace-nowrap px-4">
+              {[...CLIENTS, ...CLIENTS].map((client, i) => (
+                <div 
+                  key={i}
+                  className="flex items-center gap-3 opacity-50 transition-all hover:opacity-100 cursor-default grayscale hover:grayscale-0"
+                >
+                  <client.icon className="h-5 w-5 text-zinc-300" />
+                  <span className="text-sm font-bold text-white tracking-tighter uppercase leading-none">
+                    {client.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 });
 
 Hero.displayName = 'Hero';
+
 export default Hero;

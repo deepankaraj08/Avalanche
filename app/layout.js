@@ -1,5 +1,5 @@
 import './globals.css';
-import GlobalBackground from '@/components/GlobalBackground';
+
 
 export const metadata = {
   title: 'Avalanche Club – SIT, Tumkur',
@@ -23,9 +23,7 @@ export default function RootLayout({ children }) {
         {/* Global animated background: 
             Ensuring it is fixed and promoted to its own GPU layer for smooth movement 
         */}
-        <div className="fixed inset-0 z-0 pointer-events-none transform-gpu hidden dark:block">
-          <GlobalBackground />
-        </div>
+
 
         {/* Page content: 
             Using relative z-index to stay above the background 
