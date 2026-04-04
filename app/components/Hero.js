@@ -112,7 +112,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-[100dvh] w-full bg-background text-foreground overflow-hidden font-sans transition-colors duration-500"
+      className="relative min-h-fit lg:min-h-[100dvh] w-full bg-background text-foreground overflow-hidden font-sans transition-colors duration-500"
     >
       {/* SCOPED ANIMATIONS */}
       <style>{`
@@ -235,14 +235,29 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
             rotateY: isMobile ? 0 : rotateY,
             transformStyle: "preserve-3d",
           }}
-          className="relative overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 p-8 sm:p-12 min-h-[450px] lg:min-h-[550px] xl:min-h-[600px] w-full max-w-[650px] lg:w-[480px] xl:w-[650px] flex flex-col justify-between backdrop-blur-2xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_80px_rgba(34,211,238,0.15)] transition-all duration-700 hover:border-cyan-500/40 transform-gpu group mx-auto lg:mx-0"
+          className="hidden lg:flex relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 p-8 sm:p-12 min-h-[550px] xl:min-h-[600px] w-full max-w-[650px] lg:w-[480px] xl:w-[650px] flex-col justify-between backdrop-blur-2xl shadow-[0_0_80px_rgba(34,211,238,0.15)] transition-all duration-700 hover:border-cyan-500/40 transform-gpu group mx-auto lg:mx-0"
         >
+          {/* Mobile card: portal bg image as cinematic scene window */}
+          {isMobile && (
+            <>
+              {/* The portal image fills the full card on mobile */}
+              <div
+                className="absolute inset-0 z-0 bg-[url(/hero-bg.png)] bg-cover bg-center"
+                style={{ backgroundPosition: 'center 20%' }}
+              />
+              {/* Dark vignette overlay — keeps centre bright, edges dark */}
+              <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/70 via-black/30 to-black/80" />
+              {/* Subtle cyan glow at the centre (portal light) */}
+              <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_40%_50%_at_50%_55%,rgba(34,211,238,0.12),transparent)]" />
+            </>
+          )}
+
           {/* --- HOLOGRAPHIC HUD OVERLAYS --- */}
           <div className="absolute inset-6 sm:inset-10 pointer-events-none z-20">
-            <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-t-2 border-l-2 border-cyan-500/30 rounded-tl-2xl transition-all duration-700 group-hover:border-cyan-400" />
-            <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-t-2 border-r-2 border-cyan-500/30 rounded-tr-2xl transition-all duration-700 group-hover:border-cyan-400" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-b-2 border-l-2 border-cyan-500/30 rounded-bl-2xl transition-all duration-700 group-hover:border-cyan-400" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-b-2 border-r-2 border-cyan-500/30 rounded-br-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute top-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-t-2 border-l-2 border-cyan-500/40 rounded-tl-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute top-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-t-2 border-r-2 border-cyan-500/40 rounded-tr-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 sm:w-10 sm:h-10 border-b-2 border-l-2 border-cyan-500/40 rounded-bl-2xl transition-all duration-700 group-hover:border-cyan-400" />
+            <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 border-b-2 border-r-2 border-cyan-500/40 rounded-br-2xl transition-all duration-700 group-hover:border-cyan-400" />
           </div>
 
           <motion.div 
@@ -272,15 +287,16 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-60 w-60 sm:h-80 sm:w-80 rounded-full bg-cyan-500/15 blur-[80px] sm:blur-[100px] pointer-events-none" />
 
+          {/* Robot: desktop only — on mobile the card stands alone cleanly */}
           <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem] hidden lg:block">
-            <div 
+            <div
               className="w-full h-full"
               style={{
                 transform: 'scale(1.5) translateY(12px) translateX(8px)',
                 transformOrigin: 'center',
               }}
             >
-              <InteractiveRobotSpline 
+              <InteractiveRobotSpline
                 scene="https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode"
                 className="w-full h-full"
               />
@@ -293,19 +309,19 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                 <Target className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
               </div>
               <div>
-                <div className="text-3xl sm:text-4xl font-black italic tracking-tight text-foreground uppercase leading-none shadow-sm">Radiance</div>
-                <div className="text-[9px] sm:text-[10px] text-cyan-600 dark:text-cyan-500/80 font-black uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
+                <div className="text-3xl sm:text-4xl font-black italic tracking-tight text-white uppercase leading-none drop-shadow-[0_2px_12px_rgba(34,211,238,0.4)]">Radiance</div>
+                <div className="text-[9px] sm:text-[10px] text-cyan-400 font-black uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
                    System Active: v2.0
                 </div>
               </div>
             </div>
             <div className="space-y-4 mb-4 max-w-[150px] sm:max-w-[200px]">
               <div className="flex justify-between text-[9px] sm:text-[10px] uppercase tracking-widest font-black">
-                <span className="text-zinc-500">Scan Status</span>
+                <span className="text-white/50">Scan Status</span>
                 <span className="text-cyan-400">92%</span>
               </div>
-              <div className="h-1 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-white/5 border border-zinc-200 dark:border-white/10">
-                <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-cyan-500 to-indigo-600" />
+              <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+                <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-cyan-500 to-indigo-600 shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
               </div>
             </div>
           </div>
