@@ -53,7 +53,7 @@ function BentoCard({ children, className, glowColor = 'rgba(56, 189, 248, 0.15)'
       {/* Noise Texture */}
       <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
       
-      <div className="relative z-10 h-full flex flex-col p-8 md:p-10">
+      <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
         {children}
       </div>
     </motion.div>
@@ -108,7 +108,7 @@ const About = forwardRef((props, ref) => {
     <section 
       ref={ref}
       id="about" 
-      className="relative min-h-screen py-24 md:py-40 bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden"
+      className="relative min-h-screen py-20 md:py-32 lg:py-40 bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden"
     >
       {/* Background Ambient Gradients */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -127,7 +127,7 @@ const About = forwardRef((props, ref) => {
             </span>
           </div>
           
-          <h2 className="text-5xl sm:text-7xl lg:text-[6rem] font-black tracking-tighter leading-[0.9] max-w-4xl">
+          <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl">
             We Build <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 italic pr-4">
               Culture.
@@ -139,7 +139,7 @@ const About = forwardRef((props, ref) => {
         </motion.div>
 
         {/* --- BENTO GRID --- */}
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 auto-rows-[minmax(280px,auto)]">
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 auto-rows-[minmax(240px,auto)] md:auto-rows-[minmax(280px,auto)]">
 
           {/* Core Identity */}
           <BentoCard 

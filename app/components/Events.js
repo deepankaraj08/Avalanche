@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
-
+import { GlowCard } from '@/app/components/ui/spotlight-card';
 
 const EVENT_DATA = [
   {
@@ -14,7 +14,8 @@ const EVENT_DATA = [
     color: 'from-cyan-400/30 to-sky-500/30',
     accent: 'text-cyan-400',
     border: 'group-hover:border-cyan-500/40',
-    glow: 'rgba(34, 211, 238, 0.25)'
+    glow: 'rgba(34, 211, 238, 0.25)',
+    glowColor: 'cyan',
   },
   {
     id: '02',
@@ -25,7 +26,8 @@ const EVENT_DATA = [
     color: 'from-blue-600/30 to-indigo-500/30',
     accent: 'text-indigo-400',
     border: 'group-hover:border-indigo-500/40',
-    glow: 'rgba(99, 102, 241, 0.25)'
+    glow: 'rgba(99, 102, 241, 0.25)',
+    glowColor: 'indigo',
   }
 ];
 
@@ -88,97 +90,99 @@ const TiltCard = ({ event, index }) => {
   };
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateX,
-        rotateY: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateY,
-        transformStyle: "preserve-3d"
-      }}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.2, duration: 0.8, type: "spring", damping: 20 }}
-      viewport={{ once: true, margin: "-50px" }}
-      className="group relative perspective-[1500px] transform-gpu w-full h-full"
-    >
-      {/* Deep Shadow Glow behind the card */}
-      <div
-        className={`absolute -inset-2 rounded-[3.5rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-1000 pointer-events-none`}
-      />
-
-      {/* Main Glass Card */}
-      <div className={`relative bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-xl md:backdrop-blur-3xl rounded-[3rem] p-8 md:p-16 h-full flex flex-col border border-white/60 dark:border-white/10 transition-all duration-700 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.2)] ${event.border}`}>
-
-        {/* Dynamic Inner Spotlight */}
-        <motion.div
-          className="pointer-events-none absolute -inset-px rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          style={{
-            background: useMotionTemplate`
-              radial-gradient(
-                700px circle at ${useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"])},
-                ${event.glow},
-                transparent 70%
-              )
-            `,
-          }}
+    <GlowCard glowColor={event.glowColor} radius={48} border={2} className="w-full h-full">
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateX,
+          rotateY: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : rotateY,
+          transformStyle: "preserve-3d"
+        }}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.2, duration: 0.8, type: "spring", damping: 20 }}
+        viewport={{ once: true, margin: "-50px" }}
+        className="group relative perspective-[1500px] transform-gpu w-full h-full"
+      >
+        {/* Deep Shadow Glow behind the card */}
+        <div
+          className={`absolute -inset-2 rounded-[3.5rem] bg-gradient-to-br ${event.color} opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-1000 pointer-events-none`}
         />
 
-        {/* Ambient Noise Texture — desktop only */}
-        {!isMobile && (
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
-        )}
+        {/* Main Glass Card */}
+        <div className={`relative bg-white/70 dark:bg-[#060b18]/60 backdrop-blur-xl md:backdrop-blur-3xl rounded-[2.5rem] md:rounded-[3rem] p-6 sm:p-8 md:p-12 lg:p-16 h-full flex flex-col border border-white/60 dark:border-white/10 transition-all duration-700 overflow-hidden shadow-[0_20px_40px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_80px_rgba(0,0,0,0.2)] ${event.border}`}>
 
-        {/* Liquid Glint Animation */}
-        <motion.div
-          animate={{ x: ['-200%', '300%'], skewX: -25 }}
-          transition={{ repeat: Infinity, duration: 8, ease: "linear", repeatDelay: event.id === '01' ? 1 : 4 }}
-          className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none"
-        />
+          {/* Dynamic Inner Spotlight */}
+          <motion.div
+            className="pointer-events-none absolute -inset-px rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+            style={{
+              background: useMotionTemplate`
+                radial-gradient(
+                  700px circle at ${useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"])},
+                  ${event.glow},
+                  transparent 70%
+                )
+              `,
+            }}
+          />
 
-        {/* ID Number Watermark */}
-        <span className="absolute -right-10 -top-16 text-[12rem] md:text-[20rem] font-black text-slate-100 dark:text-white/[0.02] select-none group-hover:text-slate-200 dark:group-hover:text-white/[0.05] transition-colors duration-1000 leading-none">
-          {event.id}
-        </span>
+          {/* Ambient Noise Texture — desktop only */}
+          {!isMobile && (
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+          )}
 
-        {/* Interactive 3D Content Container */}
-        <div className="relative z-10 flex flex-col h-full transform-gpu transition-transform duration-500 ease-out" style={{ transform: isHovered && !isMobile ? "translateZ(60px) scale(1.02)" : "translateZ(0px)" }}>
+          {/* Liquid Glint Animation */}
+          <motion.div
+            animate={{ x: ['-200%', '300%'], skewX: -25 }}
+            transition={{ repeat: Infinity, duration: 8, ease: "linear", repeatDelay: event.id === '01' ? 1 : 4 }}
+            className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none"
+          />
 
-          <div className="flex flex-wrap gap-3 mb-10 w-full">
-            {event.tags.map((tag) => (
-              <span key={tag} className="px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] md:text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.25em] shadow-sm">
-                {tag}
+          {/* ID Number Watermark */}
+          <span className="absolute -right-10 -top-16 text-[12rem] md:text-[20rem] font-black text-slate-100 dark:text-white/[0.02] select-none group-hover:text-slate-200 dark:group-hover:text-white/[0.05] transition-colors duration-1000 leading-none">
+            {event.id}
+          </span>
+
+          {/* Interactive 3D Content Container */}
+          <div className="relative z-10 flex flex-col h-full transform-gpu transition-transform duration-500 ease-out" style={{ transform: isHovered && !isMobile ? "translateZ(60px) scale(1.02)" : "translateZ(0px)" }}>
+
+            <div className="flex flex-wrap gap-3 mb-10 w-full">
+              {event.tags.map((tag) => (
+                <span key={tag} className="px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] md:text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.25em] shadow-sm">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <h3 className={`text-[clamp(2.5rem,8vw,6rem)] font-black mb-4 tracking-tighter leading-none italic ${event.accent} drop-shadow-sm`}>
+              {event.title}
+            </h3>
+
+            <p className="text-lg md:text-2xl font-bold text-slate-800 dark:text-white/90 mb-8 tracking-widest uppercase text-[10px] md:text-xs">
+              {event.subtitle}
+            </p>
+
+            <p className="text-slate-600 dark:text-gray-300 text-sm md:text-lg leading-relaxed font-medium opacity-90 max-w-md">
+              {event.description}
+            </p>
+
+            <div className="mt-auto pt-14 border-t border-slate-200 dark:border-white/10 flex items-center justify-between cursor-pointer group/btn">
+              <span className="text-xs font-black tracking-widest uppercase text-slate-800 dark:text-white opacity-60 group-hover/btn:opacity-100 transition-opacity">
+                Explore Timeline
               </span>
-            ))}
-          </div>
-
-          <h3 className={`text-[clamp(3.5rem,10vw,6rem)] font-black mb-4 tracking-tighter leading-none italic ${event.accent} drop-shadow-sm`}>
-            {event.title}
-          </h3>
-
-          <p className="text-lg md:text-2xl font-bold text-slate-800 dark:text-white/90 mb-8 tracking-widest uppercase text-[10px] md:text-xs">
-            {event.subtitle}
-          </p>
-
-          <p className="text-slate-600 dark:text-gray-300 text-sm md:text-lg leading-relaxed font-medium opacity-90 max-w-md">
-            {event.description}
-          </p>
-
-          <div className="mt-auto pt-14 border-t border-slate-200 dark:border-white/10 flex items-center justify-between cursor-pointer group/btn">
-            <span className="text-xs font-black tracking-widest uppercase text-slate-800 dark:text-white opacity-60 group-hover/btn:opacity-100 transition-opacity">
-              Explore Timeline
-            </span>
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border border-slate-300 dark:border-white/20 group-hover/btn:bg-slate-900 group-hover/btn:dark:bg-white group-hover/btn:text-white group-hover/btn:dark:text-slate-900 group-hover/btn:scale-110 shadow-lg`}>
-              <svg className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border border-slate-300 dark:border-white/20 group-hover/btn:bg-slate-900 group-hover/btn:dark:bg-white group-hover/btn:text-white group-hover/btn:dark:text-slate-900 group-hover/btn:scale-110 shadow-lg`}>
+                <svg className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </GlowCard>
   );
 };
 
@@ -193,7 +197,7 @@ const Events = forwardRef((props, ref) => {
   }, []);
 
   return (
-    <section ref={ref} className={`${isMobile ? 'py-20 mt-[-10px]' : 'py-32 md:py-52 mt-[-2px]'} relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden`} id="events">
+    <section ref={ref} className={`${isMobile ? 'py-16 mt-[-10px]' : 'py-24 md:py-40 lg:py-52 mt-[-2px]'} relative bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-white overflow-hidden`} id="events">
 
       {/* 1. HIGH-END AMBIENT BACKGROUND */}
       <div
@@ -230,10 +234,10 @@ const Events = forwardRef((props, ref) => {
         <div className="absolute bottom-[10%] right-0 w-[700px] h-[700px] bg-indigo-100/60 rounded-full blur-[120px] translate-x-1/3" />
       </div>
 
-      <div className="max-w-[90rem] mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 md:px-12 relative z-10">
 
         {/* Designer Header */}
-        <header className="mb-24 md:mb-40 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+        <header className="mb-16 md:mb-28 lg:mb-40 flex flex-col lg:flex-row lg:items-end justify-between gap-6 md:gap-10">
           <div className="space-y-6 md:space-y-8 max-w-4xl w-full">
             <motion.div
               initial={{ opacity: 0, width: 0 }}
@@ -249,7 +253,7 @@ const Events = forwardRef((props, ref) => {
 
             <AnimatedTitle
               text="Flagship Events."
-              className="text-[clamp(4rem,10vw,8rem)] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]"
+              className="text-[clamp(3rem,10vw,8rem)] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9]"
             />
           </div>
 

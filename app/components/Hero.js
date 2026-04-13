@@ -112,7 +112,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-fit lg:min-h-[100dvh] w-full bg-background text-foreground overflow-hidden font-sans transition-colors duration-500"
+      className="relative min-h-screen w-full bg-background text-foreground overflow-hidden font-sans transition-colors duration-500"
     >
       {/* SCOPED ANIMATIONS */}
       <style>{`
@@ -161,11 +161,11 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-24 pb-12 sm:px-6 md:pt-32 md:pb-20 lg:px-8 h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6 md:pt-32 md:pb-16 lg:px-8 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-full">
           
           {/* --- LEFT COLUMN --- */}
-          <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-center space-y-8 pt-8 text-center lg:text-left z-20">
+          <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-center space-y-6 md:space-y-8 pt-6 md:pt-8 text-center lg:text-left z-20">
             
             {/* Badge */}
             <div className="animate-fade-in delay-100 flex justify-center lg:justify-start">
@@ -178,22 +178,16 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
             </div>
 
             {/* Heading */}
-            <h1 
-              className="animate-fade-in delay-200 text-[clamp(2.5rem,8vw,5rem)] font-bold tracking-tighter leading-[0.95] text-foreground mx-auto lg:mx-0 max-w-2xl lg:max-w-none"
-              style={{
-                maskImage: "linear-gradient(180deg, black 0%, black 80%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(180deg, black 0%, black 80%, transparent 100%)"
-              }}
-            >
-              We Don’t Just<br />
-              Organize Events<br />
-              <span className="bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent italic">
+            <h1 className="animate-fade-in delay-200 text-[clamp(1.8rem,4.5vw,3.8rem)] font-extrabold tracking-tight leading-[1.05] text-foreground mx-auto lg:mx-0 max-w-lg lg:max-w-none">
+              <span className="block">We Don't Just</span>
+              <span className="block">Organize Events</span>
+              <span className="block bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent italic mt-1">
                 — We Create Moments.
               </span>
             </h1>
 
             {/* Description */}
-            <p className="animate-fade-in delay-300 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed font-medium mx-auto lg:mx-0">
+            <p className="animate-fade-in delay-300 max-w-md text-sm sm:text-base text-muted-foreground leading-relaxed font-medium mx-auto lg:mx-0">
               Premiere event management collective, architecting 
               unforgettable campus experiences through raw talent & immersive production.
             </p>
@@ -226,7 +220,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       {/* --- CORNER STACK: Radiance + Sponsors --- 
           Restored Absolute Positioning for Desktop! 
       */}
-      <div className="animate-fade-in delay-500 relative mt-12 px-4 lg:px-0 lg:mt-0 lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-4 xl:right-8 z-30 flex flex-col items-center lg:items-end gap-6 pointer-events-auto pb-12 lg:pb-0">
+      <div className="animate-fade-in delay-500 relative mt-8 sm:mt-10 px-4 sm:px-6 lg:px-0 lg:mt-0 lg:absolute lg:top-1/2 lg:-translate-y-[52%] lg:right-4 xl:right-8 z-30 flex flex-col items-center lg:items-end gap-4 lg:gap-6 pointer-events-auto pb-10 lg:pb-0">
         
         {/* Featured Event Card (Radiance) */}
         <motion.div 
@@ -235,7 +229,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
             rotateY: isMobile ? 0 : rotateY,
             transformStyle: "preserve-3d",
           }}
-          className="hidden lg:flex relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 p-8 sm:p-12 min-h-[550px] xl:min-h-[600px] w-full max-w-[650px] lg:w-[480px] xl:w-[650px] flex-col justify-between backdrop-blur-2xl shadow-[0_0_80px_rgba(34,211,238,0.15)] transition-all duration-700 hover:border-cyan-500/40 transform-gpu group mx-auto lg:mx-0"
+          className="hidden lg:flex relative overflow-hidden rounded-[2rem] xl:rounded-[2.5rem] border border-white/10 bg-white/5 p-6 lg:p-8 xl:p-10 min-h-[420px] lg:min-h-[460px] xl:min-h-[520px] w-full lg:w-[420px] xl:w-[540px] 2xl:w-[600px] flex-col justify-between backdrop-blur-2xl shadow-[0_0_80px_rgba(34,211,238,0.15)] transition-all duration-700 hover:border-cyan-500/40 transform-gpu group mx-auto lg:mx-0"
         >
           {/* Mobile card: portal bg image as cinematic scene window */}
           {isMobile && (
@@ -287,13 +281,13 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
           <div className="absolute top-0 right-0 -mr-20 -mt-20 h-60 w-60 sm:h-80 sm:w-80 rounded-full bg-cyan-500/15 blur-[80px] sm:blur-[100px] pointer-events-none" />
 
-          {/* Robot: desktop only — on mobile the card stands alone cleanly */}
-          <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2.5rem] hidden lg:block">
+          {/* Robot: desktop only — scaled down to fit cleanly inside card */}
+          <div className="absolute inset-x-0 bottom-0 top-0 z-0 pointer-events-none opacity-75 group-hover:opacity-95 transition-opacity duration-700 transform-gpu overflow-hidden rounded-[2rem] xl:rounded-[2.5rem] hidden lg:block">
             <div
               className="w-full h-full"
               style={{
-                transform: 'scale(1.5) translateY(12px) translateX(8px)',
-                transformOrigin: 'center',
+                transform: 'scale(1.05) translateY(6px) translateX(4px)',
+                transformOrigin: 'center bottom',
               }}
             >
               <InteractiveRobotSpline
@@ -325,18 +319,10 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
               </div>
             </div>
           </div>
-
-          <div className="relative z-20 self-end pointer-events-none flex flex-col items-end gap-1 opacity-50 font-black italic text-[9px] sm:text-[10px] uppercase tracking-tighter" style={{ transform: "translateZ(40px)" }}>
-             <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 bg-red-500 rounded-full animate-pulse" />
-                Live Interaction Mode
-             </div>
-             <div className="text-zinc-500 tracking-widest">SIT-PROD-2026-X</div>
-          </div>
         </motion.div>
 
         {/* Marquee Card */}
-        <div ref={refs?.sponsorsRef} className="relative overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 py-6 sm:py-8 w-full max-w-[650px] lg:w-[480px] xl:w-[650px] backdrop-blur-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-700 hover:border-zinc-300 dark:hover:border-white/20 mx-auto lg:mx-0">
+        <div ref={refs?.sponsorsRef} className="relative overflow-hidden rounded-[2rem] xl:rounded-[2.5rem] border border-zinc-200 dark:border-white/10 bg-white/40 dark:bg-white/5 py-5 sm:py-6 lg:py-7 w-full max-w-[90vw] sm:max-w-[600px] lg:w-[420px] xl:w-[540px] 2xl:w-[600px] backdrop-blur-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-700 hover:border-zinc-300 dark:hover:border-white/20 mx-auto lg:mx-0">
           <h1 className="mb-4 sm:mb-6 px-6 sm:px-8 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 text-center lg:text-left align-center justify-center">Sponsors</h1>
           
           <div 
