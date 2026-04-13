@@ -59,7 +59,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen w-full overflow-hidden font-sans flex flex-col"
+      className="relative min-h-screen w-full overflow-hidden font-sans"
     >
       {/* ── Cosmic parallax star field (full section background) ── */}
       <CosmicParallaxBg
@@ -90,8 +90,11 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         .delay-500 { animation-delay: 0.5s; }
       `}</style>
 
-      {/* ── Hero content — inside the dark earth semicircle ── */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-end text-center px-4 sm:px-8 pb-32 sm:pb-36 max-w-5xl mx-auto w-full">
+      {/* ── Hero content — positioned strictly inside the dark planet via absolute bottom offset ── */}
+      <div 
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-5xl pointer-events-none"
+        style={{ bottom: '25%' }}
+      >
 
         {/* Badge */}
         <div className="animate-fade-in delay-100 mb-6 sm:mb-8">
@@ -109,7 +112,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md sm:max-w-none">
+        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md sm:max-w-none pointer-events-auto">
           <MagneticButton
             onClick={() => scrollTo(refs.eventsRef)}
             className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 sm:px-10 sm:py-5 text-sm font-black text-[#090A0F] uppercase tracking-widest transition-all hover:scale-[1.02] hover:bg-cyan-300 active:scale-[0.98] shadow-lg shadow-cyan-500/20"
@@ -131,7 +134,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       {/* ── Sponsors Marquee ── */}
       <div
         ref={refs?.sponsorsRef}
-        className="animate-fade-in delay-500 relative z-10 w-full border-t border-white/10 bg-white/[0.03] backdrop-blur-xl py-5 sm:py-6"
+        className="animate-fade-in delay-500 absolute bottom-0 left-0 right-0 z-10 w-full border-t border-white/10 bg-white/[0.03] backdrop-blur-xl py-5 sm:py-6"
       >
         <p className="mb-3 text-center text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-white/40">
           Sponsors

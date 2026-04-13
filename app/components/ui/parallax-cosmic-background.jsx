@@ -21,9 +21,9 @@ const CosmicParallaxBg = ({
   className = '',
   showText = false,
 }) => {
-  const [smallStars, setSmallStars]   = useState('');
+  const [smallStars, setSmallStars] = useState('');
   const [mediumStars, setMediumStars] = useState('');
-  const [bigStars, setBigStars]       = useState('');
+  const [bigStars, setBigStars] = useState('');
 
   const textParts = text ? text.split(',').map((p) => p.trim()).filter(Boolean) : [];
 
