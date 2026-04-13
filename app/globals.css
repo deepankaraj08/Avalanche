@@ -238,7 +238,7 @@
   transform: translateX(-50%);
   /* MUST match #earth exactly so border-top follows the same arc */
   width: 200%;
-  max-width: 3000px;
+  max-width: 4000px;
   height: 48vh;
   border-radius: 50% 50% 0 0;
   pointer-events: none;
@@ -259,7 +259,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 200%;
-  max-width: 3000px;
+  max-width: 4000px;
   height: 48vh;
   background: linear-gradient(
     to bottom,
@@ -297,12 +297,12 @@
 /* ── Subtitle — below horizon, spaced-out tracking ── */
 #subtitle {
   position: absolute;
-  bottom: 12%;
+  bottom: 8%; /* Very low on mobile so it doesn't hit UI buttons */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 2rem;
-  font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+  gap: 1rem; /* Tighter gap on mobile */
+  font-size: clamp(0.5rem, 1vw, 0.85rem);
   font-weight: 700;
   letter-spacing: 0.55em;
   color: rgba(140, 175, 220, 0.55);
@@ -310,6 +310,13 @@
   pointer-events: none;
   white-space: nowrap;
   z-index: 5;
+}
+
+@media (min-width: 640px) {
+  #subtitle {
+    bottom: 12%; 
+    gap: 2rem;
+  }
 }
 
 .subtitle-part-1 {

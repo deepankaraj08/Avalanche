@@ -72,15 +72,30 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       <style>{`
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateY(20px); }
-          to   { opacity: 1; transform: translateY(0); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
+        @keyframes textReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+            filter: blur(5px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0px);
+          }
         }
         .animate-fade-in {
           animation: fadeSlideIn 0.8s ease-out forwards;
           opacity: 0;
+        }
+        .animate-text-reveal {
+          animation: textReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
         .animate-marquee { animation: marquee 40s linear infinite; }
         .delay-100 { animation-delay: 0.1s; }
@@ -90,10 +105,9 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         .delay-500 { animation-delay: 0.5s; }
       `}</style>
 
-      {/* ── Hero content — positioned strictly inside the dark planet via absolute bottom offset ── */}
+      {/* ── Hero content — positioned strictly inside the dark planet cleanly across all devices ── */}
       <div 
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-5xl pointer-events-none"
-        style={{ bottom: '25%' }}
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[18%] sm:bottom-[22%] lg:bottom-[25%]"
       >
 
         {/* Badge */}
@@ -107,12 +121,20 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </div>
 
         {/* Description */}
-        <p className="animate-fade-in delay-200 max-w-xl text-sm sm:text-base md:text-lg text-white/60 leading-relaxed font-medium mb-8 sm:mb-10">
-          WE JUST DON'T ORGANIZE EVENTS, WE CREATE MOMENTS
+        <p className="max-w-xl flex flex-wrap justify-center text-center text-sm sm:text-base md:text-lg text-white/60 leading-relaxed font-medium mb-8 sm:mb-10">
+          {"WE JUST DON'T ORGANIZE EVENTS, WE CREATE MOMENTS".split(" ").map((word, i) => (
+            <span
+              key={i}
+              className="inline-block animate-text-reveal opacity-0"
+              style={{ animationDelay: `${0.3 + i * 0.08}s` }}
+            >
+              {word}&nbsp;
+            </span>
+          ))}
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md sm:max-w-none pointer-events-auto">
+        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto">
           <MagneticButton
             onClick={() => scrollTo(refs.eventsRef)}
             className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 sm:px-10 sm:py-5 text-sm font-black text-[#090A0F] uppercase tracking-widest transition-all hover:scale-[1.02] hover:bg-cyan-300 active:scale-[0.98] shadow-lg shadow-cyan-500/20"
