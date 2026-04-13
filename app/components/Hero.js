@@ -17,12 +17,13 @@ import { CosmicParallaxBg } from '@/components/parallax-cosmic-background';
 
 // --- MOCK BRANDS for the Marquee ---
 const CLIENTS = [
-  { name: 'x', icon: Hexagon },
-  { name: 'y', icon: Triangle },
-  { name: 'z', icon: CommandIcon },
-  { name: 'a', icon: Ghost },
-  { name: 'b', icon: Gem },
-  { name: 'c', icon: Cpu },
+  { name: 'Partner 1', image: '/logo.png' }, // Example of an image sponsor
+  { name: 'Brand X', icon: Hexagon },
+  { name: 'Brand Y', icon: Triangle },
+  { name: 'Brand Z', icon: CommandIcon },
+  { name: 'Studio A', icon: Ghost },
+  { name: 'Agency b', icon: Gem },
+  { name: 'Tech C', icon: Cpu },
 ];
 
 // Reusable Magnetic Button
@@ -172,12 +173,19 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
             {[...CLIENTS, ...CLIENTS].map((client, i) => (
               <div
                 key={i}
-                className="flex items-center gap-2 sm:gap-3 opacity-40 transition-all hover:opacity-100 cursor-default grayscale hover:grayscale-0"
+                className="flex items-center gap-2 sm:gap-4 opacity-40 transition-all duration-300 hover:opacity-100 cursor-default grayscale hover:grayscale-0"
               >
-                <client.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                <span className="text-xs sm:text-sm font-bold text-white tracking-tighter uppercase leading-none">
-                  {client.name}
-                </span>
+                {client.image ? (
+                  <img src={client.image} alt={client.name} className="h-6 w-auto sm:h-8 object-contain" />
+                ) : (
+                  <client.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                )}
+                {/* Only render text if you want the brand name explicitly shown textually */}
+                {!client.image && (
+                  <span className="text-xs sm:text-sm font-bold text-white tracking-tighter uppercase leading-none">
+                    {client.name}
+                  </span>
+                )}
               </div>
             ))}
           </div>

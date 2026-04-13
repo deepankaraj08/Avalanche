@@ -56,45 +56,12 @@ const ALL_MEMBERS = [
   { name: 'Om karr', image: '/photo/om.jpeg', instagram: '#', linkedin: '#' },
 ];
 
-/**
- * THREE concentric elliptical rings
- */
-const RINGS = [
-  { n: 10, rx: 24, ry: 19, startDeg: 0, size: 'w-28 h-28', floatAmp: 10 },
-  { n: 18, rx: 38, ry: 29, startDeg: 10, size: 'w-24 h-24', floatAmp: 8 },
-  { n: 22, rx: 46, ry: 43, startDeg: 5, size: 'w-20 h-20', floatAmp: 6 },
-];
-
-const MEMBER_STYLES = (() => {
-  const styles = [];
-  RINGS.forEach(({ n, rx, ry, startDeg, size, floatAmp }, ringIdx) => {
-    for (let j = 0; j < n && styles.length < ALL_MEMBERS.length; j++) {
-      const i = styles.length;
-      const angleDeg = startDeg + j * (360 / n);
-      const rad = (angleDeg * Math.PI) / 180;
-      styles.push({
-        left: `${50 + rx * Math.cos(rad)}%`,
-        top: `${50 + ry * Math.sin(rad)}%`,
-        size,
-        duration: 4 + (i * 0.31) % 3,
-        floatAmp: -floatAmp - (i % 3) * 3,
-        delay: (i * 0.17) % 2.5,
-        entryDelay: i * 0.03, // Slightly faster entry
-      });
-    }
-  });
-  return styles;
-})();
-
-// Letter animation component
 const AnimatedTitle = ({ text, className, delay = 0 }) => {
   const words = text.split(" ");
-
   const container = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({ opacity: 1, transition: { staggerChildren: 0.1, delayChildren: delay } }),
+    visible: () => ({ opacity: 1, transition: { staggerChildren: 0.1, delayChildren: delay } }),
   };
-
   const child = {
     visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { type: "spring", damping: 14, stiffness: 100 } },
     hidden: { opacity: 0, y: 30, scale: 0.9, filter: "blur(5px)" },
@@ -111,104 +78,22 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => {
   );
 };
 
-const FloatingMember = ({ member, style }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.3 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true, margin: '-5%' }}
-    transition={{ duration: 0.8, delay: style.entryDelay, type: "spring", damping: 20 }}
-    style={{ top: style.top, left: style.left }}
-    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 hover:z-50 group cursor-pointer"
-  >
-    {/* Float wrapper */}
-    <motion.div
-      animate={{ y: [0, style.floatAmp, 0] }}
-      transition={{ duration: style.duration, repeat: Infinity, ease: 'easeInOut', delay: style.delay }}
-      className="relative"
-    >
-      {/* Gradient ring */}
-      <div
-        className={`
-          ${style.size} rounded-full p-[3px]
-          bg-gradient-to-tr from-cyan-400/80 via-blue-500/80 to-purple-600/80
-          group-hover:from-rose-400 group-hover:via-pink-500 group-hover:to-orange-400
-          transition-all duration-500
-          shadow-lg group-hover:shadow-[0_0_40px_rgba(236,72,153,0.6)]
-          group-hover:scale-[1.75] z-30 relative
-        `}
-      >
-        <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900">
-          <img
-            src={member.image}
-            alt={member.name}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          />
-        </div>
-      </div>
-
-      {/* Social icons */}
-      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-2 transition-all duration-500 delay-100 pointer-events-none group-hover:pointer-events-auto z-50">
-        <a
-          href={member.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={e => member.instagram === '#' && e.preventDefault()}
-          className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform"
-          aria-label={`${member.name} Instagram`}
-        >
-          <FaInstagram size={14} />
-        </a>
-        <a
-          href={member.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={e => member.linkedin === '#' && e.preventDefault()}
-          className="w-8 h-8 rounded-full bg-[#0077b5] text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform"
-          aria-label={`${member.name} LinkedIn`}
-        >
-          <FaLinkedinIn size={14} />
-        </a>
-      </div>
-
-      {/* Name badge */}
-      <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 delay-150 z-[60] pointer-events-none">
-        <div className="bg-slate-900 dark:bg-black/90 backdrop-blur-md text-white px-5 py-2 rounded-full text-[10px] font-black shadow-2xl whitespace-nowrap border border-white/20 tracking-[0.2em] uppercase">
-          {member.name}
-        </div>
-      </div>
-    </motion.div>
-  </motion.div>
-);
-
-const MOBILE_INITIAL_COUNT = 20;
+const INITIAL_VISIBILITY_COUNT = 24;
 
 const Team = forwardRef((props, ref) => {
   const [activeIdx, setActiveIdx] = useState(null);
+  const [showAll, setShowAll] = useState(false);
   const activeMember = activeIdx !== null ? ALL_MEMBERS[activeIdx] : null;
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [showAll, setShowAll] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // On mobile, only show a paginated slice of members until "Show More" is tapped
-  const mobileVisibleMembers = isMobile && !showAll
-    ? ALL_MEMBERS.slice(0, MOBILE_INITIAL_COUNT)
-    : ALL_MEMBERS;
+  const visibleMembers = showAll ? ALL_MEMBERS : ALL_MEMBERS.slice(0, INITIAL_VISIBILITY_COUNT);
 
   return (
     <section
       ref={ref}
-      className={`${isMobile ? 'mt-[-10px]' : 'mt-[-2px]'} relative w-full bg-slate-50 dark:bg-[#020617] overflow-hidden min-h-[110vh]`}
+      className={`relative w-full bg-slate-50 dark:bg-[#020617] overflow-hidden min-h-screen py-24 md:py-40 flex flex-col justify-center`}
       id="team"
     >
-      {/* 1. LAYERED BACKGROUND EFFECTS */}
+      {/* 1. LAYERED AMBIENT BACKGROUND */}
       <div
         className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block overflow-hidden"
         style={{
@@ -216,128 +101,120 @@ const Team = forwardRef((props, ref) => {
           WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
         }}
       >
-        {/* Deep ambient background glows */}
-        <motion.div
-          animate={isMobile ? {} : { x: [0, 60, 0], y: [0, 40, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/2 left-1/4 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 -translate-x-1/2"
-        />
-        <motion.div
-          animate={isMobile ? {} : { x: [0, -50, 0], y: [0, -60, 0] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/2"
-        />
-
-        {/* Grain Overlay — desktop only */}
-        {!isMobile && (
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
-        )}
+        <div className="absolute top-1/2 left-1/4 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
       </div>
 
-      {/* Light Mode Specific Ambient Blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden overflow-hidden">
         <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-cyan-100/50 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/2" />
         <div className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-indigo-100/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
       </div>
 
-
-      {/* ── DESKTOP: Three-ring layout ── */}
-      <div className="hidden lg:flex relative min-h-[110vh] items-center justify-center">
-
-        {/* Floating Bubble Grid Map */}
-        <div className="absolute inset-0">
-          {ALL_MEMBERS.map((member, idx) => (
-            <FloatingMember key={idx} member={member} style={MEMBER_STYLES[idx]} />
-          ))}
-        </div>
-
-        {/* Center heading */}
-        <div className="relative z-30 text-center max-w-lg pointer-events-none select-none flex flex-col items-center">
+      {/* ── UNIFIED SIMPLE GRID LAYOUT ── */}
+      <div className="relative z-10 w-full max-w-[90vw] md:max-w-7xl mx-auto px-4 md:px-6">
+        
+        {/* Header */}
+        <div className="text-center mb-16 md:mb-24 flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             className="inline-flex items-center justify-center gap-4 mb-6"
           >
-            <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-500" />
-            <p className="text-[10px] md:text-xs font-black text-cyan-500 tracking-[0.6em] md:tracking-[0.8em] uppercase">Avalanche Club</p>
-            <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-500" />
+            <div className="h-[1px] w-6 md:w-8 bg-gradient-to-r from-transparent to-cyan-500" />
+            <p className="text-[10px] md:text-xs font-black text-cyan-500 tracking-[0.5em] md:tracking-[0.8em] uppercase">Avalanche Club</p>
+            <div className="h-[1px] w-6 md:w-8 bg-gradient-to-l from-transparent to-cyan-500" />
           </motion.div>
 
           <AnimatedTitle
             text="Our"
-            className="text-[clamp(6rem,12vw,9rem)] font-black tracking-tighter leading-none text-slate-900 dark:text-white"
+            className="text-[clamp(4rem,10vw,7rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
           />
           <AnimatedTitle
             text="Team."
             delay={0.2}
-            className="text-[clamp(6rem,12vw,9rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 drop-shadow-[0_0_30px_rgba(34,211,238,0.2)] pb-4 -mt-2"
+            className="text-[clamp(4rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
           />
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="mt-6 text-[10px] font-bold text-slate-500 dark:text-white/40 tracking-[0.3em] uppercase"
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-[10px] text-slate-500 dark:text-white/40 font-bold tracking-widest uppercase mt-8 md:mt-10"
           >
             {ALL_MEMBERS.length} members · SIT Tumakuru
           </motion.p>
         </div>
-      </div>
 
-      {/* ── MOBILE: responsive card grid + tap popup ── */}
-      <div className="lg:hidden py-32 px-6 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-[10px] font-black text-cyan-500 tracking-[0.5em] uppercase mb-4">Avalanche Club</p>
-          <AnimatedTitle
-            text="Our Team."
-            className="text-[clamp(3.5rem,10vw,5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
-          />
-          <p className="text-[10px] text-slate-500 dark:text-white/40 font-bold tracking-widest uppercase mt-4">
-            {ALL_MEMBERS.length} members · SIT Tumakuru
-          </p>
-        </div>
-
-        {/* 3-column grid — paginated on mobile */}
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-6">
-          {mobileVisibleMembers.map((member, idx) => (
-            <motion.button
+        {/* Unified Responsive Grid (Simple fade-in animation) */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-14">
+          {visibleMembers.map((member, idx) => (
+            <motion.div
               key={idx}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: '60px' }}
-              transition={{ duration: 0.3, delay: (idx % 6) * 0.04 }}
-              onClick={() => setActiveIdx(ALL_MEMBERS.indexOf(member))}
-              className="flex flex-col items-center gap-3 group active:scale-95 transition-transform"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '50px' }}
+              transition={{ duration: 0.5, delay: (idx % 8) * 0.05 }}
+              className="flex flex-col items-center gap-3 md:gap-4 group relative"
             >
-              <div className="w-full aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-md group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-shadow duration-500">
-                <div className="w-full h-full rounded-full overflow-hidden border border-white dark:border-[#020617] bg-slate-900">
-                  <img src={member.image} alt={member.name} loading="lazy" className="w-full h-full object-cover transition-all duration-500" />
+              <div 
+                className="w-full aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400/50 via-blue-500/50 to-indigo-500/50 group-hover:from-cyan-400 group-hover:via-blue-500 group-hover:to-indigo-500 shadow-md group-hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300 cursor-pointer active:scale-95"
+                onClick={() => setActiveIdx(ALL_MEMBERS.indexOf(member))}
+              >
+                <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900 overflow-hidden relative">
+                  <img src={member.image} alt={member.name} loading="lazy" className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-50" />
+                  
+                  {/* Subtle hover overlay hint */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-[10px] font-black text-white px-2 py-1 bg-black/40 rounded-full backdrop-blur-sm shadow-md">VIEW</span>
+                  </div>
                 </div>
               </div>
-              <span className="text-[9px] sm:text-[10px] font-black text-slate-600 dark:text-white/60 uppercase tracking-widest line-clamp-1 text-center w-full">
+
+              {/* Social Quick Links */}
+              <div className="absolute top-[80%] flex gap-2 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-2 transition-all duration-300 z-20 pointer-events-none group-hover:pointer-events-auto shadow-xl">
+                <a
+                  href={member.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => member.instagram === '#' && e.preventDefault()}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-transform border border-white/20 shadow-md"
+                >
+                  <FaInstagram size={12} />
+                </a>
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => member.linkedin === '#' && e.preventDefault()}
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#0077b5] text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-transform border border-white/20 shadow-md"
+                >
+                  <FaLinkedinIn size={12} />
+                </a>
+              </div>
+
+              <span className="text-[10px] md:text-xs font-black text-slate-700 dark:text-white/70 uppercase tracking-wider md:tracking-widest line-clamp-1 text-center w-[120%] -ml-[10%] drop-shadow-sm transition-colors group-hover:text-cyan-500 dark:group-hover:text-cyan-400 mt-2">
                 {member.name.split(' ')[0]}
               </span>
-            </motion.button>
+            </motion.div>
           ))}
         </div>
 
-        {/* Show More button — only visible when list is truncated */}
-        {!showAll && ALL_MEMBERS.length > MOBILE_INITIAL_COUNT && (
-          <div className="flex justify-center mt-10">
+        {/* Show More toggle */}
+        {ALL_MEMBERS.length > INITIAL_VISIBILITY_COUNT && (
+          <div className="flex justify-center mt-16 md:mt-24">
             <button
-              onClick={() => setShowAll(true)}
-              className="px-8 py-3 rounded-full bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl text-[10px] font-black text-slate-600 dark:text-white/60 uppercase tracking-[0.3em] shadow-sm active:scale-95 transition-transform hover:border-cyan-500/40 hover:text-cyan-500 dark:hover:text-cyan-400"
+              onClick={() => setShowAll(!showAll)}
+              className="px-8 py-4 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-300 dark:border-white/10 backdrop-blur-xl text-[10px] md:text-xs font-black text-slate-700 dark:text-white/60 uppercase tracking-[0.2em] shadow-sm active:scale-95 transition-all hover:border-cyan-500/40 hover:text-cyan-500 dark:hover:text-cyan-400"
             >
-              Show More · {ALL_MEMBERS.length - MOBILE_INITIAL_COUNT} remaining
+              {showAll ? 'Show Less' : `Load Rest of Team (${ALL_MEMBERS.length - INITIAL_VISIBILITY_COUNT})`}
             </button>
           </div>
         )}
 
-        {/* ── Bottom-sheet popup ── */}
+        {/* ── Active Member Modals ── */}
         <AnimatePresence>
           {activeMember && (
             <>
@@ -346,28 +223,25 @@ const Team = forwardRef((props, ref) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md z-40"
+                className="fixed inset-0 bg-slate-900/60 dark:bg-black/60 backdrop-blur-md z-40 cursor-pointer"
                 onClick={() => setActiveIdx(null)}
               />
 
-              {/* Glassy Bottom Sheet */}
+              {/* Glassy Modal Focus Card */}
               <motion.div
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '120%', opacity: 0 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#060b18]/80 backdrop-blur-3xl border-t border-white/60 dark:border-white/10 rounded-t-[3rem] px-6 pt-8 pb-12 shadow-[0_-20px_60px_-15px_rgba(0,0,0,0.3)]"
+                initial={{ y: '20px', scale: 0.95, opacity: 0 }}
+                animate={{ y: 0, scale: 1, opacity: 1 }}
+                exit={{ y: '20px', scale: 0.95, opacity: 0 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-sm bg-white/90 dark:bg-[#060b18]/90 backdrop-blur-2xl border border-white/60 dark:border-white/10 rounded-[3rem] px-6 py-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
               >
-                {/* Drag handle */}
-                <div className="w-12 h-1.5 bg-slate-300 dark:bg-white/20 rounded-full mx-auto mb-8" />
-
                 <div className="flex flex-col items-center gap-5">
                   <div className="relative">
                     {/* Pulsing ring behind photo */}
                     <div className="absolute -inset-4 rounded-full bg-cyan-500/20 blur-xl animate-pulse" />
 
-                    <div className="relative w-32 h-32 rounded-full p-[3px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-2xl z-10">
-                      <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900">
+                    <div className="relative w-36 h-36 rounded-full p-[3px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-2xl z-10">
+                      <div className="w-full h-full rounded-full overflow-hidden border-4 border-white dark:border-[#020617] bg-slate-900">
                         <img src={activeMember.image} alt={activeMember.name} className="w-full h-full object-cover" />
                       </div>
                     </div>
@@ -375,36 +249,36 @@ const Team = forwardRef((props, ref) => {
 
                   <div className="text-center mt-2">
                     <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{activeMember.name}</h3>
-                    <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mt-2">Core Member · Avalanche</p>
+                    <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mt-2">Core Member</p>
                   </div>
 
                   {/* Social buttons */}
-                  <div className="flex w-full gap-4 mt-4 max-w-sm">
+                  <div className="flex w-full gap-4 mt-4">
                     <a
                       href={activeMember.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={e => activeMember.instagram === '#' && e.preventDefault()}
-                      className="flex-1 flex items-center justify-center gap-3 px-5 py-4 rounded-[1.2rem] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white text-xs font-black shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                      className="flex-1 flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-3xl bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 text-white text-xs font-black shadow-lg hover:shadow-xl active:scale-95 transition-all"
                     >
-                      <FaInstagram size={18} /> Instagram
+                      <FaInstagram size={20} />
                     </a>
                     <a
                       href={activeMember.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={e => activeMember.linkedin === '#' && e.preventDefault()}
-                      className="flex-1 flex items-center justify-center gap-3 px-5 py-4 rounded-[1.2rem] bg-[#0077b5] text-white text-xs font-black shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                      className="flex-1 flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-3xl bg-[#0077b5] text-white text-xs font-black shadow-lg hover:shadow-xl active:scale-95 transition-all"
                     >
-                      <FaLinkedinIn size={16} /> LinkedIn
+                      <FaLinkedinIn size={18} />
                     </a>
                   </div>
 
                   <button
                     onClick={() => setActiveIdx(null)}
-                    className="mt-6 text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest active:scale-95 transition-transform"
+                    className="mt-4 px-6 py-2 rounded-full border border-slate-200 dark:border-white/10 text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-white/5 active:scale-95 transition-all"
                   >
-                    Close Profile
+                    Close
                   </button>
                 </div>
               </motion.div>
