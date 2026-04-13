@@ -15,10 +15,18 @@ export function InteractiveRobotSpline({ scene, className }) {
         </div>
       }
     >
-      <Spline
-        scene={scene}
-        className={className} 
-      />
+      {/* Wrapper hides the "Built with Spline" badge */}
+      <div className="relative w-full h-full">
+        <Spline
+          scene={scene}
+          className={className}
+        />
+        {/* Covers the Spline watermark at bottom-right */}
+        <div
+          className="absolute bottom-0 right-0 w-36 h-8 bg-[#060b18] pointer-events-none"
+          aria-hidden="true"
+        />
+      </div>
     </Suspense>
   );
 }

@@ -47,6 +47,7 @@
 
 :root {
   --radius: 0.625rem;
+  --animation-iteration: infinite;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -126,5 +127,320 @@
 
   html {
     transition: background-color 0.4s ease;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   COSMIC PARALLAX BACKGROUND  —  Hero section star field
+   ═══════════════════════════════════════════════════════ */
+
+/* Container fills its positioned parent absolutely */
+.cosmic-parallax-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  /*
+   * The blue atmospheric glow lives entirely IN the sky background.
+   * Strong radial gradient centered at bottom-center simulates a
+   * sunrise-from-behind-planet effect.
+   */
+  background:
+    radial-gradient(
+      ellipse 120% 60% at 50% 105%,
+      #1a3c72 0%,
+      #0d2040 18%,
+      #08131f 40%,
+      #050b14 65%,
+      #030709 100%
+    );
+}
+
+/* ── Small stars: 700 dots, 50s loop ── */
+.cosmic-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  border-radius: 50%;
+  z-index: 1;
+  animation: animStar 50s var(--animation-iteration, infinite) linear;
+}
+
+.cosmic-stars::after {
+  content: '';
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: inherit;
+  border-radius: 50%;
+}
+
+/* ── Medium stars: 200 dots, 100s loop ── */
+.cosmic-stars-medium {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  border-radius: 50%;
+  animation: animStar 100s var(--animation-iteration, infinite) linear;
+}
+
+.cosmic-stars-medium::after {
+  content: '';
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: inherit;
+  border-radius: 50%;
+}
+
+/* ── Large stars: 100 dots, 150s loop ── */
+.cosmic-stars-large {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  border-radius: 50%;
+  animation: animStar 150s var(--animation-iteration, infinite) linear;
+}
+
+.cosmic-stars-large::after {
+  content: '';
+  position: absolute;
+  top: 2000px;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow: inherit;
+  border-radius: 50%;
+}
+
+/* ── Horizon — curved arc rim line, matches #earth shape exactly ── */
+#horizon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160%;
+  max-width: 3000px;
+  height: 70%;
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+  z-index: 4;
+  background: transparent;
+  border-top: 2px solid rgba(130, 210, 255, 0.80);
+  box-shadow:
+    0 0 12px  6px rgba(100, 190, 255, 0.55),
+    0 0 35px 14px rgba( 60, 150, 255, 0.30),
+    0 0 80px 28px rgba( 30, 100, 220, 0.15);
+}
+.glow { display: none; }
+
+/* ── Earth dark arc ── */
+#earth {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200%;
+  max-width: 3000px;
+  height: 48vh;
+  background: linear-gradient(
+    to bottom,
+    #0b1828 0%,
+    #080e1a 3%,
+    #060810 10%,
+    #020308 40%,
+    #010205 100%
+  );
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Title ── */
+#title {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(2rem, 5vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  padding-left: 0.2em;
+  text-align: center;
+  pointer-events: none;
+  width: 95%;
+  white-space: normal;
+  line-height: 1.1;
+  color: #9fb0c8;
+  z-index: 2;
+  animation: animTitle 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+/* ── Subtitle — below horizon, spaced-out tracking ── */
+#subtitle {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+  font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.55em;
+  color: rgba(140, 175, 220, 0.55);
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+.subtitle-part-1 {
+  animation: animDont 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+.subtitle-part-2 {
+  animation: animLet 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+.subtitle-part-3 {
+  animation: animGo 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+.subtitle-part-4 {
+  animation: animGo 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+/* ══ Keyframe animations ══ */
+
+/* Title entrance: vertical slide-in only, NO letter-spacing explosion */
+@keyframes animTitle {
+  0% {
+    transform: translate(-50%, calc(-50% - 26px));
+    opacity: 0;
+  }
+
+  30%,
+  80% {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    transform: translate(-50%, calc(-50% - 4px));
+    opacity: 0;
+  }
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+@keyframes animGravity {
+  0% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+
+  30%,
+  80% {
+    letter-spacing: 40px;
+    padding-left: 40px;
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    letter-spacing: 35px;
+    padding-left: 35px;
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animDont {
+
+  0%,
+  15% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+
+  35%,
+  80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animLet {
+
+  0%,
+  25% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+
+  45%,
+  80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animGo {
+
+  0%,
+  35% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+
+  55%,
+  80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    transform: translateY(-4px);
+    opacity: 0;
   }
 }
