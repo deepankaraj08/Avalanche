@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
 
+import Preloader from '@/components/preloader';
+
 // Below-fold sections: lazy-loaded so their JS is NOT in the initial bundle
 const About = dynamic(() => import('@/app/components/About'), { ssr: false, loading: () => null });
 const Events = dynamic(() => import('@/app/components/Events'), { ssr: false, loading: () => null });
@@ -15,8 +17,10 @@ const Footer = dynamic(() => import('@/app/components/Footer'), { ssr: false, lo
 
 // Modals: load only when actually opened
 const JoinModal = dynamic(() => import('@/app/components/JoinModal'), { ssr: false, loading: () => null });
+
 export default function Home() {
-  // 1. State Management for Modals
+  // 1. State Management for Modals & Preloader
+  const [showPreloader, setShowPreloader] = useState(true);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   // 2. Initialize all refs
@@ -76,6 +80,12 @@ export default function Home() {
   return (
     // Optimized background and scroll container
     <div className="bg-[#020617] min-h-[100dvh] w-full selection:bg-cyan-500/30">
+      
+      <AnimatePresence mode="wait">
+        {showPreloader && (
+          <Preloader onComplete={() => setShowPreloader(false)} />
+        )}
+      </AnimatePresence>
 
       <Navbar
         scrollTo={scrollTo}
