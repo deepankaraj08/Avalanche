@@ -239,7 +239,10 @@
   /* MUST match #earth exactly so border-top follows the same arc */
   width: 200%;
   max-width: 4000px;
-  height: 58vh;
+  height: 55vh;
+  @media (min-width: 768px) {
+    height: 52vh;
+  }
   border-radius: 50% 50% 0 0;
   pointer-events: none;
   z-index: 4;
@@ -260,7 +263,10 @@
   transform: translateX(-50%);
   width: 200%;
   max-width: 4000px;
-  height: 58vh;
+  height: 55vh;
+  @media (min-width: 768px) {
+    height: 52vh;
+  }
   background: linear-gradient(
     to bottom,
     #0b1828 0%,
@@ -297,7 +303,7 @@
 /* ── Subtitle — below horizon, spaced-out tracking ── */
 #subtitle {
   position: absolute;
-  bottom: 8%; /* Very low on mobile so it doesn't hit UI buttons */
+  bottom: 13%; /* Lowered once more as requested */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -314,7 +320,7 @@
 
 @media (min-width: 640px) {
   #subtitle {
-    bottom: 12%; 
+    bottom: 18%; /* Raised further for laptop as requested */
     gap: 2rem;
   }
 }

@@ -109,7 +109,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
       {/* ── Hero content — positioned strictly inside the dark planet cleanly across all devices ── */}
       <div 
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[20%] sm:bottom-[24%] lg:bottom-[28%]"
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[28%]"
       >
 
         {/* Badge */}
