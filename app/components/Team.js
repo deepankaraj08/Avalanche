@@ -10,54 +10,81 @@ const ALL_MEMBERS = [
   { name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: '#', linkedin: '#' },
   { name: 'Satyam Verma', image: '/PHOTOS/satyam.jpg', instagram: '#', linkedin: '#' },
   { name: 'Shruti Shreya', image: '/PHOTOS/shruti.jpg', instagram: '#', linkedin: '#' },
-  { name: 'Advait Amrit', image: '/PHOTOS/advaita.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
-  { name: 'Harsh', image: '/PHOTOS/harsh.HEIC', instagram: '#', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
+
+  { name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
+  { name: 'Harsh Raj', image: '/PHOTOS/harsh.jpg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
+
   { name: 'Jhanvi', image: '/PHOTOS/jhanvi.jpg', instagram: '#', linkedin: '#' },
   { name: 'Manan Agarwal', image: '/PHOTOS/manan.jpg', instagram: '#', linkedin: '#' },
-  { name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
-  { name: 'Prakhar Banshal', image: '/PHOTOS/prakhar.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/prakhar-bansal' },
+
+  { name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: 'https://www.instagram.com/iitz_mrinal', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
+  { name: 'Prakhar Bansal', image: '/PHOTOS/prakhar.jpg', instagram: 'https://www.instagram.com/prakharrrr_bansal_', linkedin: 'https://www.linkedin.com/in/prakhar-bansal' },
+
   { name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: '#', linkedin: '#' },
-  { name: 'Nuhaa Fathima', image: '/PHOTOS/nuha.jpeg', instagram: '#', linkedin: 'https://www.linkedin.com/in/nuha-fathima-559860296' },
-  { name: 'Purvi Raj', image: '/PHOTOS/purvi.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/s-d-purvi-raj-775a53331' },
-  { name: 'Vansh Jha', image: '/PHOTOS/vansh.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/vansh-jha13' },
-  { name: 'Ankit', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
+
+  { name: 'Nuha Fathima', image: '/PHOTOS/nuha.jpeg', instagram: 'https://www.instagram.com/nuhaaaa24', linkedin: 'https://www.linkedin.com/in/nuha-fathima-559860296' },
+  { name: 'Purvi Raj', image: '/PHOTOS/purvi.jpg', instagram: 'https://www.instagram.com/raj_purvi_sd', linkedin: 'https://www.linkedin.com/in/s-d-purvi-raj-775a53331' },
+  { name: 'Vansh Jha', image: '/PHOTOS/vansh.jpg', instagram: 'https://www.instagram.com/vanshhjhaa', linkedin: 'https://www.linkedin.com/in/vansh-jha13' },
+
+  { name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
   { name: 'Deeksha', image: '/PHOTOS/deeksha.jpg', instagram: 'https://www.instagram.com/im_deeksha_08', linkedin: 'https://www.linkedin.com/in/deeksha-n-018864' },
-  { name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328?igsh=Y3Nub2E2c3Z2cGZm', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Deepankar Raj', image: '/PHOTOS/deepankar.jpg', instagram: 'https://www.instagram.com/deepankaraj', linkedin: 'https://www.linkedin.com/in/deepankaraj' },
+
+  { name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
+  { name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
+
   { name: 'Dhruthi M', image: '/PHOTOS/dhruthi.jpg', instagram: 'https://www.instagram.com/dhruthi__m', linkedin: 'https://www.linkedin.com/in/dhruthi-m-940bb6385' },
-  { name: 'Keerthi Pai', image: '/PHOTOS/keerthi.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/keerthi-pai-506bbb334?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+
+  { name: 'Keerthi Pai', image: '/PHOTOS/keerthi.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/keerthi-pai-506bbb334' },
+
   { name: 'Nanditha LM', image: '/PHOTOS/nanditha.jpg', instagram: 'https://www.instagram.com/nanditha_mallikarjun', linkedin: 'https://www.linkedin.com/in/nanditha-l-m-905057371' },
-  { name: 'Saket Sinha', image: '/PHOTOS/saket.jpg', instagram: 'https://www.instagram.com/__saket__sinha__', linkedin: 'https://www.linkedin.com/in/saket-sinha-930506331?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Soham Khade', image: '/PHOTOS/soham.jpg', instagram: 'https://www.instagram.com/sohamkhade0901', linkedin: 'https://www.linkedin.com/in/soham-khade-410378380?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Samarth Gupta', image: '/PHOTOS/samarth.jpg', instagram: 'https://www.instagram.com/samarth_542', linkedin: 'www.linkedin.com/in/samarth-gupta-7ab08a331' },
-  { name: 'Vishal Tiwary', image: '/PHOTOS/vishal.pdf', instagram: 'https://www.instagram.com/vishaltiwary016?utm_source=qr&igsh=MXdocDJtZ2c5bWpueQ==', linkedin: 'https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Aditya Kumar', image: '/PHOTOS/aditya.heif', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Lasya Shetty', image: '/PHOTOS/lasya.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-https://www.linkedin.com/in/nagalasya-t-v-3118613b3?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app3118613b3' },
-  { name: 'Lisha GL', image: '/PHOTOS/LISHA.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/lisha-g-l-377656372?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Avnish Aman', image: '/PHOTOS/avnish.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/avnish-aman-903b39362?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Aryan Shandilya', image: '/PHOTOS/aryan.jpg', instagram: '#', linkedin: 'http://www.linkedin.com/in/aryan-shandilya-757266382' },
-  { name: 'Anjali Mallur', image: '/PHOTOS/anjali.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/anjali-mallur-238031374?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  { name: 'Abhijeet Satyam', image: '/PHOTOS/jeet.jpeg', instagram: '#', linkedin: 'www.linkedin.com/in/abhijeet-satyam-45b85a3b4' },
-  { name: 'Ayush Ranjan', image: '/PHOTOS/ayush.jpeg', instagram: '#', linkedin: 'https://www.linkedin.com/in/ayush-ranjan-614589388?utm_source=share_via&utm_content=profile&utm_medium=member_ios' },
-  //{ name: 'Agamya sinha', image: '/PHOTOS/agamya.jpg', instagram: '#', linkedin: '#' },
- //{ name: 'K bhuvana', image: '/PHOTOS/khuvana.jpg', instagram: '#', linkedin: '#' },
-  { name: 'Shashank Shekhar', image: '/PHOTOS/shashank.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/shashank-shekhar-1730b23b4?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Ayman Akhtar', image: '/PHOTOS/ayman.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/md-ayman-akhtar-20413735b?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Madhurya R', image: '/PHOTOS/madhurya.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/madhurya-r-336784336' },
-  { name: 'Shubham Kanshi', image: '/PHOTOS/shubham.png', instagram: '#', linkedin: 'https://www.linkedin.com/in/shubham-kumar-kanshi-a48264326?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Siddharth Soni', image: '/PHOTOS/sid soni.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/siddharth-soni-2744ba3a2' },
+
+  { name: 'Saket Sinha', image: '/PHOTOS/saket.jpg', instagram: 'https://www.instagram.com/__saket__sinha__', linkedin: 'https://www.linkedin.com/in/saket-sinha-930506331' },
+
+  { name: 'Soham Khade', image: '/PHOTOS/soham.jpg', instagram: 'https://www.instagram.com/sohamkhade0901', linkedin: 'https://www.linkedin.com/in/soham-khade-410378380' },
+
+  { name: 'Samarth Gupta', image: '/PHOTOS/samarth.jpg', instagram: 'https://www.instagram.com/samarth_542', linkedin: 'https://www.linkedin.com/in/samarth-gupta-7ab08a331' },
+
+  { name: 'Vishal Tiwary', image: '/PHOTOS/vishal.jpg', instagram: 'https://www.instagram.com/vishaltiwary016', linkedin: 'https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310' },
+
+  { name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
+
+  { name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331' },
+
+  { name: 'Lasya Shetty', image: '/PHOTOS/lasya.jpg', instagram: 'https://www.instagram.com/nagalasyaaa', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-3118613b3' },
+
+  { name: 'Lisha GL', image: '/PHOTOS/LISHA.jpg', instagram: 'https://www.instagram.com/lisha_gl', linkedin: 'https://www.linkedin.com/in/lisha-g-l-377656372' },
+
+  { name: 'Avnish Aman', image: '/PHOTOS/avnish.jpg', instagram: 'https://www.instagram.com/avnish__04', linkedin: 'https://www.linkedin.com/in/avnish-aman-903b39362' },
+
+  { name: 'Aryan Shandilya', image: '/PHOTOS/aryan.jpg', instagram: 'https://www.instagram.com/aryan.tf', linkedin: 'https://www.linkedin.com/in/aryan-shandilya-757266382' },
+
+  { name: 'Anjali Mallur', image: '/PHOTOS/anjali.jpg', instagram: 'https://www.instagram.com/anjalimallur', linkedin: 'https://www.linkedin.com/in/anjali-mallur-238031374' },
+
+  { name: 'Abhijeet Satyam', image: '/PHOTOS/jeet.jpeg', instagram: 'https://www.instagram.com/the_jeetx', linkedin: 'https://www.linkedin.com/in/abhijeet-satyam-45b85a3b4' },
+
+  { name: 'Ayush Ranjan', image: '/PHOTOS/ayush.jpeg', instagram: 'https://www.instagram.com/_ayush._.ranjan_', linkedin: 'https://www.linkedin.com/in/ayush-ranjan-614589388' },
+
+  { name: 'Shashank Shekhar', image: '/PHOTOS/shashank.jpg', instagram: 'https://www.instagram.com/shashankk_shk', linkedin: 'https://www.linkedin.com/in/shashank-shekhar-1730b23b4' },
+
+  { name: 'Ayman Akhtar', image: '/PHOTOS/ayman.jpg', instagram: 'https://www.instagram.com/akhi_ayman313', linkedin: 'https://www.linkedin.com/in/md-ayman-akhtar-20413735b' },
+
+  { name: 'Madhurya R', image: '/PHOTOS/madhurya.jpg', instagram: 'https://www.instagram.com/_madhurya__r', linkedin: 'https://www.linkedin.com/in/madhurya-r-336784336' },
+
+  { name: 'Shubham Kanshi', image: '/PHOTOS/shubham.png', instagram: 'https://www.instagram.com/shubham_kanshi', linkedin: 'https://www.linkedin.com/in/shubham-kumar-kanshi-a48264326' },
+
+  { name: 'Siddharth Soni', image: '/PHOTOS/sid soni.jpg', instagram: 'https://www.instagram.com/siddharthsoni73577', linkedin: 'https://www.linkedin.com/in/siddharth-soni-2744ba3a2' },
+
   { name: 'Snehil Pandey', image: '/PHOTOS/snehil.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/snehil-pandey-b884a4381' },
-  { name: 'Suprem Timsina', image: '/PHOTOS/suprem.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/suprem-timsina-387086392?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-  { name: 'Simran', image: '/PHOTOS/simran.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/simran-vats-148446385' },
-  { name: 'Saarth Singh', image: '/PHOTOS/saarth.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/saarth-singh-713201229?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
-  //{ name: 'Sharadhi', image: '/PHOTOS/sharadhi.jpg', instagram: '#', linkedin: '#' },
-  //{ name: 'Preetham C G', image: '/PHOTOS/preetham.jpg', instagram: '#', linkedin: '#' },
-  //{ name: 'Nitin Desai', image: '/PHOTOS/nitin.jpg', instagram: '#', linkedin: '#' },
-  { name: 'Geet Roy', image: '/PHOTOS/geet.jpg', instagram: '#', linkedin: 'https://www.linkedin.com/in/geet-roy-17a618373' },
-  //{ name: 'Om karr', image: '/PHOTOS/om.jpg', instagram: '#', linkedin: '#' },
+
+  { name: 'Suprem Timsina', image: '/PHOTOS/suprem.jpg', instagram: 'https://www.instagram.com/supremm___', linkedin: 'https://www.linkedin.com/in/suprem-timsina-387086392' },
+
+  { name: 'Simran Vats', image: '/PHOTOS/simran.jpg', instagram: 'https://www.instagram.com/simran_vats_13', linkedin: 'https://www.linkedin.com/in/simran-vats-148446385' },
+
+  { name: 'Saarth Singh', image: '/PHOTOS/saarth.jpg', instagram: 'https://www.instagram.com/saarth_singh24', linkedin: 'https://www.linkedin.com/in/saarth-singh-713201229' },
+
+  { name: 'Geet Roy', image: '/PHOTOS/geet.jpg', instagram: 'https://www.instagram.com/geetroy_07', linkedin: 'https://www.linkedin.com/in/geet-roy-17a618373' }
 ];
+
 
 const AnimatedTitle = ({ text, className, delay = 0 }) => {
   const words = text.split(" ");
