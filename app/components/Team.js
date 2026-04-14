@@ -10,7 +10,6 @@
 
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin } from 'lucide-react';
 import { TeamSection } from '@/components/ui/team-section';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -77,26 +76,17 @@ const ALL_MEMBERS = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  DATA TRANSFORM
-//  Converts raw member data → TeamSection-compatible format
-//  Rules:
-//   • designation = "Core Member" (update per member if roles differ)
-//   • socialLinks skips null values
-//   • imageSrc = member.image  (null → TeamSection shows initials fallback)
+//  DATA TRANSFORM  →  team-section.jsx prop shape
+//   { name, role, image, year, instagram, linkedin }
 // ─────────────────────────────────────────────────────────────────────────────
-const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => {
-  const socialLinks = [];
-  if (m.instagram) socialLinks.push({ icon: Instagram, href: m.instagram, label: `${m.name} on Instagram` });
-  if (m.linkedin)  socialLinks.push({ icon: Linkedin,  href: m.linkedin,  label: `${m.name} on LinkedIn`  });
-
-  return {
-    name:        m.name,
-    designation: 'Core Member',
-    imageSrc:    m.image,
-    year:        m.year,
-    socialLinks,
-  };
-});
+const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => ({
+  name:      m.name,
+  role:      'Core Member',   // ← update per member if they have titles
+  image:     m.image,
+  year:      m.year,
+  instagram: m.instagram,
+  linkedin:  m.linkedin,
+}));
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  ANIMATED HEADING  (word-by-word spring entrance)
