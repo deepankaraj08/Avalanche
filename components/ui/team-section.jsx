@@ -8,7 +8,8 @@
  *   role        : string
  *   image       : string          /PHOTOS/file.jpg  (null → initials fallback)
  *   year        : 1 | 2 | 3 | 4
- *   position    : string | null   CSS object-position e.g. "50% 25%" (default "50% 15%")
+ *   position    : string | null   CSS object-position e.g. "50% 20%" (default "top")
+ *                                  Use this to fix cropped faces per member
  *   instagram   : string | null
  *   linkedin    : string | null
  * }>
@@ -37,13 +38,13 @@ import { Instagram, Linkedin } from 'lucide-react';
 
 const FILTERS = [
   { key: 'all', label: 'All' },
-  { key: 1,     label: '1st Year' },
-  { key: 2,     label: '2nd Year' },
-  { key: 3,     label: '3rd Year' },
-  { key: 4,     label: '4th Year' },
+  { key: 4, label: '4th Year' },
+  { key: 3, label: '3rd Year' },
+  { key: 2, label: '2nd Year' },
+  { key: 1, label: '1st Year' },
 ];
 
-const TILT_MAX    = 11;   // degrees
+const TILT_MAX = 11;   // degrees
 const MAGNETIC_PX = 8;    // max avatar magnetic shift (px)
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -52,7 +53,7 @@ const MAGNETIC_PX = 8;    // max avatar magnetic shift (px)
 
 const gridVariants = {
   hidden: {},
-  show:   { transition: { staggerChildren: 0.05, delayChildren: 0.06 } },
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.06 } },
 };
 
 const cardVariants = {
@@ -87,11 +88,13 @@ const ordinal = (n) => ['1st', '2nd', '3rd', '4th'][n - 1] ?? `${n}th`;
 // ─────────────────────────────────────────────────────────────────────────────
 
 const MemberCard = ({ member }) => {
-  const [imgErr,    setImgErr]    = useState(false);
+  const [imgErr, setImgErr] = useState(false);
+  // imgLoaded: tracks when <img> fires onLoad — drives skeleton → real image swap
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [spotlight, setSpotlight] = useState({ x: 50, y: 50, visible: false });
-  const cardRef  = useRef(null);
-  const hue      = strToHue(member.name);
-  const hasInsta  = !!member.instagram;
+  const cardRef = useRef(null);
+  const hue = strToHue(member.name);
+  const hasInsta = !!member.instagram;
   const hasLinked = !!member.linkedin;
 
   // ── Motion values for 3-D tilt ──────────────────────────────────────────
@@ -100,7 +103,7 @@ const MemberCard = ({ member }) => {
 
   const springCfg = { stiffness: 260, damping: 26, mass: 0.6 };
   const rotateY = useSpring(useTransform(rawX, [-1, 1], [-TILT_MAX, TILT_MAX]), springCfg);
-  const rotateX = useSpring(useTransform(rawY, [-1, 1], [ TILT_MAX, -TILT_MAX]), springCfg);
+  const rotateX = useSpring(useTransform(rawY, [-1, 1], [TILT_MAX, -TILT_MAX]), springCfg);
 
   // ── Motion values for magnetic avatar ───────────────────────────────────
   const magRawX = useMotionValue(0);
@@ -115,8 +118,8 @@ const MemberCard = ({ member }) => {
     const { left, top, width, height } = el.getBoundingClientRect();
 
     // Normalised −1 → +1
-    const nx = ((e.clientX - left) / width)  * 2 - 1;
-    const ny = ((e.clientY - top)  / height) * 2 - 1;
+    const nx = ((e.clientX - left) / width) * 2 - 1;
+    const ny = ((e.clientY - top) / height) * 2 - 1;
 
     rawX.set(nx);
     rawY.set(ny);
@@ -125,8 +128,8 @@ const MemberCard = ({ member }) => {
 
     // Spotlight percentage
     setSpotlight({
-      x: ((e.clientX - left) / width)  * 100,
-      y: ((e.clientY - top)  / height) * 100,
+      x: ((e.clientX - left) / width) * 100,
+      y: ((e.clientY - top) / height) * 100,
       visible: true,
     });
   }, [rawX, rawY, magRawX, magRawY]);
@@ -150,18 +153,21 @@ const MemberCard = ({ member }) => {
       whileTap={{ scale: 0.97 }}
       className="
         group relative flex flex-col items-center
-        p-6 sm:p-8 md:p-9
+        p-6 sm:p-8 md:p-10
         rounded-[1.75rem]
         bg-gradient-to-b from-white/[0.09] to-white/[0.04]
-        backdrop-blur-xl
+        dark:from-white/[0.06] dark:to-white/[0.02]
+        backdrop-blur-md sm:backdrop-blur-xl
         border border-white/[0.09]
+        dark:border-white/[0.07]
         shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]
-        hover:border-white/[0.20]
-        hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_60px_-12px_rgba(34,211,238,0.25)]
+        hover:border-white/[0.22]
+        hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_70px_-12px_rgba(34,211,238,0.30)]
         overflow-hidden select-none
         transition-[border-color,box-shadow,background] duration-400
-        cursor-default
-        min-h-[280px] sm:min-h-[320px] md:min-h-[360px]
+        cursor-pointer will-change-transform
+        active:scale-[0.98]
+        min-h-[360px] sm:min-h-[420px] md:min-h-[520px]
       "
     >
       {/* ── Cursor spotlight ─────────────────────────────────────────────── */}
@@ -190,10 +196,19 @@ const MemberCard = ({ member }) => {
           opacity-0 group-hover:opacity-100 transition-opacity duration-500
         "
       />
+      {/* ── Shine sweep — animated light ray on hover ─────────────────────── */}
+      <div className="absolute inset-0 rounded-[1.75rem] pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div
+            className="card-shine absolute inset-y-0 w-1/3
+              bg-gradient-to-r from-transparent via-white/[0.07] to-transparent"
+          />
+        </div>
+      </div>
 
       {/* ── Avatar (magnetic) ─────────────────────────────────────────────── */}
       <motion.div
-        className="relative z-10 mb-5 sm:mb-6"
+        className="relative z-10 mb-6 sm:mb-7"
         style={{ x: magX, y: magY }}
       >
         {/* Glow bloom behind avatar */}
@@ -210,16 +225,17 @@ const MemberCard = ({ member }) => {
         <div
           className="
             relative z-10
-            w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40
+            w-32 h-32 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-56 lg:h-56
             rounded-full overflow-hidden
             ring-[1.5px] ring-white/[0.13]
             group-hover:ring-2 group-hover:ring-cyan-400/55
             shadow-[0_8px_32px_rgba(0,0,0,0.7)]
-            group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.7),0_0_24px_rgba(34,211,238,0.25)]
+            group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.7),0_0_32px_rgba(34,211,238,0.30)]
             transition-all duration-400
           "
         >
           {imgErr ? (
+            /* ── Initials fallback ── */
             <div
               className="w-full h-full flex items-center justify-center text-white font-black text-2xl sm:text-3xl tracking-tight"
               style={{
@@ -229,26 +245,39 @@ const MemberCard = ({ member }) => {
               {getInitials(member.name)}
             </div>
           ) : (
-            <img
-              src={member.image}
-              alt={member.name}
-              loading="lazy"
-              draggable={false}
-              onError={() => setImgErr(true)}
-              className="w-full h-full object-cover group-hover:scale-[1.08] transition-transform duration-500 ease-out"
-              style={{ objectPosition: member.position ?? '50% 15%' }}
-            />
+            <>
+              {/* ── Skeleton pulse — shown until image loads ── */}
+              {!imgLoaded && (
+                <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
+              )}
+              <img
+                src={member.image}
+                alt={member.name}
+                loading="lazy"
+                draggable={false}
+                onLoad={() => setImgLoaded(true)}
+                onError={() => setImgErr(true)}
+                className={`
+                  w-full h-full object-cover
+                  will-change-transform transform-gpu
+                  scale-[0.96] group-hover:scale-[1.05]
+                  transition-all duration-500 ease-out
+                  ${imgLoaded ? 'opacity-100' : 'opacity-0'}
+                `}
+                style={{ objectPosition: member.position ?? '50% 15%' }}
+              />
+            </>
           )}
         </div>
       </motion.div>
 
       {/* ── Text ─────────────────────────────────────────────────────────── */}
-      <div className="text-center z-10 flex flex-col items-center mt-1">
+      <div className="text-center z-10 flex flex-col items-center mt-6">
 
         {/* Name */}
         <h3
           className="
-            text-base sm:text-lg md:text-xl
+            text-lg sm:text-xl md:text-2xl
             font-semibold tracking-tight leading-snug
             text-white/90 group-hover:text-white
             transition-colors duration-200
@@ -261,9 +290,9 @@ const MemberCard = ({ member }) => {
         {/* Role */}
         <p
           className="
-            mt-1.5 text-[11px] sm:text-xs md:text-sm
-            font-medium uppercase tracking-[0.18em]
-            text-white/30 group-hover:text-white/52
+            mt-2 text-sm md:text-base
+            font-medium uppercase tracking-[0.16em]
+            text-white/30 group-hover:text-white/55
             transition-colors duration-200
             line-clamp-1
           "
@@ -275,11 +304,11 @@ const MemberCard = ({ member }) => {
         <span
           className="
             inline-flex items-center mt-3
-            px-3 py-[3px] rounded-full
-            text-[9px] sm:text-[10px] font-black uppercase tracking-widest
+            px-3.5 py-[4px] rounded-full
+            text-[10px] font-black uppercase tracking-widest
             bg-white/[0.05] border border-white/[0.08]
             text-white/25
-            group-hover:bg-cyan-500/10 group-hover:border-cyan-500/28 group-hover:text-cyan-300/70
+            group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 group-hover:text-cyan-300/75
             transition-all duration-300
           "
         >
@@ -291,9 +320,10 @@ const MemberCard = ({ member }) => {
       {(hasInsta || hasLinked) && (
         <div
           className="
-            flex items-center gap-2.5 mt-5 z-10
-            opacity-0 translate-y-3
-            group-hover:opacity-100 group-hover:translate-y-0
+            flex items-center gap-4 mt-5 z-10
+            opacity-100 translate-y-0
+            sm:opacity-0 sm:translate-y-3
+            sm:group-hover:opacity-100 sm:group-hover:translate-y-0
             transition-all duration-300 ease-out
           "
         >
@@ -352,7 +382,7 @@ const FilterBar = ({ active, onChange, counts, total }) => (
   >
     {FILTERS.map((f) => {
       const isActive = active === f.key;
-      const count    = f.key === 'all' ? total : (counts[f.key] ?? 0);
+      const count = f.key === 'all' ? total : (counts[f.key] ?? 0);
       return (
         <button
           key={String(f.key)}
@@ -454,22 +484,22 @@ export function TeamSection({ members }) {
         </motion.p>
       </AnimatePresence>
 
-      {/* Card grid */}
+      {/* Card grid — max 3 per row, scroll-triggered entrance */}
       <AnimatePresence mode="wait">
         <motion.div
           key={String(activeFilter)}
           variants={gridVariants}
           initial="hidden"
-          animate="show"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
           exit={{ opacity: 0, transition: { duration: 0.15 } }}
           className="
             grid
-            grid-cols-2
+            grid-cols-1
             sm:grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            gap-4 sm:gap-5 md:gap-6
+            lg:grid-cols-3
+            mx-auto max-w-6xl
+            gap-6 sm:gap-8 md:gap-12
           "
         >
           {filtered.map((member) => (

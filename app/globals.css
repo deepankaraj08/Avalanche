@@ -458,3 +458,10 @@
     opacity: 0;
   }
 }
+
+/* ── Team card border shine sweep ──────────────────────────── */
+@keyframes shine {
+  0%   { transform: translateX(-120%) skewX(-15deg); }
+  100% { transform: translateX(220%)  skewX(-15deg); }
+}
+.card-shine { animation: shine 2.8s linear infinite; }
