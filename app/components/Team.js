@@ -77,13 +77,17 @@ const ALL_MEMBERS = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  DATA TRANSFORM  →  team-section.jsx prop shape
-//   { name, role, image, year, instagram, linkedin }
+//   { name, role, image, year, position?, instagram, linkedin }
+//
+//  position : CSS object-position string (default "50% 15%" in component)
+//             Override per member to avoid face cropping, e.g. "50% 20%"
 // ─────────────────────────────────────────────────────────────────────────────
 const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => ({
   name:      m.name,
-  role:      'Core Member',   // ← update per member if they have titles
+  role:      'Core Member',      // ← update per member if they have specific titles
   image:     m.image,
   year:      m.year,
+  position:  m.position ?? null, // forwards to img style.objectPosition
   instagram: m.instagram,
   linkedin:  m.linkedin,
 }));
@@ -147,9 +151,15 @@ const Team = forwardRef((props, ref) => (
 
     {/* ── Ambient colour blobs ── */}
     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-      <div className="absolute top-[20%] left-[10%]  w-[600px] h-[600px] bg-indigo-700/10 rounded-full blur-[130px]" />
-      <div className="absolute top-[30%] right-[10%] w-[500px] h-[500px] bg-cyan-700/10  rounded-full blur-[110px]" />
-      <div className="absolute bottom-[10%] left-1/2  w-[700px] h-[400px] bg-blue-800/8   rounded-full blur-[120px] -translate-x-1/2" />
+      {/* Side blobs */}
+      <div className="absolute top-[20%] left-[8%]   w-[560px] h-[560px] bg-indigo-700/12 rounded-full blur-[130px]" />
+      <div className="absolute top-[30%] right-[8%]  w-[480px] h-[480px] bg-cyan-700/12  rounded-full blur-[110px]" />
+      <div className="absolute bottom-[8%] left-1/2  w-[660px] h-[380px] bg-blue-800/10  rounded-full blur-[120px] -translate-x-1/2" />
+      {/* Center radial glow — premium depth layer */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2
+        w-[900px] h-[600px]
+        bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.05)_0%,transparent_65%)]
+        pointer-events-none" />
     </div>
 
     {/* ── Content ── */}
