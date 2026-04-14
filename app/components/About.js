@@ -51,7 +51,7 @@ function BentoCard({ children, className, glowColor = 'rgba(56, 189, 248, 0.15)'
       )}
 
       {/* Noise Texture */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+      <div className="hidden md:block absolute inset-0 opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
       
       <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
         {children}
@@ -187,6 +187,7 @@ const About = forwardRef((props, ref) => {
                  <img 
                    src="/gallery/five.png" 
                    alt="GOONJ Initiative" 
+                   loading="lazy"
                    className="w-full h-full object-cover rounded-full transition-transform duration-700 group-hover/img:scale-110" 
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-500/20 to-transparent pointer-events-none" />

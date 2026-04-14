@@ -63,7 +63,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed max-w-xs font-bold uppercase tracking-wide opacity-80">
-              Siddaganga Institute of Technology's premier cultural and technical hub.
+              Siddaganga Institute of Technology
             </p>
             <div className="flex flex-col text-[10px] text-slate-500 dark:text-slate-400 space-y-3 font-black tracking-widest uppercase">
               <span className="flex items-center gap-3">

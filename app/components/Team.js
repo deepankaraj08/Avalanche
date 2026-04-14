@@ -157,13 +157,13 @@ const Team = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '50px' }}
               transition={{ duration: 0.5, delay: (idx % 8) * 0.05 }}
-              className="flex flex-col items-center gap-3 md:gap-4 group relative"
+              className="flex flex-col items-center gap-3 md:gap-4 group relative w-full"
             >
               <div 
-                className="w-full aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400/50 via-blue-500/50 to-indigo-500/50 group-hover:from-cyan-400 group-hover:via-blue-500 group-hover:to-indigo-500 shadow-md group-hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300 cursor-pointer active:scale-95"
+                className="w-full relative aspect-square rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400/50 via-blue-500/50 to-indigo-500/50 group-hover:from-cyan-400 group-hover:via-blue-500 group-hover:to-indigo-500 shadow-md group-hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300 cursor-pointer active:scale-95"
                 onClick={() => setActiveIdx(ALL_MEMBERS.indexOf(member))}
               >
-                <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900 overflow-hidden relative">
+                <div className="absolute inset-[2.5px] rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900">
                   <img src={member.image} alt={member.name} loading="lazy" className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-50" />
                   
                   {/* Subtle hover overlay hint */}

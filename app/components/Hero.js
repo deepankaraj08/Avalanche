@@ -65,7 +65,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       {/* ── Cosmic parallax star field (full section background) ── */}
       <CosmicParallaxBg
         head="Team Avalanche"
-        text="We, Create, Moment"
+        text="Radiance Coming Soon"
+        countdownTo="2026-04-28T18:00:00"
         loop={true}
       />
 
@@ -108,7 +109,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
 
       {/* ── Hero content — positioned strictly inside the dark planet cleanly across all devices ── */}
       <div 
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[18%] sm:bottom-[22%] lg:bottom-[25%]"
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[20%] sm:bottom-[24%] lg:bottom-[28%]"
       >
 
         {/* Badge */}
@@ -176,7 +177,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                 className="flex items-center gap-2 sm:gap-4 opacity-40 transition-all duration-300 hover:opacity-100 cursor-default grayscale hover:grayscale-0"
               >
                 {client.image ? (
-                  <img src={client.image} alt={client.name} className="h-6 w-auto sm:h-8 object-contain" />
+                  <img src={client.image} alt={client.name} loading="lazy" className="h-6 w-auto sm:h-8 object-contain" />
                 ) : (
                   <client.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 )}

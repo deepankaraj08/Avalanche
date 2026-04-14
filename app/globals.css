@@ -239,7 +239,7 @@
   /* MUST match #earth exactly so border-top follows the same arc */
   width: 200%;
   max-width: 4000px;
-  height: 48vh;
+  height: 58vh;
   border-radius: 50% 50% 0 0;
   pointer-events: none;
   z-index: 4;
@@ -260,7 +260,7 @@
   transform: translateX(-50%);
   width: 200%;
   max-width: 4000px;
-  height: 48vh;
+  height: 58vh;
   background: linear-gradient(
     to bottom,
     #0b1828 0%,
