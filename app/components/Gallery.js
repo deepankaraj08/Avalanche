@@ -46,33 +46,33 @@ const Gallery = forwardRef((props, ref) => {
     <section
       ref={ref}
       id="gallery"
-      className="py-20 md:py-40 mt-[-2px] relative overflow-hidden bg-slate-50 dark:bg-[#020617] flex flex-col justify-center"
+      className="relative w-full min-h-screen overflow-hidden
+        bg-slate-50 dark:bg-[#020617]
+        transition-colors duration-500
+        py-24 md:py-40 flex flex-col justify-center"
     >
-      {/* Premium Ambient Background */}
+      {/* ── Background grid (Matches Team Section) ── */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none transform-gpu hidden dark:block"
+        className="absolute inset-0 z-0 pointer-events-none 
+        bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
+        dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
         style={{
-          maskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`,
-          WebkitMaskImage: `linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)`
+          backgroundSize: '60px 60px',
+          maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
         }}
-      >
-        <motion.div
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[20%] right-[10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[140px] mix-blend-screen"
-        />
-        <motion.div
-          animate={{ x: [0, -60, 0], y: [0, 40, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[20%] left-[5%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen"
-        />
-        {/* Grain Overlay */}
-        <div className="hidden md:block absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
-      </div>
+      />
 
-      <div className="absolute inset-0 z-0 pointer-events-none block dark:hidden">
-        <div className="absolute top-[10%] left-0 w-[600px] h-[600px] bg-cyan-100/60 rounded-full blur-[100px] -translate-x-1/3" />
-        <div className="absolute bottom-[10%] right-0 w-[700px] h-[700px] bg-purple-100/60 rounded-full blur-[120px] translate-x-1/3" />
+      {/* ── Ambient colour blobs (Matches Team Section) ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
+        <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
+        <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2
+          w-[900px] h-[600px]
+          bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.15)_0%,transparent_65%)]
+          dark:bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.05)_0%,transparent_65%)]
+          pointer-events-none" />
       </div>
 
       {/* Header */}
@@ -84,7 +84,7 @@ const Gallery = forwardRef((props, ref) => {
           className="inline-flex items-center justify-center gap-4 mb-6"
         >
           <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-500" />
-          <p className="text-[10px] md:text-xs font-black text-cyan-500 tracking-[0.5em] md:tracking-[0.8em] uppercase">Visual Archive</p>
+          <p className="text-[10px] md:text-xs font-black text-cyan-600 dark:text-cyan-500 tracking-[0.5em] md:tracking-[0.8em] uppercase">Visual Archive</p>
           <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-500" />
         </motion.div>
 
@@ -95,7 +95,7 @@ const Gallery = forwardRef((props, ref) => {
         <AnimatedTitle
           text="Motion."
           delay={0.3}
-          className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
+          className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 drop-shadow-[0_0_30px_rgba(34,211,238,0.15)] dark:drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
         />
       </div>
 
@@ -109,7 +109,7 @@ const Gallery = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: (i % 4) * 0.1, duration: 0.6, type: "spring" }}
-              className="group relative rounded-[2rem] overflow-hidden bg-slate-200 dark:bg-white/5 cursor-pointer shadow-lg shadow-black/5 dark:shadow-none hover:shadow-cyan-500/20 break-inside-avoid"
+              className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 cursor-pointer shadow-lg shadow-black/5 dark:shadow-none hover:shadow-cyan-500/20 break-inside-avoid"
             >
               {/* Image */}
               <img

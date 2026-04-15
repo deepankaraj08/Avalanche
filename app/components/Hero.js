@@ -107,9 +107,10 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         .delay-500 { animation-delay: 0.5s; }
       `}</style>
 
-      {/* ── Hero content — positioned strictly inside the dark planet cleanly across all devices ── */}
+      {/* ── Hero content ── */}
+      {/* FIX: Changed lg:bottom-[28%] to lg:bottom-[38%] and added xl:bottom-[40%] to lift it off the timer on laptops/desktops. Mobile stays exactly the same. */}
       <div 
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[28%]"
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[38%] xl:bottom-[40%]"
       >
 
         {/* Badge */}
@@ -123,7 +124,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </div>
 
         {/* Description */}
-        <p className="max-w-xl flex flex-wrap justify-center text-center text-sm sm:text-base md:text-lg text-white/60 leading-relaxed font-medium mb-8 sm:mb-10">
+        {/* FIX: Added lg:mb-12 to give a tiny bit more breathing room above the buttons on desktop */}
+        <p className="max-w-xl flex flex-wrap justify-center text-center text-sm sm:text-base md:text-lg text-white/60 leading-relaxed font-medium mb-8 sm:mb-10 lg:mb-12">
           {"WE JUST DON'T ORGANIZE EVENTS, WE CREATE MOMENTS".split(" ").map((word, i) => (
             <span
               key={i}
@@ -136,7 +138,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto">
+        {/* FIX: Increased desktop gap from sm:gap-4 to sm:gap-5 for better visual spacing */}
+        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto">
           <MagneticButton
             onClick={() => scrollTo(refs.eventsRef)}
             className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 sm:px-10 sm:py-5 text-sm font-black text-[#090A0F] uppercase tracking-widest transition-all hover:scale-[1.02] hover:bg-cyan-300 active:scale-[0.98] shadow-lg shadow-cyan-500/20"
@@ -181,7 +184,6 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                 ) : (
                   <client.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 )}
-                {/* Only render text if you want the brand name explicitly shown textually */}
                 {!client.image && (
                   <span className="text-xs sm:text-sm font-bold text-white tracking-tighter uppercase leading-none">
                     {client.name}

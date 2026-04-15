@@ -5,111 +5,105 @@
  *
  * • Defines ALL_MEMBERS with year, image, and social links
  * • Transforms data into the format TeamSection expects
- * • All old circular-avatar UI is removed
+ * • Supports Light/Dark mode via Tailwind dark: classes
+ * • Removes heavy JS animations on mobile for smooth scrolling
+ * • INCLUDES the TeamSection card grid directly in this file
+ * • INCLUDES Year Filtering functionality
  */
 
-import React, { forwardRef } from 'react';
-import { motion } from 'framer-motion';
-import { TeamSection } from '@/components/ui/team-section';
+import React, { forwardRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  RAW DATA
-//  • year        : 1 | 2 | 3 | 4  (update to match actual batches)
-//  • instagram   : full URL or null  (null = not shown anywhere)
-//  • linkedin    : full URL or null
-//  • image       : /PHOTOS/<file>   (must be .jpg / .jpeg / .png)
-//                  Unsupported formats (.heic, .heif, .pdf) → set to null
 // ─────────────────────────────────────────────────────────────────────────────
 const ALL_MEMBERS = [
-  // ── Year 4 (seniors / leads) ─────────────────────────────────────────────
+  // ── Year 4 ─────────────────────────────────────────────
   { year: 4, name: 'Anmol Sharan', image: '/PHOTOS/anmol.jpg', instagram: null, linkedin: null },
-  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/yash.jpg', instagram: null, linkedin: null },
   { year: 4, name: 'Chinmayee Bhatt', image: '/PHOTOS/chinmayee.jpg', instagram: null, linkedin: null },
   { year: 4, name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: 'https://www.instagram.com/yah_rishabh', linkedin: 'https://www.linkedin.com/in/rishabh-ojha-854775294' },
   { year: 4, name: 'Satyam Verma', image: '/PHOTOS/satyam.jpeg', instagram: 'https://www.instagram.com/satyam1260', linkedin: 'https://www.linkedin.com/in/satyam-verma-0b9b922aa/' },
   { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/shruti.jpg', instagram: null, linkedin: null },
+  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/yash.jpg', instagram: null, linkedin: null },
 
   // ── Year 3 ───────────────────────────────────────────────────────────────
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
   { year: 3, name: 'Harsh Raj', image: '/PHOTOS/harsh.jpg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
-  { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/manan.jpg', instagram: null, linkedin: null },
-  { year: 3, name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: 'https://www.instagram.com/iitz_mrinal', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
-  { year: 3, name: 'Vansh Jha', image: '/PHOTOS/vansh.jpeg', instagram: 'https://www.instagram.com/vanshhjhaa', linkedin: 'https://www.linkedin.com/in/vansh-jha13' },
-  { year: 3, name: 'Nuha Fathima', image: '/PHOTOS/nuha copy.jpeg', instagram: 'https://www.instagram.com/nuhaaaa24', linkedin: 'https://www.linkedin.com/in/nuha-fathima-559860296' },
-  { year: 3, name: 'Purvi Raj', image: '/PHOTOS/purvi.jpg', instagram: 'https://www.instagram.com/raj_purvi_sd', linkedin: 'https://www.linkedin.com/in/s-d-purvi-raj-775a53331' },
-  { year: 3, name: 'Prakhar Bansal', image: '/PHOTOS/prakhar.jpg', instagram: 'https://www.instagram.com/prakharrrr_bansal_', linkedin: 'https://www.linkedin.com/in/prakhar-bansal' },
-  { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
-  { year: 3, name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: null, linkedin: null },
   { year: 3, name: 'Jhanvi', image: '/PHOTOS/jhanvi.jpg', instagram: null, linkedin: null },
-  
+  { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/manan.jpg', instagram: null, linkedin: null },
+  { year: 3, name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: null, linkedin: null },
+  { year: 3, name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: 'https://www.instagram.com/iitz_mrinal', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
+  { year: 3, name: 'Nuha Fathima', image: '/PHOTOS/nuha copy.jpeg', instagram: 'https://www.instagram.com/nuhaaaa24', linkedin: 'https://www.linkedin.com/in/nuha-fathima-559860296' },
+  { year: 3, name: 'Prakhar Bansal', image: '/PHOTOS/prakhar.jpg', instagram: 'https://www.instagram.com/prakharrrr_bansal_', linkedin: 'https://www.linkedin.com/in/prakhar-bansal' },
+  { year: 3, name: 'Purvi Raj', image: '/PHOTOS/purvi.jpg', instagram: 'https://www.instagram.com/raj_purvi_sd', linkedin: 'https://www.linkedin.com/in/s-d-purvi-raj-775a53331' },
+  { year: 3, name: 'Vansh Jha', image: '/PHOTOS/vansh.jpeg', instagram: 'https://www.instagram.com/vanshhjhaa', linkedin: 'https://www.linkedin.com/in/vansh-jha13' },
+  { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
+
   // ── Year 2 ───────────────────────────────────────────────────────────────
-  { year: 2, name: 'Deepankar Raj', image: '/PHOTOS/deepankar.jpeg', instagram: 'https://www.instagram.com/deepankaraj?igsh=cjRxbnpveHVtMml3l', linkedin: 'https://www.linkedin.com/in/deepankaraj' },
-  { year: 2, name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
-  { year: 2, name: 'Deeksha', image: '/PHOTOS/deeksha1 copy.png', instagram: 'https://www.instagram.com/im_deeksha_08', linkedin: 'https://www.linkedin.com/in/deeksha-n-018864' },
-  { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
-  { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
-  { year: 2, name: 'Dhruthi M', image: '/PHOTOS/dhruthi.jpg', instagram: 'https://www.instagram.com/dhruthi__m', linkedin: 'https://www.linkedin.com/in/dhruthi-m-940bb6385' },
-  { year: 2, name: 'Samarth Gupta', image: '/PHOTOS/samarth.jpg', instagram: 'https://www.instagram.com/samarth_542', linkedin: 'https://www.linkedin.com/in/samarth-gupta-7ab08a331' },
-  { year: 2, name: 'Keerthi Pai', image: '/PHOTOS/keerthi copy.jpg', instagram: null, linkedin: 'https://www.linkedin.com/in/keerthi-pai-506bbb334' },
-  { year: 2, name: 'Nanditha LM', image: '/PHOTOS/nanditha copy.jpg', instagram: 'https://www.instagram.com/nanditha_mallikarjun', linkedin: 'https://www.linkedin.com/in/nanditha-l-m-905057371' },
-  { year: 2, name: 'Saket Sinha', image: '/PHOTOS/saket.jpg', instagram: 'https://www.instagram.com/__saket__sinha__', linkedin: 'https://www.linkedin.com/in/saket-sinha-930506331' },
-  { year: 2, name: 'Soham Khade', image: '/PHOTOS/soham.jpg', instagram: 'https://www.instagram.com/sohamkhade0901', linkedin: 'https://www.linkedin.com/in/soham-khade-410378380' },
-  { year: 2, name: 'Vishal Tiwary', image: '/PHOTOS/tiwari.jpeg', instagram: 'https://www.instagram.com/vishaltiwary016', linkedin: 'https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310' },
-  { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
-  { year: 2, name: 'Inchara Vishwanath', image: '/PHOTOS/inchara.jpg', instagram: 'https://www.instagram.com/inch_vishwanath', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-3118613b3' },
-  { year: 2, name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331' },
-  { year: 2, name: 'Lisha GL', image: '/PHOTOS/LISHA.jpg', instagram: 'https://www.instagram.com/lisha_gl', linkedin: 'https://www.linkedin.com/in/lisha-g-l-377656372' },
-  { year: 2, name: 'Madhurya R', image: '/PHOTOS/madhurya.jpg', instagram: 'https://www.instagram.com/_madhurya__r', linkedin: 'https://www.linkedin.com/in/madhurya-r-336784336' },
-  { year: 2, name: 'Lasya Shetty', image: '/PHOTOS/lasya.jpg', instagram: 'https://www.instagram.com/nagalasyaaa', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-3118613b3' },
-  
-  // ── Year 1 (freshers) ────────────────────────────────────────────────────
-  { year: 1, name: 'Avnish Aman', image: '/PHOTOS/avnish.jpg', instagram: 'https://www.instagram.com/avnish__04', linkedin: 'https://www.linkedin.com/in/avnish-aman-903b39362' },
-  { year: 1, name: 'Aryan Shandilya', image: '/PHOTOS/aryan.jpg', instagram: 'https://www.instagram.com/aryan.tf', linkedin: 'https://www.linkedin.com/in/aryan-shandilya-757266382' },
+  { year: 2, name: "Abhinav Raj", image: "/PHOTOS/abhinav.png", instagram: "https://www.instagram.com/abhinav.en", linkedin: "https://www.linkedin.com/in/abhinav-raj-9b789731a" },
+  { year: 2, name: "Aditya Kumar", image: "/PHOTOS/aditya.jpg", instagram: "https://www.instagram.com/adiiix18", linkedin: "https://www.linkedin.com/in/aditya-kumar-289162318" },
+  { year: 2, name: "Ankit Kumar", image: "/PHOTOS/ANKIT.jpeg", instagram: "https://www.instagram.com/iyk.ankit", linkedin: "https://www.linkedin.com/in/ankit-kumar-4a1b94333" },
+  { year: 2, name: "Deeksha", image: "/PHOTOS/deeksha1 copy.png", instagram: "https://www.instagram.com/im_deeksha_08", linkedin: "https://www.linkedin.com/in/deeksha-n-018864" },
+  { year: 2, name: "Babul Kumar", image: "/PHOTOS/babul.jpg", instagram: "https://www.instagram.com/babulkr328", linkedin: "https://www.linkedin.com/in/babul-kumar-a0a45a27b" },
+  { year: 2, name: "Deepankar Raj", image: "/PHOTOS/deepankar.jpeg", instagram: "https://www.instagram.com/deepankaraj?igsh=cjRxbnpveHVtMml3l", linkedin: "https://www.linkedin.com/in/deepankaraj" },
+  { year: 2, name: "Dhruthi M", image: "/PHOTOS/dhruthi.jpg", instagram: "https://www.instagram.com/dhruthi__m", linkedin: "https://www.linkedin.com/in/dhruthi-m-940bb6385" },
+  { year: 2, name: "Inchara Vishwanath", image: "/PHOTOS/inchara.jpg", instagram: "https://www.instagram.com/inch_vishwanath", linkedin: "https://www.linkedin.com/in/nagalasya-t-v-3118613b3" },
+  { year: 2, name: "Keerthi Pai", image: "/PHOTOS/keerthi copy.jpg", instagram: null, linkedin: "https://www.linkedin.com/in/keerthi-pai-506bbb334" },
+  { year: 2, name: "Lasya Shetty", image: "/PHOTOS/lasya.jpg", instagram: "https://www.instagram.com/nagalasyaaa", linkedin: "https://www.linkedin.com/in/nagalasya-t-v-3118613b3" },
+  { year: 2, name: "Lisha GL", image: "/PHOTOS/LISHA.jpg", instagram: "https://www.instagram.com/lisha_gl", linkedin: "https://www.linkedin.com/in/lisha-g-l-377656372" },
+  { year: 2, name: "Madhurya R", image: "/PHOTOS/madhurya.jpg", instagram: "https://www.instagram.com/_madhurya__r", linkedin: "https://www.linkedin.com/in/madhurya-r-336784336" },
+  { year: 2, name: "Nanditha LM", image: "/PHOTOS/nanditha copy.jpg", instagram: "https://www.instagram.com/nanditha_mallikarjun", linkedin: "https://www.linkedin.com/in/nanditha-l-m-905057371" },
+  { year: 2, name: "Saket Sinha", image: "/PHOTOS/saket.jpg", instagram: "https://www.instagram.com/__saket__sinha__", linkedin: "https://www.linkedin.com/in/saket-sinha-930506331" },
+  { year: 2, name: "Samarth Gupta", image: "/PHOTOS/samarth.jpg", instagram: "https://www.instagram.com/samarth_542", linkedin: "https://www.linkedin.com/in/samarth-gupta-7ab08a331" },
+  { year: 2, name: "Sayan Kumar", image: "/PHOTOS/sayan.jpg", instagram: "https://www.instagram.com/_sayan38", linkedin: "https://www.linkedin.com/in/sayan-kumar-342536331" },
+  { year: 2, name: "Soham Khade", image: "/PHOTOS/soham.jpg", instagram: "https://www.instagram.com/sohamkhade0901", linkedin: "https://www.linkedin.com/in/soham-khade-410378380" },
+  { year: 2, name: "Vishal Tiwary", image: "/PHOTOS/tiwari.jpeg", instagram: "https://www.instagram.com/vishaltiwary016", linkedin: "https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310" },
+
+  // ── Year 1 ────────────────────────────────────────────────────
   { year: 1, name: 'Abhijeet Satyam', image: '/PHOTOS/jeet.jpeg', instagram: 'https://www.instagram.com/the_jeetx', linkedin: 'https://www.linkedin.com/in/abhijeet-satyam-45b85a3b4' },
-  { year: 1, name: 'Simran Vats', image: '/PHOTOS/simran.jpg', instagram: 'https://www.instagram.com/simran_vats_13', linkedin: 'https://www.linkedin.com/in/simran-vats-148446385' },
-  { year: 1, name: 'Ayush Ranjan', image: '/PHOTOS/ayush copy.jpeg', instagram: 'https://www.instagram.com/_ayush._.ranjan_', linkedin: 'https://www.linkedin.com/in/ayush-ranjan-614589388' },
-  { year: 1, name: 'Shashank Shekhar', image: '/PHOTOS/shashank.jpg', instagram: 'https://www.instagram.com/shashankk_shk', linkedin: 'https://www.linkedin.com/in/shashank-shekhar-1730b23b4' },
+  { year: 1, name: 'Anjali Mallur', image: '/PHOTOS/anjali copy.jpg', instagram: 'https://www.instagram.com/anjalimallur', linkedin: 'https://www.linkedin.com/in/anjali-mallur-238031374' },
+  { year: 1, name: 'Aryan Shandilya', image: '/PHOTOS/aryan.jpg', instagram: 'https://www.instagram.com/aryan.tf', linkedin: 'https://www.linkedin.com/in/aryan-shandilya-757266382' },
+  { year: 1, name: 'Avnish Aman', image: '/PHOTOS/avnish.jpg', instagram: 'https://www.instagram.com/avnish__04', linkedin: 'https://www.linkedin.com/in/avnish-aman-903b39362' },
   { year: 1, name: 'Ayman Akhtar', image: '/PHOTOS/ayman copy.jpg', instagram: 'https://www.instagram.com/akhi_ayman313', linkedin: 'https://www.linkedin.com/in/md-ayman-akhtar-20413735b' },
+  { year: 1, name: 'Ayush Ranjan', image: '/PHOTOS/ayush copy.jpeg', instagram: 'https://www.instagram.com/_ayush._.ranjan_', linkedin: 'https://www.linkedin.com/in/ayush-ranjan-614589388' },
+  { year: 1, name: 'Geet Roy', image: '/PHOTOS/geet.jpg', instagram: 'https://www.instagram.com/geetroy_07', linkedin: 'https://www.linkedin.com/in/geet-roy-17a618373' },
+  { year: 1, name: 'Saarth Singh', image: '/PHOTOS/saarth.jpg', instagram: 'https://www.instagram.com/saarth_singh24', linkedin: 'https://www.linkedin.com/in/saarth-singh-713201229' },
+  { year: 1, name: 'Shashank Shekhar', image: '/PHOTOS/shashank.jpg', instagram: 'https://www.instagram.com/shashankk_shk', linkedin: 'https://www.linkedin.com/in/shashank-shekhar-1730b23b4' },
   { year: 1, name: 'Shubham Kanshi', image: '/PHOTOS/shubham.png', instagram: 'https://www.instagram.com/shubham_kanshi', linkedin: 'https://www.linkedin.com/in/shubham-kumar-kanshi-a48264326' },
   { year: 1, name: 'Siddharth Soni', image: '/PHOTOS/sid soni.jpg', instagram: 'https://www.instagram.com/siddharthsoni73577', linkedin: 'https://www.linkedin.com/in/siddharth-soni-2744ba3a2' },
-  { year: 1, name: 'Anjali Mallur', image: '/PHOTOS/anjali copy.jpg', instagram: 'https://www.instagram.com/anjalimallur', linkedin: 'https://www.linkedin.com/in/anjali-mallur-238031374' },
-  { year: 1, name: 'Suprem Timsina', image: '/PHOTOS/suprem.jpg', instagram: 'https://www.instagram.com/supremm___', linkedin: 'https://www.linkedin.com/in/suprem-timsina-387086392' },
-  { year: 1, name: 'Saarth Singh', image: '/PHOTOS/saarth.jpg', instagram: 'https://www.instagram.com/saarth_singh24', linkedin: 'https://www.linkedin.com/in/saarth-singh-713201229' },
-  { year: 1, name: 'Geet Roy', image: '/PHOTOS/geet.jpg', instagram: 'https://www.instagram.com/geetroy_07', linkedin: 'https://www.linkedin.com/in/geet-roy-17a618373' },
+  { year: 1, name: 'Simran Vats', image: '/PHOTOS/simran.jpg', instagram: 'https://www.instagram.com/simran_vats_13', linkedin: 'https://www.linkedin.com/in/simran-vats-148446385' },
   { year: 1, name: 'Snehil Pandey', image: '/PHOTOS/snehil.jpg', instagram: null, linkedin: 'https://www.linkedin.com/in/snehil-pandey-b884a4381' },
+  { year: 1, name: 'Suprem Timsina', image: '/PHOTOS/suprem.jpg', instagram: 'https://www.instagram.com/supremm___', linkedin: 'https://www.linkedin.com/in/suprem-timsina-387086392' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  DATA TRANSFORM  →  team-section.jsx prop shape
-//   { name, role, image, year, position?, instagram, linkedin }
-//
-//  position : CSS object-position string (default "50% 15%" in component)
-//             Override per member to avoid face cropping, e.g. "50% 20%"
+//  DATA TRANSFORM
 // ─────────────────────────────────────────────────────────────────────────────
 const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => ({
   name: m.name,
-  role: 'Core Member',      // ← update per member if they have specific titles
+  role: 'Core Member',
   image: m.image,
   year: m.year,
-  position: m.position ?? null, // forwards to img style.objectPosition
+  position: m.position ?? null,
   instagram: m.instagram,
   linkedin: m.linkedin,
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  ANIMATED HEADING  (word-by-word spring entrance)
+//  ANIMATED HEADING
 // ─────────────────────────────────────────────────────────────────────────────
 const wordContainer = {
   hidden: {},
   visible: (delay = 0) => ({
-    transition: { staggerChildren: 0.09, delayChildren: delay },
+    transition: { staggerChildren: 0.08, delayChildren: delay },
   }),
 };
+
 const wordItem = {
-  hidden: { opacity: 0, y: 28, scale: 0.88, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
-    opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
-    transition: { type: 'spring', damping: 14, stiffness: 110 }
+    opacity: 1, y: 0, scale: 1,
+    transition: { type: 'spring', damping: 18, stiffness: 100 }
   },
 };
 
@@ -119,7 +113,7 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
     variants={wordContainer}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, margin: '-80px' }}
+    viewport={{ once: true, margin: '-50px' }}
     className={`flex flex-wrap justify-center gap-x-[0.3em] ${className}`}
   >
     {text.split(' ').map((word, i) => (
@@ -130,99 +124,220 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
   </motion.div>
 );
 
+
 // ─────────────────────────────────────────────────────────────────────────────
-//  TEAM SECTION  (page-level section wrapper)
+//  TEAM SECTION COMPONENT (Cards & Grid)
 // ─────────────────────────────────────────────────────────────────────────────
-const Team = forwardRef((props, ref) => (
-  <section
-    ref={ref}
-    id="team"
-    className="relative w-full min-h-screen overflow-hidden
-      bg-[#020617]
-      py-24 md:py-40"
-  >
-    {/* ── Animated background grid ── */}
-    <div
-      className="absolute inset-0 z-0 pointer-events-none"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
-        `,
-        backgroundSize: '60px 60px',
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-      }}
-    />
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+};
 
-    {/* ── Ambient colour blobs ── */}
-    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Side blobs */}
-      <div className="absolute top-[20%] left-[8%]   w-[560px] h-[560px] bg-indigo-700/12 rounded-full blur-[130px]" />
-      <div className="absolute top-[30%] right-[8%]  w-[480px] h-[480px] bg-cyan-700/12  rounded-full blur-[110px]" />
-      <div className="absolute bottom-[8%] left-1/2  w-[660px] h-[380px] bg-blue-800/10  rounded-full blur-[120px] -translate-x-1/2" />
-      {/* Center radial glow — premium depth layer */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2
-        w-[900px] h-[600px]
-        bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.05)_0%,transparent_65%)]
-        pointer-events-none" />
-    </div>
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.9, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } }
+};
 
-    {/* ── Content ── */}
-    <div className="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8">
+const TeamSectionInline = ({ members }) => {
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center"
+    >
+      <AnimatePresence mode="popLayout">
+        {members.map((member, idx) => (
+          <motion.div
+            key={member.name} // Unique key helps Framer Motion track items during filtering
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            layout // Smoothly re-arranges remaining cards when filtering
+            className="bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10 transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            {/* Fixed circle image */}
+            <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-full h-full object-cover"
+                style={{ objectPosition: member.position || 'center' }}
+                loading="lazy"
+              />
+            </div>
 
-      {/* Section header */}
-      <div className="text-center mb-16 md:mb-20 flex flex-col items-center gap-3">
+            {/* Text Container */}
+            <div className="text-center w-full mb-4">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate px-2">
+                {member.name}
+              </h3>
+              <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">
+                {member.role}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+                Year {member.year}
+              </p>
+            </div>
 
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-3"
-        >
-          <span className="h-px w-8 bg-gradient-to-r from-transparent to-cyan-500/70" />
-          <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.75em]">
-            Team Avalanche
-          </span>
-          <span className="h-px w-8 bg-gradient-to-l from-transparent to-cyan-500/70" />
-        </motion.div>
+            {/* Social Links */}
+            <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-white/5 w-full justify-center">
+              {member.linkedin && (
+                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1" aria-label={`${member.name} LinkedIn`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                </a>
+              )}
+              {member.instagram && (
+                <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors p-1" aria-label={`${member.name} Instagram`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
-        {/* Main heading */}
-        <AnimatedTitle
-          text="Meet The Team"
-          className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter
-            text-white leading-[0.9] mt-1"
-        />
-        <AnimatedTitle
-          text="Team."
-          delay={0.15}
-          className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter
-            leading-[0.9] italic text-transparent bg-clip-text
-            bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400"
-        />
 
-        {/* Sub-label */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="text-[10px] text-white/25 font-bold tracking-[0.4em]
-            uppercase mt-4 flex items-center gap-2"
-        >
-          <span>{ALL_MEMBERS.length} members</span>
-          <span className="w-1 h-1 rounded-full bg-white/20 inline-block" />
-          <span>SIT Tumakuru</span>
-        </motion.p>
+// ─────────────────────────────────────────────────────────────────────────────
+//  TEAM MAIN SECTION Wrapper
+// ─────────────────────────────────────────────────────────────────────────────
+const Team = forwardRef((props, ref) => {
+  // Setup State for Filtering
+  const [activeYear, setActiveYear] = useState('All');
+  
+  // Array of filter options to map over
+  const filterOptions = ['All', 4, 3, 2, 1];
+
+  // Perform the actual filtering based on the state
+  const filteredMembers = TRANSFORMED_MEMBERS.filter(member => {
+    if (activeYear === 'All') return true;
+    return member.year === activeYear;
+  });
+
+  return (
+    <section
+      ref={ref}
+      id="team"
+      className="relative w-full min-h-screen overflow-hidden
+        bg-slate-50 dark:bg-[#020617]
+        transition-colors duration-500
+        py-24 md:py-40"
+    >
+      {/* ── Background grid (Light/Dark mode) ── */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none 
+        bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
+        dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
+        style={{
+          backgroundSize: '60px 60px',
+          maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        }}
+      />
+
+      {/* ── Ambient colour blobs (Light/Dark mode friendly) ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
+        <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
+        <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2
+          w-[900px] h-[600px]
+          bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.15)_0%,transparent_65%)]
+          dark:bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.05)_0%,transparent_65%)]
+          pointer-events-none" />
       </div>
 
-      {/* ── Team grid + filters ── */}
-      <TeamSection members={TRANSFORMED_MEMBERS} />
-    </div>
-  </section>
-));
+      {/* ── Content ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8">
+        
+        <div className="text-center mb-10 md:mb-14 flex flex-col items-center gap-3">
+          
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-3"
+          >
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-cyan-500/70" />
+            <span className="text-[10px] font-black text-cyan-600 dark:text-cyan-500 uppercase tracking-[0.75em]">
+              Team Avalanche
+            </span>
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-cyan-500/70" />
+          </motion.div>
+
+          {/* MOBILE HEADING: Static text to ensure 60fps scrolling on phones. */}
+          <div className="flex md:hidden flex-col items-center mt-1">
+            <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
+              Meet The Team
+            </h2>
+            <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2">
+              Team
+            </h2>
+          </div>
+
+          {/* DESKTOP HEADING: Animated version. */}
+          <div className="hidden md:flex flex-col items-center mt-1">
+            <AnimatedTitle
+              text="Meet The Team"
+              className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
+            />
+            <AnimatedTitle
+              text="Team"
+              delay={0.15}
+              className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2"
+            />
+          </div>
+
+          {/* Sub-label */}
+        
+        </div>
+
+        {/* ── FILTER BUTTONS UI ── */}
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
+          {filterOptions.map((year) => {
+            const isActive = activeYear === year;
+            const label = year === 'All' ? 'All Members' : `Year ${year}`;
+            
+            return (
+              <button
+                key={year}
+                onClick={() => setActiveYear(year)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900' 
+                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-white/5 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10'
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* ── Team grid using the newly added inline component ── */}
+        {/* We pass 'filteredMembers' instead of 'TRANSFORMED_MEMBERS' and force a re-animation with key */}
+        <motion.div key={activeYear} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+           <TeamSectionInline members={filteredMembers} />
+        </motion.div>
+        
+      </div>
+    </section>
+  );
+});
 
 Team.displayName = 'Team';
 export default Team;
