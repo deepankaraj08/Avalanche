@@ -25,13 +25,13 @@ const BentoCardContent = ({ children, bgImage }) => (
       {bgImage && (
         <>
           <div
-            className="absolute inset-0 bg-cover bg-center opacity-90"
+            className="absolute inset-0 bg-cover bg-center opacity-90 max-md:bg-contain max-md:bg-top max-md:bg-no-repeat max-md:bg-[#0f172a]"
             style={{ backgroundImage: `url(${bgImage})` }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70" />
         </>
       )}
-      <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
+      <div className={`relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10 ${bgImage ? 'max-md:pt-[70%]' : ''}`}>
         {children}
       </div>
     </>
@@ -202,12 +202,12 @@ const About = forwardRef((props, ref) => {
           
           {/* Avalanche */}
           <BentoCard
-            className="md:col-span-4 lg:col-start-2 lg:col-span-4 row-span-2 text-white"
+            className="md:col-span-4 lg:col-start-2 lg:col-span-4 max-md:row-span-1 md:row-span-2 text-white"
             glowColor="rgba(56,189,248,0.2)"
             bgImage="/gallery/12.jpeg"
           >
             <div className="flex justify-between items-start mb-10">
-              <div className="p-4 rounded-2xl bg-black text-white shadow-xl">
+              <div className="p-4 rounded-2xl bg-black text-white shadow-xl max-md:hidden">
                 <Zap className="w-7 h-7" />
               </div>
 
@@ -227,45 +227,65 @@ const About = forwardRef((props, ref) => {
           </BentoCard>
 
           {/* GOONJ */}
-          <BentoCard className="md:col-span-4 lg:col-span-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 h-full">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">
-                    <Heart className="w-5 h-5 fill-current" />
-                  </div>
+          {isMobile ? (
+            <BentoCard
+              className="md:col-span-4 lg:col-span-6 max-md:row-span-1 md:row-span-2 text-white"
+              glowColor="rgba(217,70,239,0.2)"
+              bgImage="/gallery/five.png"
+            >
 
-                  <span className="text-xs font-black tracking-[0.3em] uppercase text-fuchsia-600 dark:text-fuchsia-400">
-                    The Soul of Avalanche
-                  </span>
-                </div>
 
-                <h3 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+              <div className="mt-auto">
+                <h3 className="text-4xl md:text-6xl font-black mb-4">
                   GOONJ Initiative
                 </h3>
 
-                <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-3xl">
+                <p className="text-white/80 text-lg max-w-xl">
                   GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
                 </p>
               </div>
+            </BentoCard>
+          ) : (
+            <BentoCard className="md:col-span-4 lg:col-span-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 h-full">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">
+                      <Heart className="w-5 h-5 fill-current" />
+                    </div>
 
-              {/* Image Circle */}
-              <div className="hidden lg:flex items-center justify-center flex-shrink-0 w-48 h-48 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 relative overflow-hidden p-1 shadow-xl">
-                <img
-                  src="/gallery/five.png"
-                  alt="GOONJ Initiative"
-                  loading="lazy"
-                  className="w-full h-full object-cover rounded-full"
-                />
+                    <span className="text-xs font-black tracking-[0.3em] uppercase text-fuchsia-600 dark:text-fuchsia-400">
+                      The Soul of Avalanche
+                    </span>
+                  </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-500/20 to-transparent pointer-events-none" />
+                  <h3 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+                    GOONJ Initiative
+                  </h3>
 
-                {/* spinning rings only on desktop */}
-                <div className="absolute inset-0 border border-fuchsia-500/30 rounded-full scale-[1.05] hidden lg:block animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
-                <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[1.1] hidden lg:block animate-[spin_15s_linear_infinite_reverse]" style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
+                  <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-3xl">
+                    GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
+                  </p>
+                </div>
+
+                {/* Image Circle */}
+                <div className="hidden lg:flex items-center justify-center flex-shrink-0 w-48 h-48 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 relative overflow-hidden p-1 shadow-xl">
+                  <img
+                    src="/gallery/five.png"
+                    alt="GOONJ Initiative"
+                    loading="lazy"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-500/20 to-transparent pointer-events-none" />
+
+                  {/* spinning rings only on desktop */}
+                  <div className="absolute inset-0 border border-fuchsia-500/30 rounded-full scale-[1.05] hidden lg:block animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
+                  <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[1.1] hidden lg:block animate-[spin_15s_linear_infinite_reverse]" style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
+                </div>
               </div>
-            </div>
-          </BentoCard>
+            </BentoCard>
+          )}
 
         </div>
       </div>

@@ -9,8 +9,8 @@
  * Desktop keeps full whileInView + spring animations.
  */
 
-import React, { forwardRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { forwardRef, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const GALLERY_IMAGES = [
   { id: 1,  src: '/gallery/first1.png' },
@@ -58,6 +58,10 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => {
 
 const Gallery = forwardRef((props, ref) => {
   const [isMobile, setIsMobile] = useState(false);
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+
+  const openLightbox  = useCallback((src) => setLightboxSrc(src), []);
+  const closeLightbox = useCallback(() => setLightboxSrc(null), []);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -65,6 +69,14 @@ const Gallery = forwardRef((props, ref) => {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  // Close lightbox on back-swipe / Escape key
+  useEffect(() => {
+    if (!lightboxSrc) return;
+    const handler = (e) => { if (e.key === 'Escape') closeLightbox(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightboxSrc, closeLightbox]);
 
   return (
     <section
@@ -83,6 +95,31 @@ const Gallery = forwardRef((props, ref) => {
         }
         .gallery-card-fadein {
           animation: galleryFade 0.4s ease-out both;
+        }
+        /* Expand button */
+        .gallery-expand-btn {
+          position: absolute;
+          bottom: 12px;
+          right: 12px;
+          z-index: 30;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: rgba(0,0,0,0.45);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1px solid rgba(255,255,255,0.18);
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.15s;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .gallery-expand-btn:active {
+          background: rgba(34,211,238,0.55);
+          transform: scale(0.92);
         }
       `}</style>
 
@@ -157,7 +194,7 @@ const Gallery = forwardRef((props, ref) => {
         <div className="columns-1 md:columns-2 2xl:columns-3 gap-6 md:gap-10 space-y-6 md:space-y-10">
           {GALLERY_IMAGES.map((img, i) =>
             isMobile ? (
-              // ── MOBILE: plain div + CSS fade, no hover effects ──
+              // ── MOBILE: plain div + CSS fade + expand button ──
               <div
                 key={img.id}
                 className="gallery-card-fadein relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 shadow-md break-inside-avoid"
@@ -170,6 +207,20 @@ const Gallery = forwardRef((props, ref) => {
                   decoding="async"
                   className="w-full h-auto block rounded-[2rem]"
                 />
+                {/* ── Expand / Fullscreen button ── */}
+                <button
+                  className="gallery-expand-btn"
+                  aria-label="View fullscreen"
+                  onClick={() => openLightbox(img.src)}
+                >
+                  {/* Expand icon (same as the four-corner icon in the prompt) */}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 3 21 3 21 9" />
+                    <polyline points="9 21 3 21 3 15" />
+                    <line x1="21" y1="3" x2="14" y2="10" />
+                    <line x1="3" y1="21" x2="10" y2="14" />
+                  </svg>
+                </button>
               </div>
             ) : (
               // ── DESKTOP: full framer-motion + hover effects ──
@@ -195,6 +246,50 @@ const Gallery = forwardRef((props, ref) => {
           )}
         </div>
       </div>
+      {/* ── Mobile Lightbox ── */}
+      <AnimatePresence>
+        {lightboxSrc && (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center"
+            style={{ background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(8px)' }}
+            onClick={closeLightbox}
+          >
+            {/* Image */}
+            <motion.img
+              src={lightboxSrc}
+              alt="Fullscreen view"
+              initial={{ scale: 0.88, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.88, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+              className="max-w-[92vw] max-h-[82vh] rounded-2xl object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            {/* Close button */}
+            <button
+              onClick={closeLightbox}
+              aria-label="Close fullscreen"
+              className="absolute top-5 right-5 flex items-center justify-center w-10 h-10 rounded-full"
+              style={{
+                background: 'rgba(255,255,255,0.12)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                color: '#fff',
+                backdropFilter: 'blur(6px)',
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 });
