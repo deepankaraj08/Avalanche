@@ -95,12 +95,33 @@ const About = forwardRef((props, ref) => {
     <section
       ref={ref}
       id="about"
-      className="relative py-20 md:py-32 lg:py-40 bg-slate-50 dark:bg-[#020617] overflow-hidden"
+      className="relative w-full min-h-screen overflow-hidden
+        bg-slate-50 dark:bg-[#020617]
+        transition-colors duration-500
+        py-20 md:py-32 lg:py-40"
     >
-      {/* Background Glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-400/10 blur-[60px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/10 blur-[60px]" />
+      {/* ── Background grid (Matches Team & Gallery) ── */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none 
+        bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
+        dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
+        style={{
+          backgroundSize: '60px 60px',
+          maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        }}
+      />
+
+      {/* ── Ambient colour blobs (Matches Team & Gallery) ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
+        <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
+        <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2
+          w-[900px] h-[600px]
+          bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.15)_0%,transparent_65%)]
+          dark:bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.05)_0%,transparent_65%)]
+          pointer-events-none" />
       </div>
 
       <div ref={innerRef} className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -113,9 +134,9 @@ const About = forwardRef((props, ref) => {
             </span>
           </div>
 
-          <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl">
+          <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
             We Build <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 italic">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
               Culture
             </span>
           </h2>
@@ -156,58 +177,45 @@ const About = forwardRef((props, ref) => {
           </BentoCard>
 
           {/* GOONJ */}
-         <BentoCard className="md:col-span-4 lg:col-span-6">
+          <BentoCard className="md:col-span-4 lg:col-span-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 h-full">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">
+                    <Heart className="w-5 h-5 fill-current" />
+                  </div>
 
-  <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 h-full">
+                  <span className="text-xs font-black tracking-[0.3em] uppercase text-fuchsia-600 dark:text-fuchsia-400">
+                    The Soul of Avalanche
+                  </span>
+                </div>
 
-    <div className="flex-1">
+                <h3 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+                  GOONJ Initiative
+                </h3>
 
-      <div className="flex items-center gap-3 mb-4">
+                <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-3xl">
+                  GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
+                </p>
+              </div>
 
-        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">
-          <Heart className="w-5 h-5 fill-current" />
-        </div>
+              {/* Image Circle */}
+              <div className="hidden lg:flex items-center justify-center flex-shrink-0 w-48 h-48 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 relative overflow-hidden p-1 shadow-xl">
+                <img
+                  src="/gallery/five.png"
+                  alt="GOONJ Initiative"
+                  loading="lazy"
+                  className="w-full h-full object-cover rounded-full"
+                />
 
-        <span className="text-xs font-black tracking-[0.3em] uppercase text-fuchsia-600 dark:text-fuchsia-400">
-          The Soul of Avalanche
-        </span>
+                <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-500/20 to-transparent pointer-events-none" />
 
-      </div>
-
-      <h3 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
-        GOONJ Initiative
-      </h3>
-
-      <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-3xl">
-        GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
-      </p>
-
-    </div>
-
-    {/* Image Circle */}
-
-    <div className="hidden lg:flex items-center justify-center flex-shrink-0 w-48 h-48 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 relative overflow-hidden p-1 shadow-xl">
-
-      <img
-        src="/gallery/five.png"
-        alt="GOONJ Initiative"
-        loading="lazy"
-        className="w-full h-full object-cover rounded-full"
-      />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-500/20 to-transparent pointer-events-none" />
-
-      {/* spinning rings only on desktop */}
-
-      <div className="absolute inset-0 border border-fuchsia-500/30 rounded-full scale-[1.05] hidden lg:block animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
-
-      <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[1.1] hidden lg:block animate-[spin_15s_linear_infinite_reverse]" style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
-
-    </div>
-
-  </div>
-
-</BentoCard>
+                {/* spinning rings only on desktop */}
+                <div className="absolute inset-0 border border-fuchsia-500/30 rounded-full scale-[1.05] hidden lg:block animate-[spin_10s_linear_infinite]" style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
+                <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[1.1] hidden lg:block animate-[spin_15s_linear_infinite_reverse]" style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
+              </div>
+            </div>
+          </BentoCard>
 
         </div>
       </div>

@@ -6,13 +6,11 @@
  * • Defines ALL_MEMBERS with year, image, and social links
  * • Transforms data into the format TeamSection expects
  * • Supports Light/Dark mode via Tailwind dark: classes
- * • Removes heavy JS animations on mobile for smooth scrolling
- * • INCLUDES the TeamSection card grid directly in this file
- * • INCLUDES Year Filtering functionality
+ * • Highly optimized for mobile performance (removed layout thrashing)
  */
 
 import React, { forwardRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  RAW DATA
@@ -30,7 +28,7 @@ const ALL_MEMBERS = [
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
   { year: 3, name: 'Harsh Raj', image: '/PHOTOS/harsh.jpg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
   { year: 3, name: 'Jhanvi', image: '/PHOTOS/jhanvi.jpg', instagram: null, linkedin: null },
-  { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/manan.jpg', instagram: null, linkedin: null },
+  { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/Manan.jpeg', instagram: 'https://www.instagram.com/manan_agarwal06?utm_source=qr&igsh=aWF0anE4NzA4MDB1', linkedin: 'https://www.linkedin.com/in/manan-agarwal-5b290a256' },
   { year: 3, name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: null, linkedin: null },
   { year: 3, name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: 'https://www.instagram.com/iitz_mrinal', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
   { year: 3, name: 'Nuha Fathima', image: '/PHOTOS/nuha copy.jpeg', instagram: 'https://www.instagram.com/nuhaaaa24', linkedin: 'https://www.linkedin.com/in/nuha-fathima-559860296' },
@@ -124,22 +122,21 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
   </motion.div>
 );
 
-
 // ─────────────────────────────────────────────────────────────────────────────
-//  TEAM SECTION COMPONENT (Cards & Grid)
+//  TEAM SECTION COMPONENT (Cards & Grid - Mobile Optimized)
 // ─────────────────────────────────────────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.05 },
+    transition: { staggerChildren: 0.03 }, // Faster stagger for better performance
   },
 };
 
+// Simplified animation for cards to reduce lag
 const cardVariants = {
-  hidden: { opacity: 0, scale: 0.9, y: 20 },
-  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3 } },
-  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } }
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
 const TeamSectionInline = ({ members }) => {
@@ -150,77 +147,68 @@ const TeamSectionInline = ({ members }) => {
       animate="visible"
       className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center"
     >
-      <AnimatePresence mode="popLayout">
-        {members.map((member, idx) => (
-          <motion.div
-            key={member.name} // Unique key helps Framer Motion track items during filtering
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            layout // Smoothly re-arranges remaining cards when filtering
-            className="bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10 transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg"
-          >
-            {/* Fixed circle image */}
-            <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-full object-cover"
-                style={{ objectPosition: member.position || 'center' }}
-                loading="lazy"
-              />
-            </div>
+      {/* REMOVED: AnimatePresence and layout props which cause massive mobile lag */}
+      {members.map((member) => (
+        <motion.div
+          key={member.name} 
+          variants={cardVariants}
+          // Added will-change to force hardware acceleration on scroll
+          className="bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10 transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg will-change-transform"
+        >
+          {/* Fixed circle image */}
+          <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
+            <img
+              src={member.image}
+              alt={member.name}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: member.position || 'center' }}
+              loading="lazy"
+            />
+          </div>
 
-            {/* Text Container */}
-            <div className="text-center w-full mb-4">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate px-2">
-                {member.name}
-              </h3>
-              <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">
-                {member.role}
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
-                Year {member.year}
-              </p>
-            </div>
+          {/* Text Container */}
+          <div className="text-center w-full mb-4">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate px-2">
+              {member.name}
+            </h3>
+            <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">
+              {member.role}
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+              Year {member.year}
+            </p>
+          </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-white/5 w-full justify-center">
-              {member.linkedin && (
-                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1" aria-label={`${member.name} LinkedIn`}>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
-                </a>
-              )}
-              {member.instagram && (
-                <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors p-1" aria-label={`${member.name} Instagram`}>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+          {/* Social Links */}
+          <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-white/5 w-full justify-center">
+            {member.linkedin && (
+              <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1" aria-label={`${member.name} LinkedIn`}>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+            )}
+            {member.instagram && (
+              <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors p-1" aria-label={`${member.name} Instagram`}>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            )}
+          </div>
+        </motion.div>
+      ))}
     </motion.div>
   );
 };
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  TEAM MAIN SECTION Wrapper
 // ─────────────────────────────────────────────────────────────────────────────
 const Team = forwardRef((props, ref) => {
-  // Setup State for Filtering
   const [activeYear, setActiveYear] = useState('All');
-  
-  // Array of filter options to map over
   const filterOptions = ['All', 4, 3, 2, 1];
 
-  // Perform the actual filtering based on the state
   const filteredMembers = TRANSFORMED_MEMBERS.filter(member => {
     if (activeYear === 'All') return true;
     return member.year === activeYear;
@@ -235,7 +223,7 @@ const Team = forwardRef((props, ref) => {
         transition-colors duration-500
         py-24 md:py-40"
     >
-      {/* ── Background grid (Light/Dark mode) ── */}
+      {/* ── Background grid ── */}
       <div
         className="absolute inset-0 z-0 pointer-events-none 
         bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
@@ -247,8 +235,8 @@ const Team = forwardRef((props, ref) => {
         }}
       />
 
-      {/* ── Ambient colour blobs (Light/Dark mode friendly) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* ── Ambient colour blobs (Hidden on mobile to save GPU performance) ── */}
+      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
         <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
         <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />
@@ -264,7 +252,6 @@ const Team = forwardRef((props, ref) => {
         
         <div className="text-center mb-10 md:mb-14 flex flex-col items-center gap-3">
           
-          {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -279,7 +266,6 @@ const Team = forwardRef((props, ref) => {
             <span className="h-px w-8 bg-gradient-to-l from-transparent to-cyan-500/70" />
           </motion.div>
 
-          {/* MOBILE HEADING: Static text to ensure 60fps scrolling on phones. */}
           <div className="flex md:hidden flex-col items-center mt-1">
             <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
               Meet The Team
@@ -289,7 +275,6 @@ const Team = forwardRef((props, ref) => {
             </h2>
           </div>
 
-          {/* DESKTOP HEADING: Animated version. */}
           <div className="hidden md:flex flex-col items-center mt-1">
             <AnimatedTitle
               text="Meet The Team"
@@ -301,9 +286,6 @@ const Team = forwardRef((props, ref) => {
               className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2"
             />
           </div>
-
-          {/* Sub-label */}
-        
         </div>
 
         {/* ── FILTER BUTTONS UI ── */}
@@ -328,9 +310,13 @@ const Team = forwardRef((props, ref) => {
           })}
         </div>
 
-        {/* ── Team grid using the newly added inline component ── */}
-        {/* We pass 'filteredMembers' instead of 'TRANSFORMED_MEMBERS' and force a re-animation with key */}
-        <motion.div key={activeYear} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+        {/* ── Team grid with simplified mounting animation ── */}
+        <motion.div 
+          key={activeYear} 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          transition={{ duration: 0.3 }}
+        >
            <TeamSectionInline members={filteredMembers} />
         </motion.div>
         
