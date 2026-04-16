@@ -128,10 +128,11 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
 // ─────────────────────────────────────────────────────────────────────────────
 const MemberCardContent = ({ member, onImageClick }) => (
   <>
-    <div 
-      className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50 cursor-pointer hover:border-cyan-400 dark:hover:border-cyan-500 transition-colors"
+    {/* Profile picture — tap/click to open full image */}
+    <div
+      className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50 cursor-pointer
+        hover:border-cyan-400 dark:hover:border-cyan-500 transition-colors"
       onClick={() => onImageClick && onImageClick(member.image)}
-      title={`View ${member.name}'s picture`}
     >
       <img
         src={member.image}
@@ -301,6 +302,7 @@ const Team = forwardRef((props, ref) => {
           opacity: 0;
           transition: opacity 0.35s ease;
           animation: gradientSpin 4s linear infinite;
+          pointer-events: none;
         }
         @keyframes gradientSpin {
           0%   { background-position: 0%   50%; }
