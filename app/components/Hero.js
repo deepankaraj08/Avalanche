@@ -64,11 +64,11 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
     >
       {/* ── Cosmic parallax star field (full section background) ── */}
       <CosmicParallaxBg
-        head="Team Avalanche"
-        text="Radiance Coming Soon"
-        countdownTo="2026-04-28T18:00:00"
-        loop={true}
-      />
+  head="Team Avalanche"
+  text="Radiance Coming Soon"
+  countdownTo="2026-04-30T17:15:00"
+  loop={false}
+/>
 
       {/* SCOPED ANIMATIONS */}
       <style>{`
