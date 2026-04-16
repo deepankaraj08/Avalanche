@@ -9,7 +9,7 @@
  */
 
 import React, { forwardRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  RAW DATA
@@ -126,9 +126,13 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
 // ─────────────────────────────────────────────────────────────────────────────
 //  CARD INNER — pure HTML, shared by both mobile & desktop wrappers
 // ─────────────────────────────────────────────────────────────────────────────
-const MemberCardContent = ({ member }) => (
+const MemberCardContent = ({ member, onImageClick }) => (
   <>
-    <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
+    <div 
+      className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50 cursor-pointer hover:border-cyan-400 dark:hover:border-cyan-500 transition-colors"
+      onClick={() => onImageClick && onImageClick(member.image)}
+      title={`View ${member.name}'s picture`}
+    >
       <img
         src={member.image}
         alt={member.name}
@@ -195,13 +199,13 @@ const cardVariants = {
 const cardBase =
   'bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10';
 
-const TeamSectionInline = ({ members, isMobile }) => (
+const TeamSectionInline = ({ members, isMobile, onImageClick }) => (
   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 justify-items-center">
     {members.map((member) =>
       isMobile ? (
         // ── Zero JS animation on mobile ──
         <div key={member.name} className={`${cardBase} team-card-fadein`}>
-          <MemberCardContent member={member} />
+          <MemberCardContent member={member} onImageClick={onImageClick} />
         </div>
       ) : (
         // ── Desktop: framer-motion whileInView ──
@@ -213,7 +217,7 @@ const TeamSectionInline = ({ members, isMobile }) => (
           viewport={{ once: true, margin: '-30px' }}
           className={`${cardBase} hover:-translate-y-1 hover:shadow-lg transition-transform duration-200`}
         >
-          <MemberCardContent member={member} />
+          <MemberCardContent member={member} onImageClick={onImageClick} />
         </motion.div>
       )
     )}
@@ -226,6 +230,7 @@ const TeamSectionInline = ({ members, isMobile }) => (
 const Team = forwardRef((props, ref) => {
   const [activeYear, setActiveYear] = useState('All');
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const filterOptions = ['All', 4, 3, 2, 1];
 
   useEffect(() => {
@@ -348,9 +353,40 @@ const Team = forwardRef((props, ref) => {
         </div>
 
         {/* ── Team Grid ── */}
-        <TeamSectionInline members={filteredMembers} isMobile={isMobile} />
+        <TeamSectionInline members={filteredMembers} isMobile={isMobile} onImageClick={setSelectedImage} />
 
       </div>
+
+      {/* ── IMAGE MODAL ── */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm cursor-pointer"
+            onClick={() => setSelectedImage(null)}
+          >
+            <button
+              className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 z-[60]"
+              onClick={() => setSelectedImage(null)}
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <motion.img
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              src={selectedImage}
+              alt="Enlarged profile picture"
+              className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain relative z-50"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 });
