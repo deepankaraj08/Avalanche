@@ -1,5 +1,14 @@
 'use client';
 
+/**
+ * Events.js
+ *
+ * MOBILE PERFORMANCE: On mobile, TiltCard skips GlowCard (which runs a global
+ * pointermove listener + background-attachment:fixed causing full repaints),
+ * skips all framer-motion spring hooks, and skips backdrop-blur.
+ * Desktop keeps full 3D tilt + GlowCard spotlight effect.
+ */
+
 import React, { forwardRef, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { GlowCard } from '@/app/components/ui/spotlight-card';
@@ -12,7 +21,6 @@ const EVENT_DATA = [
     description:
       'The definitive stage for performers. A grand showcase of dance, music, drama, and fashion where campus legends are born.',
     tags: ['Annual', 'Cultural', '3 DAYS'],
-    // Fixed for light/dark mode contrast
     accent: 'text-cyan-600 dark:text-cyan-400',
     glowColor: 'cyan',
   },
@@ -23,44 +31,54 @@ const EVENT_DATA = [
     description:
       'A high-octane extravaganza designed to welcome new talent. Workshops, performances and unforgettable nights.',
     tags: ['1 Day', 'Concert'],
-    // Fixed for light/dark mode contrast
     accent: 'text-indigo-600 dark:text-indigo-400',
     glowColor: 'indigo',
   },
 ];
 
-const TiltCard = ({ event, index }) => {
+// ── Shared card content — no animation cost ──────────────────────────────────
+const EventCardContent = ({ event }) => (
+  <div className="relative bg-white/80 dark:bg-[#060b18]/70 rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col border border-slate-200 dark:border-white/10 shadow-lg h-full">
+    <div className="flex flex-wrap gap-2 mb-6">
+      {event.tags.map((tag) => (
+        <span
+          key={tag}
+          className="px-3 py-1 rounded-full bg-slate-200/70 dark:bg-white/10 text-slate-700 dark:text-white/80 text-[10px] font-bold uppercase tracking-wider"
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+
+    <h3 className={`text-[clamp(2rem,7vw,4rem)] font-black mb-3 leading-none ${event.accent}`}>
+      {event.title}
+    </h3>
+
+    <p className="text-xs md:text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 font-semibold">
+      {event.subtitle}
+    </p>
+
+    <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-md">
+      {event.description}
+    </p>
+  </div>
+);
+
+// ── Desktop-only TiltCard with 3D tilt + GlowCard ────────────────────────────
+const TiltCardDesktop = ({ event, index }) => {
   const ref = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const mouseXSpring = useSpring(x, { stiffness: 80, damping: 20 });
   const mouseYSpring = useSpring(y, { stiffness: 80, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['10deg', '-10deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-10deg', '10deg']);
 
   const handleMouseMove = (e) => {
-    if (isMobile || !ref.current) return;
-
+    if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const handleLeave = () => {
-    x.set(0);
-    y.set(0);
   };
 
   return (
@@ -68,49 +86,29 @@ const TiltCard = ({ event, index }) => {
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
-        onMouseLeave={handleLeave}
-        style={{
-          rotateX: isMobile ? 0 : rotateX,
-          rotateY: isMobile ? 0 : rotateY,
-        }}
+        onMouseLeave={() => { x.set(0); y.set(0); }}
+        style={{ rotateX, rotateY }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.2, duration: 0.6 }}
         viewport={{ once: true }}
         className="group relative w-full h-full"
       >
-        <div className="relative bg-white/80 dark:bg-[#060b18]/70 backdrop-blur-md rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col border border-slate-200 dark:border-white/10 shadow-lg transition-all h-full">
-          
-          <div className="flex flex-wrap gap-2 mb-6">
-            {event.tags.map((tag) => (
-              <span
-                key={tag}
-                // Fixed bg and text colors for light/dark mode contrast
-                className="px-3 py-1 rounded-full bg-slate-200/70 dark:bg-white/10 text-slate-700 dark:text-white/80 text-[10px] font-bold uppercase tracking-wider"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <h3
-            className={`text-[clamp(2rem,7vw,4rem)] font-black mb-3 leading-none ${event.accent}`}
-          >
-            {event.title}
-          </h3>
-
-          <p className="text-xs md:text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 font-semibold">
-            {event.subtitle}
-          </p>
-
-          <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-md">
-            {event.description}
-          </p>
-        </div>
+        <EventCardContent event={event} />
       </motion.div>
     </GlowCard>
   );
 };
+
+// ── Mobile-only card — zero JS animation / GPU cost ──────────────────────────
+const TiltCardMobile = ({ event, index }) => (
+  <div
+    className="event-card-fadein rounded-[2.25rem] overflow-hidden border border-slate-200 dark:border-white/10 shadow-lg"
+    style={{ animationDelay: `${index * 0.1}s` }}
+  >
+    <EventCardContent event={event} />
+  </div>
+);
 
 const Events = forwardRef((props, ref) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -126,15 +124,24 @@ const Events = forwardRef((props, ref) => {
     <section
       ref={ref}
       id="events"
-      className={`relative w-full overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500 ${
-        isMobile ? 'py-16' : 'py-32'
-      }`}
+      className="relative w-full overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500 py-16 md:py-32"
     >
-      {/* ── Background grid (Matches Team, Gallery & About) ── */}
+      {/* CSS fade-in for mobile cards */}
+      <style>{`
+        @keyframes eventCardFade {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .event-card-fadein {
+          animation: eventCardFade 0.4s ease-out both;
+        }
+      `}</style>
+
+      {/* ── Background grid ── */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none 
-        bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
-        dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
+        className="absolute inset-0 z-0 pointer-events-none
+          bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
+          dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
         style={{
           backgroundSize: '60px 60px',
           maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
@@ -155,33 +162,34 @@ const Events = forwardRef((props, ref) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
-        
-        {/* header */}
+
+        {/* ── Header ── */}
         <div className="mb-14 md:mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <p className="text-cyan-600 dark:text-cyan-500 text-xs font-bold tracking-[0.5em] uppercase mb-4">
               The Core Experiences
             </p>
-            {/* Fixed text color for light mode visibility */}
             <h2 className="text-[clamp(2.5rem,9vw,6rem)] font-black leading-[0.9] text-slate-900 dark:text-white">
               Flagship Events
             </h2>
           </div>
-
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs lg:text-right">
             Two legendary experiences defining the spirit of the campus.
           </p>
         </div>
 
-        {/* grid */}
+        {/* ── Event Cards ── */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 md:gap-16">
           {EVENT_DATA.map((event, idx) => (
-            <div key={event.id} className={idx === 1 ? "xl:mt-24" : ""}>
-              <TiltCard event={event} index={idx} />
+            <div key={event.id} className={idx === 1 ? 'xl:mt-24' : ''}>
+              {isMobile
+                ? <TiltCardMobile event={event} index={idx} />
+                : <TiltCardDesktop event={event} index={idx} />
+              }
             </div>
           ))}
         </div>
-        
+
       </div>
     </section>
   );

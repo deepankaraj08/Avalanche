@@ -1,5 +1,14 @@
 'use client';
 
+/**
+ * About.js
+ *
+ * MOBILE PERFORMANCE: On mobile, BentoCard skips GlowCard (which runs a global pointermove listener
+ * and radial gradients), skips framer-motion spring hooks, and skips backdrop-blur. Desktop keeps
+ * full hover glow + mouse tracking + background animations. 
+ * Disabled useScroll and useTransform for scroll-linked animations on mobile as they fire every pixel.
+ */
+
 import React, { useRef, useState, useEffect, forwardRef } from "react";
 import {
   motion,
@@ -10,9 +19,26 @@ import {
 } from "framer-motion";
 import { Zap, Heart, ArrowUpRight } from "lucide-react";
 
-/* ---------------- Bento Card ---------------- */
+/* ---------------- Bento Card Content ---------------- */
+const BentoCardContent = ({ children, bgImage }) => (
+    <>
+      {bgImage && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-90"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70" />
+        </>
+      )}
+      <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
+        {children}
+      </div>
+    </>
+)
 
-function BentoCard({
+/* ---------------- Bento Card Desktop ---------------- */
+function BentoCardDesktop({
   children,
   className,
   glowColor = "rgba(56,189,248,0.15)",
@@ -29,20 +55,8 @@ function BentoCard({
     )
   `;
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
   function handleMouseMove({ currentTarget, clientX, clientY }) {
-    if (isMobile) return;
-
     const rect = currentTarget.getBoundingClientRect();
-
     mouseX.set(clientX - rect.left);
     mouseY.set(clientY - rect.top);
   }
@@ -51,32 +65,33 @@ function BentoCard({
     <motion.div
       className={`relative transform-gpu overflow-hidden rounded-3xl bg-white/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/10 backdrop-blur-md group ${className}`}
       onMouseMove={handleMouseMove}
-      whileHover={isMobile ? {} : { scale: 0.98 }}
+      whileHover={{ scale: 0.98 }}
       transition={{ duration: 0.3 }}
     >
-      {!isMobile && (
-        <motion.div
-          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition"
-          style={{ background: glow }}
-        />
-      )}
-
-      {bgImage && (
-        <>
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-90"
-            style={{ backgroundImage: `url(${bgImage})` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70" />
-        </>
-      )}
-
-      <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
-        {children}
-      </div>
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition"
+        style={{ background: glow }}
+      />
+      <BentoCardContent bgImage={bgImage}>{children}</BentoCardContent>
     </motion.div>
   );
 }
+
+/* ---------------- Bento Card Mobile ---------------- */
+function BentoCardMobile({
+    children,
+    className,
+    bgImage,
+  }) {
+    // Plain div with NO javascript event listeners and NO backdrop-blur
+    return (
+      <div
+        className={`relative overflow-hidden rounded-3xl bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-lg ${className}`}
+      >
+        <BentoCardContent bgImage={bgImage}>{children}</BentoCardContent>
+      </div>
+    );
+  }
 
 /* ---------------- Main About Section ---------------- */
 
@@ -96,9 +111,12 @@ const About = forwardRef((props, ref) => {
     offset: ["start end", "end start"],
   });
 
-  // Disable expensive scroll parallax on mobile — fires every pixel and causes jank
+  // Enable scroll parallax ONLY on desktop to prevent mobile jank
   const headerY = useTransform(scrollYProgress, [0, 0.5], isMobile ? [0, 0] : [60, 0]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], isMobile ? [1, 1, 1, 1] : [0, 1, 1, 0]);
+
+  // Use the appropriate component based on device
+  const BentoCard = isMobile ? BentoCardMobile : BentoCardDesktop;
 
   return (
     <section
@@ -135,7 +153,7 @@ const About = forwardRef((props, ref) => {
 
       <div ref={innerRef} className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Header */}
-        <motion.div style={{ opacity, y: headerY }} className="mb-20 md:mb-32">
+        <motion.div style={isMobile ? {} : { opacity, y: headerY }} className="mb-20 md:mb-32">
           <div className="flex items-center gap-4 mb-6">
             <div className="h-px w-12 bg-gradient-to-r from-cyan-400 to-transparent" />
             <span className="text-xs font-black tracking-[0.4em] uppercase text-cyan-600 dark:text-cyan-400">
