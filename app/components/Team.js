@@ -3,13 +3,12 @@
 /**
  * Team.js  —  Page-level section component
  *
- * • Defines ALL_MEMBERS with year, image, and social links
- * • Transforms data into the format TeamSection expects
- * • Supports Light/Dark mode via Tailwind dark: classes
- * • Highly optimized for mobile performance (removed layout thrashing)
+ * MOBILE PERFORMANCE: On mobile, cards render as plain <div> with CSS-only
+ * fade-in — zero framer-motion overhead, zero IntersectionObservers, zero
+ * GPU compositor layers. Desktop keeps whileInView animations.
  */
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -38,24 +37,26 @@ const ALL_MEMBERS = [
   { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
 
   // ── Year 2 ───────────────────────────────────────────────────────────────
-  { year: 2, name: "Abhinav Raj", image: "/PHOTOS/abhinav.png", instagram: "https://www.instagram.com/abhinav.en", linkedin: "https://www.linkedin.com/in/abhinav-raj-9b789731a" },
-  { year: 2, name: "Aditya Kumar", image: "/PHOTOS/aditya.jpg", instagram: "https://www.instagram.com/adiiix18", linkedin: "https://www.linkedin.com/in/aditya-kumar-289162318" },
-  { year: 2, name: "Ankit Kumar", image: "/PHOTOS/ANKIT.jpeg", instagram: "https://www.instagram.com/iyk.ankit", linkedin: "https://www.linkedin.com/in/ankit-kumar-4a1b94333" },
-  { year: 2, name: "Deeksha", image: "/PHOTOS/deeksha1 copy.png", instagram: "https://www.instagram.com/im_deeksha_08", linkedin: "https://www.linkedin.com/in/deeksha-n-018864" },
-  { year: 2, name: "Babul Kumar", image: "/PHOTOS/babul.jpg", instagram: "https://www.instagram.com/babulkr328", linkedin: "https://www.linkedin.com/in/babul-kumar-a0a45a27b" },
-  { year: 2, name: "Deepankar Raj", image: "/PHOTOS/deepankar.jpeg", instagram: "https://www.instagram.com/deepankaraj?igsh=cjRxbnpveHVtMml3l", linkedin: "https://www.linkedin.com/in/deepankaraj" },
-  { year: 2, name: "Dhruthi M", image: "/PHOTOS/dhruthi.jpg", instagram: "https://www.instagram.com/dhruthi__m", linkedin: "https://www.linkedin.com/in/dhruthi-m-940bb6385" },
-  { year: 2, name: "Inchara Vishwanath", image: "/PHOTOS/inchara.jpg", instagram: "https://www.instagram.com/inch_vishwanath", linkedin: "https://www.linkedin.com/in/nagalasya-t-v-3118613b3" },
-  { year: 2, name: "Keerthi Pai", image: "/PHOTOS/keerthi copy.jpg", instagram: null, linkedin: "https://www.linkedin.com/in/keerthi-pai-506bbb334" },
-  { year: 2, name: "Lasya Shetty", image: "/PHOTOS/lasya.jpg", instagram: "https://www.instagram.com/nagalasyaaa", linkedin: "https://www.linkedin.com/in/nagalasya-t-v-3118613b3" },
-  { year: 2, name: "Lisha GL", image: "/PHOTOS/LISHA.jpg", instagram: "https://www.instagram.com/lisha_gl", linkedin: "https://www.linkedin.com/in/lisha-g-l-377656372" },
-  { year: 2, name: "Madhurya R", image: "/PHOTOS/madhurya.jpg", instagram: "https://www.instagram.com/_madhurya__r", linkedin: "https://www.linkedin.com/in/madhurya-r-336784336" },
-  { year: 2, name: "Nanditha LM", image: "/PHOTOS/nanditha copy.jpg", instagram: "https://www.instagram.com/nanditha_mallikarjun", linkedin: "https://www.linkedin.com/in/nanditha-l-m-905057371" },
-  { year: 2, name: "Saket Sinha", image: "/PHOTOS/saket.jpg", instagram: "https://www.instagram.com/__saket__sinha__", linkedin: "https://www.linkedin.com/in/saket-sinha-930506331" },
-  { year: 2, name: "Samarth Gupta", image: "/PHOTOS/samarth.jpg", instagram: "https://www.instagram.com/samarth_542", linkedin: "https://www.linkedin.com/in/samarth-gupta-7ab08a331" },
-  { year: 2, name: "Sayan Kumar", image: "/PHOTOS/sayan.jpg", instagram: "https://www.instagram.com/_sayan38", linkedin: "https://www.linkedin.com/in/sayan-kumar-342536331" },
-  { year: 2, name: "Soham Khade", image: "/PHOTOS/soham.jpg", instagram: "https://www.instagram.com/sohamkhade0901", linkedin: "https://www.linkedin.com/in/soham-khade-410378380" },
-  { year: 2, name: "Vishal Tiwary", image: "/PHOTOS/tiwari.jpeg", instagram: "https://www.instagram.com/vishaltiwary016", linkedin: "https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310" },
+  { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
+  { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
+    { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
+
+  { year: 2, name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
+
+  { year: 2, name: 'Deeksha', image: '/PHOTOS/deeksha1 copy.png', instagram: 'https://www.instagram.com/im_deeksha_08', linkedin: 'https://www.linkedin.com/in/deeksha-n-018864' },
+  { year: 2, name: 'Deepankar Raj', image: '/PHOTOS/deepankar.jpeg', instagram: 'https://www.instagram.com/deepankaraj?igsh=cjRxbnpveHVtMml3l', linkedin: 'https://www.linkedin.com/in/deepankaraj' },
+  { year: 2, name: 'Dhruthi M', image: '/PHOTOS/dhruthi.jpg', instagram: 'https://www.instagram.com/dhruthi__m', linkedin: 'https://www.linkedin.com/in/dhruthi-m-940bb6385' },
+  { year: 2, name: 'Inchara Vishwanath', image: '/PHOTOS/inchara.jpg', instagram: 'https://www.instagram.com/inch_vishwanath', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-3118613b3' },
+  { year: 2, name: 'Keerthi Pai', image: '/PHOTOS/keerthi copy.jpg', instagram: null, linkedin: 'https://www.linkedin.com/in/keerthi-pai-506bbb334' },
+  { year: 2, name: 'Lasya Shetty', image: '/PHOTOS/lasya.jpg', instagram: 'https://www.instagram.com/nagalasyaaa', linkedin: 'https://www.linkedin.com/in/nagalasya-t-v-3118613b3' },
+  { year: 2, name: 'Lisha GL', image: '/PHOTOS/LISHA.jpg', instagram: 'https://www.instagram.com/lisha_gl', linkedin: 'https://www.linkedin.com/in/lisha-g-l-377656372' },
+  { year: 2, name: 'Madhurya R', image: '/PHOTOS/madhurya.jpg', instagram: 'https://www.instagram.com/_madhurya__r', linkedin: 'https://www.linkedin.com/in/madhurya-r-336784336' },
+  { year: 2, name: 'Nanditha LM', image: '/PHOTOS/nanditha copy.jpg', instagram: 'https://www.instagram.com/nanditha_mallikarjun', linkedin: 'https://www.linkedin.com/in/nanditha-l-m-905057371' },
+  { year: 2, name: 'Saket Sinha', image: '/PHOTOS/saket.jpg', instagram: 'https://www.instagram.com/__saket__sinha__', linkedin: 'https://www.linkedin.com/in/saket-sinha-930506331' },
+  { year: 2, name: 'Samarth Gupta', image: '/PHOTOS/samarth.jpg', instagram: 'https://www.instagram.com/samarth_542', linkedin: 'https://www.linkedin.com/in/samarth-gupta-7ab08a331' },
+  { year: 2, name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331' },
+  { year: 2, name: 'Soham Khade', image: '/PHOTOS/soham.jpg', instagram: 'https://www.instagram.com/sohamkhade0901', linkedin: 'https://www.linkedin.com/in/soham-khade-410378380' },
+  { year: 2, name: 'Vishal Tiwary', image: '/PHOTOS/tiwari.jpeg', instagram: 'https://www.instagram.com/vishaltiwary016', linkedin: 'https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310' },
 
   // ── Year 1 ────────────────────────────────────────────────────
   { year: 1, name: 'Abhijeet Satyam', image: '/PHOTOS/jeet.jpeg', instagram: 'https://www.instagram.com/the_jeetx', linkedin: 'https://www.linkedin.com/in/abhijeet-satyam-45b85a3b4' },
@@ -88,7 +89,7 @@ const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => ({
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  ANIMATED HEADING
+//  ANIMATED HEADING (desktop only — never runs on mobile)
 // ─────────────────────────────────────────────────────────────────────────────
 const wordContainer = {
   hidden: {},
@@ -101,7 +102,7 @@ const wordItem = {
   hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
     opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring', damping: 18, stiffness: 100 }
+    transition: { type: 'spring', damping: 18, stiffness: 100 },
   },
 };
 
@@ -123,96 +124,120 @@ const AnimatedTitle = ({ text, className, delay = 0 }) => (
 );
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  TEAM SECTION COMPONENT (Cards & Grid - Mobile Optimized)
+//  CARD INNER — pure HTML, shared by both mobile & desktop wrappers
 // ─────────────────────────────────────────────────────────────────────────────
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.03 }, // Faster stagger for better performance
-  },
-};
+const MemberCardContent = ({ member }) => (
+  <>
+    <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
+      <img
+        src={member.image}
+        alt={member.name}
+        className="w-full h-full object-cover"
+        style={{ objectPosition: member.position || 'center' }}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
 
-// Simplified animation for cards to reduce lag
+    <div className="text-center w-full mb-4">
+      <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate px-2">
+        {member.name}
+      </h3>
+      <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">
+        {member.role}
+      </p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
+        Year {member.year}
+      </p>
+    </div>
+
+    <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-white/5 w-full justify-center">
+      {member.linkedin && (
+        <a
+          href={member.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1"
+          aria-label={`${member.name} LinkedIn`}
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+          </svg>
+        </a>
+      )}
+      {member.instagram && (
+        <a
+          href={member.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors p-1"
+          aria-label={`${member.name} Instagram`}
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+        </a>
+      )}
+    </div>
+  </>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TEAM GRID
+//  Mobile  → plain <div> + CSS keyframe fade (0 JS animation cost)
+//  Desktop → motion.div with whileInView (smooth scroll reveal)
+// ─────────────────────────────────────────────────────────────────────────────
 const cardVariants = {
   hidden: { opacity: 0, y: 15 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-const TeamSectionInline = ({ members }) => {
-  return (
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center"
-    >
-      {/* Using whileInView instead of animate so only visible cards animate — prevents all 54 firing at once */}
-      {members.map((member) => (
+const cardBase =
+  'bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10';
+
+const TeamSectionInline = ({ members, isMobile }) => (
+  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 justify-items-center">
+    {members.map((member) =>
+      isMobile ? (
+        // ── Zero JS animation on mobile ──
+        <div key={member.name} className={`${cardBase} team-card-fadein`}>
+          <MemberCardContent member={member} />
+        </div>
+      ) : (
+        // ── Desktop: framer-motion whileInView ──
         <motion.div
           key={member.name}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-30px' }}
-          // Added will-change to force hardware acceleration on scroll
-          className="bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10 transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg will-change-transform"
+          className={`${cardBase} hover:-translate-y-1 hover:shadow-lg transition-transform duration-200`}
         >
-          {/* Fixed circle image */}
-          <div className="w-28 h-28 rounded-full overflow-hidden shadow-sm mb-4 shrink-0 border-4 border-slate-50 dark:border-slate-800/50">
-            <img
-              src={member.image}
-              alt={member.name}
-              className="w-full h-full object-cover"
-              style={{ objectPosition: member.position || 'center' }}
-              loading="lazy"
-            />
-          </div>
-
-          {/* Text Container */}
-          <div className="text-center w-full mb-4">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate px-2">
-              {member.name}
-            </h3>
-            <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400 mt-0.5">
-              {member.role}
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
-              Year {member.year}
-            </p>
-          </div>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-white/5 w-full justify-center">
-            {member.linkedin && (
-              <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1" aria-label={`${member.name} LinkedIn`}>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-              </a>
-            )}
-            {member.instagram && (
-              <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors p-1" aria-label={`${member.name} Instagram`}>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
-            )}
-          </div>
+          <MemberCardContent member={member} />
         </motion.div>
-      ))}
-    </div>
-  );
-};
+      )
+    )}
+  </div>
+);
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  TEAM MAIN SECTION Wrapper
+//  TEAM SECTION WRAPPER
 // ─────────────────────────────────────────────────────────────────────────────
 const Team = forwardRef((props, ref) => {
   const [activeYear, setActiveYear] = useState('All');
+  const [isMobile, setIsMobile] = useState(false);
   const filterOptions = ['All', 4, 3, 2, 1];
 
-  const filteredMembers = TRANSFORMED_MEMBERS.filter(member => {
-    if (activeYear === 'All') return true;
-    return member.year === activeYear;
-  });
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const filteredMembers = TRANSFORMED_MEMBERS.filter((member) =>
+    activeYear === 'All' ? true : member.year === activeYear
+  );
 
   return (
     <section
@@ -223,11 +248,22 @@ const Team = forwardRef((props, ref) => {
         transition-colors duration-500
         py-24 md:py-40"
     >
+      {/* CSS-only card fade-in — used on mobile, zero JS overhead */}
+      <style>{`
+        @keyframes teamCardFade {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .team-card-fadein {
+          animation: teamCardFade 0.35s ease-out both;
+        }
+      `}</style>
+
       {/* ── Background grid ── */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none 
-        bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
-        dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
+        className="absolute inset-0 z-0 pointer-events-none
+          bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)]
+          dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]"
         style={{
           backgroundSize: '60px 60px',
           maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
@@ -235,7 +271,7 @@ const Team = forwardRef((props, ref) => {
         }}
       />
 
-      {/* ── Ambient colour blobs (Hidden on mobile to save GPU performance) ── */}
+      {/* ── Ambient colour blobs (hidden on mobile to save GPU) ── */}
       <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
         <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
@@ -249,9 +285,9 @@ const Team = forwardRef((props, ref) => {
 
       {/* ── Content ── */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-8">
-        
+
         <div className="text-center mb-10 md:mb-14 flex flex-col items-center gap-3">
-          
+
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -266,6 +302,7 @@ const Team = forwardRef((props, ref) => {
             <span className="h-px w-8 bg-gradient-to-l from-transparent to-cyan-500/70" />
           </motion.div>
 
+          {/* Mobile heading — plain HTML, zero animation overhead */}
           <div className="flex md:hidden flex-col items-center mt-1">
             <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
               Meet The Team
@@ -275,6 +312,7 @@ const Team = forwardRef((props, ref) => {
             </h2>
           </div>
 
+          {/* Desktop heading — animated word reveal */}
           <div className="hidden md:flex flex-col items-center mt-1">
             <AnimatedTitle
               text="Meet The Team"
@@ -288,38 +326,30 @@ const Team = forwardRef((props, ref) => {
           </div>
         </div>
 
-        {/* ── FILTER BUTTONS UI ── */}
+        {/* ── FILTER BUTTONS ── */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
           {filterOptions.map((year) => {
             const isActive = activeYear === year;
             const label = year === 'All' ? 'All Members' : `Year ${year}`;
-            
             return (
               <button
                 key={year}
                 onClick={() => setActiveYear(year)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900' 
+                  isActive
+                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900'
                     : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-white/5 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10'
                 }`}
               >
                 {label}
               </button>
-            )
+            );
           })}
         </div>
 
-        {/* ── Team grid with simplified mounting animation ── */}
-        <motion.div 
-          key={activeYear} 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          transition={{ duration: 0.3 }}
-        >
-           <TeamSectionInline members={filteredMembers} />
-        </motion.div>
-        
+        {/* ── Team Grid ── */}
+        <TeamSectionInline members={filteredMembers} isMobile={isMobile} />
+
       </div>
     </section>
   );
