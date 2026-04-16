@@ -297,7 +297,9 @@
   line-height: 1.1;
   color: #9fb0c8;
   z-index: 2;
-  animation: animTitle 12s var(--animation-iteration, infinite) ease-in-out;
+  white-space: normal;
+  text-align: center;
+  /* animation handled per character via .title-char */
 }
 
 /* ── Subtitle — below horizon, spaced-out tracking ── */
@@ -339,6 +341,46 @@
 
 .subtitle-part-4 {
   animation: animGo 12s var(--animation-iteration, infinite) ease-in-out;
+}
+
+/* ── Per-character typewriter snap animation ── */
+.title-char {
+  display: inline-block;
+  opacity: 0;
+  animation: charType 6s var(--animation-iteration, infinite);
+  animation-timing-function: step-end;
+}
+
+@keyframes charType {
+  0%    { opacity: 0; }
+  8%    { opacity: 1; }
+  78%   { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+
+/* ── Blinking cursor after title ── */
+.title-cursor {
+  display: inline-block;
+  color: #22d3ee;
+  font-weight: 100;
+  font-size: 0.85em;
+  margin-left: 2px;
+  vertical-align: middle;
+  text-shadow: 0 0 12px rgba(34,211,238,0.8);
+  animation: cursorBlink 0.55s step-end infinite,
+             cursorFade  6s var(--animation-iteration, infinite) step-end;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes cursorFade {
+  0%   { opacity: 0; }
+  6%   { opacity: 1; }
+  78%  { opacity: 1; }
+  80%, 100% { opacity: 0; }
 }
 
 /* ══ Keyframe animations ══ */

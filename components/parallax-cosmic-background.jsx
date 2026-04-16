@@ -93,8 +93,31 @@ const CosmicParallaxBg = ({
         <div className="glow"></div>
       </div>
       <div id="earth"></div>
-      {/* Title and subtitle */}
-      <div id="title">{head.toUpperCase()}</div>
+      {/* Title — typewriter character-by-character */}
+      <div id="title">
+        {head.toUpperCase().split('').map((char, i) => (
+          char === ' ' ? (
+            <span key={i}>
+              {/* Mobile: line break so TEAM and AVALANCHE are on separate lines */}
+              <br className="block md:hidden" />
+              {/* Desktop: non-breaking space to keep on one line */}
+              <span
+                className="hidden md:inline-block title-char"
+                style={{ animationDelay: `${i * 0.08}s`, minWidth: '0.4em' }}
+              >&nbsp;</span>
+            </span>
+          ) : (
+            <span
+              key={i}
+              className="title-char"
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
+              {char}
+            </span>
+          )
+        ))}
+        <span className="title-cursor">|</span>
+      </div>
       
       {countdownTo ? (
         <div id="subtitle" style={{ opacity: 1, pointerEvents: 'auto' }}>

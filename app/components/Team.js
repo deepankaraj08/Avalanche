@@ -38,7 +38,7 @@ const ALL_MEMBERS = [
 
   // ── Year 2 ───────────────────────────────────────────────────────────────
   { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
-  { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
+  { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpeg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
     { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
 
   { year: 2, name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
@@ -196,8 +196,13 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
+// Mobile card — plain, no glass, no hover effects (performance-safe)
 const cardBase =
   'bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10';
+
+// Desktop card — glassmorphism + animated border on hover (laptop/desktop only)
+const desktopCardBase =
+  'team-glass-card rounded-2xl p-5 flex flex-col items-center w-full max-w-[240px]';
 
 const TeamSectionInline = ({ members, isMobile, onImageClick }) => (
   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 justify-items-center">
@@ -208,14 +213,15 @@ const TeamSectionInline = ({ members, isMobile, onImageClick }) => (
           <MemberCardContent member={member} onImageClick={onImageClick} />
         </div>
       ) : (
-        // ── Desktop: framer-motion whileInView ──
+        // ── Desktop: framer-motion whileInView + glassmorphism + glow border ──
         <motion.div
           key={member.name}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-30px' }}
-          className={`${cardBase} hover:-translate-y-1 hover:shadow-lg transition-transform duration-200`}
+          whileHover={{ y: -6, transition: { type: 'spring', stiffness: 260, damping: 18 } }}
+          className={desktopCardBase}
         >
           <MemberCardContent member={member} onImageClick={onImageClick} />
         </motion.div>
@@ -261,6 +267,54 @@ const Team = forwardRef((props, ref) => {
         }
         .team-card-fadein {
           animation: teamCardFade 0.35s ease-out both;
+        }
+
+        /* ── Desktop glass card ── */
+        .team-glass-card {
+          position: relative;
+          background: rgba(255,255,255,0.55);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          border: 1px solid rgba(255,255,255,0.35);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+          transition: box-shadow 0.35s ease, transform 0.25s ease;
+          overflow: visible;
+        }
+        .dark .team-glass-card {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        /* gradient glow border via ::before — desktop hover only */
+        .team-glass-card::before {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          border-radius: inherit;
+          padding: 2px;
+          background: linear-gradient(135deg, #22d3ee, #6366f1, #ec4899, #22d3ee);
+          background-size: 300% 300%;
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          animation: gradientSpin 4s linear infinite;
+        }
+        @keyframes gradientSpin {
+          0%   { background-position: 0%   50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0%   50%; }
+        }
+        .team-glass-card:hover::before {
+          opacity: 1;
+        }
+        .team-glass-card:hover {
+          box-shadow: 0 16px 48px rgba(34,211,238,0.18), 0 4px 16px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+        .dark .team-glass-card:hover {
+          box-shadow: 0 16px 48px rgba(34,211,238,0.12), 0 4px 16px rgba(99,102,241,0.10), inset 0 1px 0 rgba(255,255,255,0.08);
         }
       `}</style>
 
@@ -310,21 +364,21 @@ const Team = forwardRef((props, ref) => {
           {/* Mobile heading — plain HTML, zero animation overhead */}
           <div className="flex md:hidden flex-col items-center mt-1">
             <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
-              Meet The Team
+              Meet The
             </h2>
             <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2">
-              Team
+              Team.
             </h2>
           </div>
 
           {/* Desktop heading — animated word reveal */}
           <div className="hidden md:flex flex-col items-center mt-1">
             <AnimatedTitle
-              text="Meet The Team"
+              text="Meet The"
               className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
             />
             <AnimatedTitle
-              text="Team"
+              text="Team."
               delay={0.15}
               className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2"
             />

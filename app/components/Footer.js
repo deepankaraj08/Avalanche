@@ -2,117 +2,249 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaInstagram } from 'react-icons/fa';
+import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
+
+// ── Quick nav links ──────────────────────────────────────────────────────────
+const NAV_LINKS = [
+  { label: 'Home',    href: null },        // No id on Hero — scroll to top
+  { label: 'About',   href: '#about' },
+  { label: 'Events',  href: '#events' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Team',    href: '#team' },
+];
 
 const SOCIAL_LINKS = [
   {
-    icon: <FaInstagram size={20} />,
+    icon: <FaInstagram size={18} />,
     href: 'https://www.instagram.com/team_avalanche_official?igsh=MWw4anl0YnE5c3B2ZQ==',
     label: 'Instagram',
-    hoverColor: 'hover:text-pink-400 hover:border-pink-500/50 hover:bg-pink-500/10'
+    color: 'hover:text-pink-400 hover:border-pink-500/60 hover:shadow-pink-500/20',
+    bg: 'hover:bg-pink-500/10',
+  },
+  {
+    icon: <FaWhatsapp size={18} />,
+    href: 'https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t',
+    label: 'WhatsApp',
+    color: 'hover:text-emerald-400 hover:border-emerald-500/60 hover:shadow-emerald-500/20',
+    bg: 'hover:bg-emerald-500/10',
   },
 ];
 
 const Footer = () => {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   const openWhatsApp = () => {
     window.open('https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t', '_blank');
   };
 
   return (
-    <footer className={`${isMobile ? 'mt-[-10px]' : 'mt-[-2px]'} relative bg-slate-50 dark:bg-[#020617] pt-16 md:pt-24 pb-10 overflow-hidden text-slate-800 dark:text-white`} id="footer">
+    <footer
+      id="footer"
+      className="relative bg-slate-50 dark:bg-[#020617] pt-20 pb-8 overflow-hidden text-slate-800 dark:text-white"
+    >
+      {/* ── Inline styles ────────────────────────────────────────────────── */}
+      <style>{`
+        /* Gradient top divider */
+        .footer-divider {
+          height: 1px;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(34,211,238,0.5) 30%,
+            rgba(99,102,241,0.5) 70%,
+            transparent 100%
+          );
+          margin-bottom: 0;
+        }
 
-      {/* ===== Background Atmosphere - Performance Optimized ===== */}
-      <div className="absolute inset-0 -z-10 pointer-events-none transform-gpu">
+        /* Animated gradient border on CTA card */
+        .footer-cta-glow {
+          position: relative;
+        }
+        .footer-cta-glow::before {
+          content: '';
+          position: absolute;
+          inset: -1.5px;
+          border-radius: 1.75rem;
+          background: linear-gradient(135deg, #22d3ee, #6366f1, #ec4899, #22d3ee);
+          background-size: 300% 300%;
+          animation: footerGradSpin 5s linear infinite;
+          z-index: 0;
+          opacity: 0.6;
+        }
+        @keyframes footerGradSpin {
+          0%   { background-position: 0%   50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0%   50%; }
+        }
+        .footer-cta-inner {
+          position: relative;
+          z-index: 1;
+          border-radius: 1.65rem;
+        }
+
+        /* Social icon base */
+        .footer-social-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          border: 1px solid;
+          transition: all 0.25s ease;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Desktop blob — hidden on mobile */
+        @media (max-width: 767px) {
+          .footer-blob { display: none !important; }
+        }
+      `}</style>
+
+      {/* ── Background atmosphere ─────────────────────────────────────────── */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
         <div
-          className="absolute inset-0 bg-gradient-to-b from-slate-50 dark:from-[#020617] via-slate-100 dark:via-[#0f172a] to-slate-200 dark:to-black"
+          className="absolute inset-0 bg-gradient-to-b from-slate-50 dark:from-[#020617] via-slate-100/80 dark:via-[#0f172a]/60 to-slate-200 dark:to-black"
           style={{
-            maskImage: 'linear-gradient(to bottom, transparent, black 15%, black)',
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black)'
+            maskImage: 'linear-gradient(to bottom, transparent, black 10%, black)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black)',
           }}
         />
-
-        {/* Glow: Reduced blur for mobile GPU stability */}
-        <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[300px] md:h-[500px] bg-cyan-600/5 rounded-[100%] blur-[60px] md:blur-[120px] will-change-transform" />
-
-        <div
-          className="absolute inset-0 opacity-[0.02] mix-blend-overlay transform-gpu"
-          style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
-        />
+        {/* Glow blobs — desktop only via CSS */}
+        <div className="footer-blob absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[300px] bg-cyan-600/8 rounded-[100%] blur-[100px]" />
+        <div className="footer-blob absolute top-0 left-[10%] w-[400px] h-[300px] bg-indigo-500/8 rounded-full blur-[80px]" />
+        <div className="footer-blob absolute top-0 right-[10%] w-[300px] h-[250px] bg-pink-500/6 rounded-full blur-[70px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-16 md:mb-20">
+      {/* ── Top gradient divider line ─────────────────────────────────────── */}
+      <div className="footer-divider max-w-7xl mx-auto px-6 mb-16" />
 
-          {/* ===== 1. Brand Column ===== */}
-          <div className="space-y-6 md:space-y-8">
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+        {/* Grid: 1 col on mobile → 2 on sm → 4 on lg */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+
+          {/* ── Col 1 · Brand ───────────────────────────────────────────── */}
+          <div className="flex flex-col gap-6 sm:col-span-2 lg:col-span-1">
+            {/* Logo + name */}
             <div className="flex items-center gap-4">
-              <div className="relative flex items-center justify-center p-1.5 rounded-full bg-white/80 dark:bg-white dark:shadow-[0_0_25px_rgba(255,255,255,0.8)] backdrop-blur-md transition-all duration-300">
-                <img src="/gallery/Avalanche%20Logo.png" alt="Avalanche Logo" className="w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
+              <div className="flex items-center justify-center p-1.5 rounded-full bg-white/80 dark:bg-white shadow-[0_0_20px_rgba(255,255,255,0.6)] dark:shadow-[0_0_25px_rgba(255,255,255,0.8)]">
+                <img
+                  src="/gallery/Avalanche%20Logo.png"
+                  alt="Avalanche Logo"
+                  className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,1)]"
+                />
               </div>
-              <div className="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent inline-block">
+              <span className="text-2xl md:text-3xl font-black tracking-tighter bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
                 AVALANCHE
-              </div>
+              </span>
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed max-w-xs font-bold uppercase tracking-wide opacity-80">
-              Siddaganga Institute of Technology
+
+            {/* Description */}
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-xs">
+              The premier tech &amp; innovation club of Siddaganga Institute of Technology,
+              Tumakuru — building the next generation of creators.
             </p>
-            <div className="flex flex-col text-[10px] text-slate-500 dark:text-slate-400 space-y-3 font-black tracking-widest uppercase">
-              <span className="flex items-center gap-3">
-                <span className="relative flex h-2 w-2">
+
+            {/* Location + Email */}
+            <div className="flex flex-col gap-3 text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              <span className="flex items-center gap-2">
+                {/* Ping dot */}
+                <span className="relative flex h-2 w-2 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                 </span>
                 Tumakuru, Karnataka, India
               </span>
-              <a href="mailto:avalanche@club.sit.edu" className="hover:text-cyan-400 transition-all w-max underline underline-offset-8 decoration-white/5 hover:decoration-cyan-400/40 active:scale-95 transform-gpu">
+              <a
+                href="mailto:avalanche@club.sit.edu"
+                className="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors underline underline-offset-4 decoration-slate-300 dark:decoration-slate-700 hover:decoration-cyan-400/50 w-max"
+              >
                 avalanche@club.sit.edu
               </a>
             </div>
           </div>
 
-          <div className="hidden lg:block" />
+          {/* ── Col 2 · Quick Links ──────────────────────────────────────── */}
+          <div className="flex flex-col gap-6">
+            <h4 className="text-[10px] font-black tracking-[0.35em] uppercase text-slate-400 dark:text-slate-500">
+              Navigate
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {NAV_LINKS.map((link) => (
+                <li key={link.label}>
+                  {link.href ? (
+                    <a
+                      href={link.href}
+                      className="group flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                    >
+                      <span className="w-4 h-px bg-slate-300 dark:bg-slate-600 group-hover:w-6 group-hover:bg-cyan-500 transition-all duration-300" />
+                      {link.label}
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className="group flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                    >
+                      <span className="w-4 h-px bg-slate-300 dark:bg-slate-600 group-hover:w-6 group-hover:bg-cyan-500 transition-all duration-300" />
+                      {link.label}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* ===== 2. Social Presence ===== */}
-          <div className="space-y-6">
-            <h4 className="text-slate-400 dark:text-slate-500 font-black tracking-[0.3em] uppercase text-[10px]">Social Pulse</h4>
-            <div className="flex gap-4">
-              {SOCIAL_LINKS.map((social, idx) => (
-                <motion.a
-                  key={idx}
-                  href={social.href}
+          {/* ── Col 3 · Social ───────────────────────────────────────────── */}
+          <div className="flex flex-col gap-6">
+            <h4 className="text-[10px] font-black tracking-[0.35em] uppercase text-slate-400 dark:text-slate-500">
+              Social Pulse
+            </h4>
+            <div className="flex flex-col gap-3">
+              {SOCIAL_LINKS.map((s, i) => (
+                <a
+                  key={i}
+                  href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
-                  whileTap={{ scale: 0.9 }}
-                  className={`w-14 h-14 rounded-2xl bg-slate-200 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700/50 flex items-center justify-center text-slate-500 dark:text-slate-400 transition-all duration-300 transform-gpu will-change-transform ${social.hoverColor}`}
+                  aria-label={s.label}
+                  className={`group flex items-center gap-3 w-max text-sm font-semibold text-slate-500 dark:text-slate-400 transition-all duration-250 ${s.color}`}
                 >
-                  {social.icon}
-                </motion.a>
+                  <span
+                    className={`footer-social-btn border-slate-200 dark:border-slate-700/50 bg-slate-100 dark:bg-white/5 ${s.color} ${s.bg} shadow-sm`}
+                  >
+                    {s.icon}
+                  </span>
+                  {s.label}
+                </a>
               ))}
             </div>
           </div>
 
-          {/* ===== 3. CTA Card - Enhanced for Mobile Touch ===== */}
-          <div className="relative group mt-4 lg:mt-0 transform-gpu">
-            <div className="absolute -inset-px bg-cyan-500/20 rounded-[2.2rem] blur-md group-hover:bg-cyan-500/40 transition-all duration-700" />
+          {/* ── Col 4 · CTA Card ─────────────────────────────────────────── */}
+          <div className="footer-cta-glow self-start">
+            <div className="footer-cta-inner bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-6 md:p-7 flex flex-col gap-4 shadow-xl shadow-black/10 dark:shadow-black/40">
+              {/* Heading */}
+              <div>
+                <h4 className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight">
+                  Join the Energy
+                </h4>
+                <p className="text-[10px] font-black uppercase tracking-widest text-cyan-600 dark:text-cyan-400 mt-1">
+                  Connect via WhatsApp
+                </p>
+              </div>
 
-            <div className="relative bg-cyan-500/10 backdrop-blur-xl border border-white/5 p-7 md:p-8 rounded-[2.2rem] overflow-hidden shadow-2xl">
-              <h4 className="text-white font-black mb-1 md:mb-2 tracking-tighter text-2xl leading-none">Join the Energy</h4>
-              <p className="text-cyan-400/60 text-[9px] mb-6 md:mb-8 font-black uppercase tracking-widest">Connect via WhatsApp</p>
+              {/* Sub-text */}
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Be part of a community that builds, experiments, and drives innovation forward.
+              </p>
 
+              {/* Button */}
               <button
                 onClick={openWhatsApp}
-                className="w-full py-4.5 px-6 bg-cyan-500 text-[#0f172a] rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-white active:scale-95 shadow-lg shadow-cyan-500/20"
+                className="flex items-center justify-center gap-2 w-full py-3.5 px-5 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white rounded-xl text-xs font-black uppercase tracking-[0.18em] transition-all duration-300 shadow-lg shadow-cyan-500/25 active:scale-95"
               >
+                <FaWhatsapp size={14} />
                 Register Now
               </button>
             </div>
@@ -120,14 +252,18 @@ const Footer = () => {
 
         </div>
 
-        {/* ===== Bottom Bar ===== */}
-        <div className="pt-8 md:pt-10 border-t border-slate-200 dark:border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-400 dark:text-slate-500 text-[10px] font-black tracking-[0.2em] uppercase">
-          <p>© {new Date().getFullYear()} Avalanche Club SIT.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors active:scale-95">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors active:scale-95">Terms</a>
+        {/* ── Bottom Bar ────────────────────────────────────────────────── */}
+        <div className="pt-8 border-t border-slate-200 dark:border-slate-800/50 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-black tracking-[0.2em] uppercase text-slate-400 dark:text-slate-600">
+          <p>© {new Date().getFullYear()} Avalanche Club · SIT Tumakuru</p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Privacy</a>
+            <span className="w-px h-3 bg-slate-300 dark:bg-slate-700" />
+            <a href="#" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Terms</a>
+            <span className="w-px h-3 bg-slate-300 dark:bg-slate-700" />
+            <a href="#" className="hover:text-slate-700 dark:hover:text-slate-300 transition-colors">Contact</a>
           </div>
         </div>
+
       </div>
     </footer>
   );
