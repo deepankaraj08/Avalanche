@@ -153,26 +153,49 @@ const About = forwardRef((props, ref) => {
 
       <div ref={innerRef} className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Header */}
-        <motion.div style={isMobile ? {} : { opacity, y: headerY }} className="mb-20 md:mb-32">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-px w-12 bg-gradient-to-r from-cyan-400 to-transparent" />
-            <span className="text-xs font-black tracking-[0.4em] uppercase text-cyan-600 dark:text-cyan-400">
-              The Architecture of Hype
-            </span>
+        {isMobile ? (
+          <div className="mb-20 md:mb-32">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-12 bg-gradient-to-r from-cyan-400 to-transparent" />
+              <span className="text-xs font-black tracking-[0.4em] uppercase text-cyan-600 dark:text-cyan-400">
+                The Architecture of Hype
+              </span>
+            </div>
+
+            <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
+              We Build <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
+                Culture
+              </span>
+            </h2>
+
+            <p className="mt-8 text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+              SIT Tumkur’s event powerhouse. We engineer experiences that define
+              the campus heartbeat.
+            </p>
           </div>
+        ) : (
+          <motion.div style={{ opacity, y: headerY }} className="mb-20 md:mb-32">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-12 bg-gradient-to-r from-cyan-400 to-transparent" />
+              <span className="text-xs font-black tracking-[0.4em] uppercase text-cyan-600 dark:text-cyan-400">
+                The Architecture of Hype
+              </span>
+            </div>
 
-          <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
-            We Build <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
-              Culture
-            </span>
-          </h2>
+            <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
+              We Build <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
+                Culture
+              </span>
+            </h2>
 
-          <p className="mt-8 text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
-            SIT Tumkur’s event powerhouse. We engineer experiences that define
-            the campus heartbeat.
-          </p>
-        </motion.div>
+            <p className="mt-8 text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
+              SIT Tumkur’s event powerhouse. We engineer experiences that define
+              the campus heartbeat.
+            </p>
+          </motion.div>
+        )}
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 auto-rows-[minmax(240px,auto)]">
