@@ -147,14 +147,12 @@
    * sunrise-from-behind-planet effect.
    */
   background:
-    radial-gradient(
-      ellipse 120% 60% at 50% 105%,
+    radial-gradient(ellipse 120% 60% at 50% 105%,
       #1a3c72 0%,
       #0d2040 18%,
       #08131f 40%,
       #050b14 65%,
-      #030709 100%
-    );
+      #030709 100%);
 }
 
 /* ── Small stars: 700 dots, 50s loop ── */
@@ -240,20 +238,24 @@
   width: 200%;
   max-width: 4000px;
   height: 55vh;
+
   @media (min-width: 768px) {
     height: 52vh;
   }
+
   border-radius: 50% 50% 0 0;
   pointer-events: none;
   z-index: 4;
   background: transparent;
   border-top: 2px solid rgba(130, 210, 255, 0.80);
-  box-shadow:
-    0 0 12px  6px rgba(100, 190, 255, 0.55),
-    0 0 35px 14px rgba( 60, 150, 255, 0.30),
-    0 0 80px 28px rgba( 30, 100, 220, 0.15);
+  box-shadow: 0 0 12px 6px rgba(100, 190, 255, 0.55),
+  0 0 35px 14px rgba(60, 150, 255, 0.30),
+  0 0 80px 28px rgba(30, 100, 220, 0.15);
 }
-.glow { display: none; }
+
+.glow {
+  display: none;
+}
 
 /* ── Earth dark arc ── */
 #earth {
@@ -264,17 +266,17 @@
   width: 200%;
   max-width: 4000px;
   height: 55vh;
+
   @media (min-width: 768px) {
     height: 52vh;
   }
-  background: linear-gradient(
-    to bottom,
+
+  background: linear-gradient(to bottom,
     #0b1828 0%,
     #080e1a 3%,
     #060810 10%,
     #020308 40%,
-    #010205 100%
-  );
+    #010205 100%);
   border-radius: 50% 50% 0 0;
   pointer-events: none;
   z-index: 3;
@@ -305,11 +307,13 @@
 /* ── Subtitle — below horizon, spaced-out tracking ── */
 #subtitle {
   position: absolute;
-  bottom: 13%; /* Lowered once more as requested */
+  bottom: 13%;
+  /* Lowered once more as requested */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 1rem; /* Tighter gap on mobile */
+  gap: 1rem;
+  /* Tighter gap on mobile */
   font-size: clamp(0.5rem, 1vw, 0.85rem);
   font-weight: 700;
   letter-spacing: 0.55em;
@@ -322,7 +326,8 @@
 
 @media (min-width: 640px) {
   #subtitle {
-    bottom: 18%; /* Raised further for laptop as requested */
+    bottom: 18%;
+    /* Raised further for laptop as requested */
     gap: 2rem;
   }
 }
@@ -352,10 +357,22 @@
 }
 
 @keyframes charType {
-  0%    { opacity: 0; }
-  8%    { opacity: 1; }
-  78%   { opacity: 1; }
-  80%, 100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  78% {
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ── Blinking cursor after title ── */
@@ -366,21 +383,40 @@
   font-size: 0.85em;
   margin-left: 2px;
   vertical-align: middle;
-  text-shadow: 0 0 12px rgba(34,211,238,0.8);
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
   animation: cursorBlink 0.55s step-end infinite,
-             cursorFade  6s var(--animation-iteration, infinite) step-end;
+    cursorFade 6s var(--animation-iteration, infinite) step-end;
 }
 
 @keyframes cursorBlink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes cursorFade {
-  0%   { opacity: 0; }
-  6%   { opacity: 1; }
-  78%  { opacity: 1; }
-  80%, 100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  6% {
+    opacity: 1;
+  }
+
+  78% {
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ══ Keyframe animations ══ */
@@ -503,7 +539,15 @@
 
 /* ── Team card border shine sweep ──────────────────────────── */
 @keyframes shine {
-  0%   { transform: translateX(-120%) skewX(-15deg); }
-  100% { transform: translateX(220%)  skewX(-15deg); }
+  0% {
+    transform: translateX(-120%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(220%) skewX(-15deg);
+  }
 }
-.card-shine { animation: shine 2.8s linear infinite; }
+
+.card-shine {
+  animation: shine 2.8s linear infinite;
+}

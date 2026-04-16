@@ -21,20 +21,20 @@ import { Zap, Heart, ArrowUpRight } from "lucide-react";
 
 /* ---------------- Bento Card Content ---------------- */
 const BentoCardContent = ({ children, bgImage }) => (
-    <>
-      {bgImage && (
-        <>
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-90 max-md:bg-contain max-md:bg-top max-md:bg-no-repeat max-md:bg-[#0f172a]"
-            style={{ backgroundImage: `url(${bgImage})` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70" />
-        </>
-      )}
-      <div className={`relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10 ${bgImage ? 'max-md:pt-[70%]' : ''}`}>
-        {children}
-      </div>
-    </>
+  <>
+    {bgImage && (
+      <>
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-90 max-md:bg-contain max-md:bg-top max-md:bg-no-repeat max-md:bg-[#0f172a]"
+          style={{ backgroundImage: `url(${bgImage})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/70" />
+      </>
+    )}
+    <div className={`relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10 ${bgImage ? 'max-md:pt-[70%]' : ''}`}>
+      {children}
+    </div>
+  </>
 )
 
 /* ---------------- Bento Card Desktop ---------------- */
@@ -79,19 +79,19 @@ function BentoCardDesktop({
 
 /* ---------------- Bento Card Mobile ---------------- */
 function BentoCardMobile({
-    children,
-    className,
-    bgImage,
-  }) {
-    // Plain div with NO javascript event listeners and NO backdrop-blur
-    return (
-      <div
-        className={`relative overflow-hidden rounded-3xl bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-lg ${className}`}
-      >
-        <BentoCardContent bgImage={bgImage}>{children}</BentoCardContent>
-      </div>
-    );
-  }
+  children,
+  className,
+  bgImage,
+}) {
+  // Plain div with NO javascript event listeners and NO backdrop-blur
+  return (
+    <div
+      className={`relative overflow-hidden rounded-3xl bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-lg ${className}`}
+    >
+      <BentoCardContent bgImage={bgImage}>{children}</BentoCardContent>
+    </div>
+  );
+}
 
 /* ---------------- Main About Section ---------------- */
 
@@ -199,7 +199,7 @@ const About = forwardRef((props, ref) => {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 auto-rows-[minmax(240px,auto)]">
-          
+
           {/* Avalanche */}
           <BentoCard
             className="md:col-span-4 lg:col-start-2 lg:col-span-4 max-md:row-span-1 md:row-span-2 text-white"

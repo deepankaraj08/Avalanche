@@ -26,7 +26,7 @@ const ALL_MEMBERS = [
   // ── Year 3 ───────────────────────────────────────────────────────────────
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
   { year: 3, name: 'Harsh Raj', image: '/PHOTOS/harsh.jpg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
-  { year: 3, name: 'Jhanvi', image: '/PHOTOS/jhanvi.jpg', instagram: null, linkedin: null },
+  { year: 3, name: 'Jhanvi', image: '/PHOTOS/Jnanavi.jpeg', instagram: 'https://www.instagram.com/jnanaviiii', linkedin: 'https://www.linkedin.com/in/JnanaviHarish' },
   { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/Manan.jpeg', instagram: 'https://www.instagram.com/manan_agarwal06?utm_source=qr&igsh=aWF0anE4NzA4MDB1', linkedin: 'https://www.linkedin.com/in/manan-agarwal-5b290a256' },
   { year: 3, name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: null, linkedin: null },
   { year: 3, name: 'Mrinalini', image: '/PHOTOS/mrinalini.jpg', instagram: 'https://www.instagram.com/iitz_mrinal', linkedin: 'https://www.linkedin.com/in/mrinalini-56270b2a6' },
