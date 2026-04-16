@@ -141,17 +141,17 @@ const cardVariants = {
 
 const TeamSectionInline = ({ members }) => {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <div
       className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center"
     >
-      {/* REMOVED: AnimatePresence and layout props which cause massive mobile lag */}
+      {/* Using whileInView instead of animate so only visible cards animate — prevents all 54 firing at once */}
       {members.map((member) => (
         <motion.div
-          key={member.name} 
+          key={member.name}
           variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-30px' }}
           // Added will-change to force hardware acceleration on scroll
           className="bg-white dark:bg-white/5 rounded-2xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none flex flex-col items-center w-full max-w-[240px] border border-slate-100 dark:border-white/10 transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg will-change-transform"
         >
@@ -198,7 +198,7 @@ const TeamSectionInline = ({ members }) => {
           </div>
         </motion.div>
       ))}
-    </motion.div>
+    </div>
   );
 };
 

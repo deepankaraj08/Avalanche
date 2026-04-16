@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 /**
  * A cosmic parallax star-field background.
@@ -39,9 +39,11 @@ const CosmicParallaxBg = ({
   };
 
   useEffect(() => {
-    setSmallStars(generateStars(700));
-    setMediumStars(generateStars(200));
-    setBigStars(generateStars(100));
+    // Reduce star count on mobile to prevent GPU overload
+    const isMobile = window.innerWidth < 768;
+    setSmallStars(generateStars(isMobile ? 300 : 700));
+    setMediumStars(generateStars(isMobile ? 80 : 200));
+    setBigStars(generateStars(isMobile ? 40 : 100));
 
     document.documentElement.style.setProperty(
       '--animation-iteration',

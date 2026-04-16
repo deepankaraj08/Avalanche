@@ -82,14 +82,23 @@ function BentoCard({
 
 const About = forwardRef((props, ref) => {
   const innerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: innerRef,
     offset: ["start end", "end start"],
   });
 
-  const headerY = useTransform(scrollYProgress, [0, 0.5], [60, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  // Disable expensive scroll parallax on mobile — fires every pixel and causes jank
+  const headerY = useTransform(scrollYProgress, [0, 0.5], isMobile ? [0, 0] : [60, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], isMobile ? [1, 1, 1, 1] : [0, 1, 1, 0]);
 
   return (
     <section
@@ -112,8 +121,8 @@ const About = forwardRef((props, ref) => {
         }}
       />
 
-      {/* ── Ambient colour blobs (Matches Team & Gallery) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* ── Ambient colour blobs (hidden on mobile to save GPU) ── */}
+      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
         <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
         <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />

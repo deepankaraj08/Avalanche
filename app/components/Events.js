@@ -142,8 +142,8 @@ const Events = forwardRef((props, ref) => {
         }}
       />
 
-      {/* ── Ambient colour blobs (Matches Team, Gallery & About) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* ── Ambient colour blobs (hidden on mobile to save GPU) ── */}
+      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
         <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
         <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />

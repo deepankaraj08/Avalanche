@@ -63,8 +63,8 @@ const Gallery = forwardRef((props, ref) => {
         }}
       />
 
-      {/* ── Ambient colour blobs (Matches Team Section) ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* ── Ambient colour blobs (hidden on mobile to save GPU) ── */}
+      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[20%] left-[8%] w-[560px] h-[560px] bg-indigo-300/30 dark:bg-indigo-700/12 rounded-full blur-[130px]" />
         <div className="absolute top-[30%] right-[8%] w-[480px] h-[480px] bg-cyan-300/30 dark:bg-cyan-700/12 rounded-full blur-[110px]" />
         <div className="absolute bottom-[8%] left-1/2 w-[660px] h-[380px] bg-blue-400/20 dark:bg-blue-800/10 rounded-full blur-[120px] -translate-x-1/2" />
@@ -95,7 +95,7 @@ const Gallery = forwardRef((props, ref) => {
         <AnimatedTitle
           text="Motion."
           delay={0.3}
-          className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 drop-shadow-[0_0_30px_rgba(34,211,238,0.15)] dark:drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
+          className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 md:drop-shadow-[0_0_30px_rgba(34,211,238,0.15)] dark:md:drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
         />
       </div>
 
