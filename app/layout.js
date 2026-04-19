@@ -2,13 +2,8 @@ import './globals.css';
 
 
 export const metadata = {
-  title: 'Avalanche Club – SIT, Tumkur',
+  title: 'TEAM-AVALANCHE',
   description: 'Avalanche Club at Siddaganga Institute of Technology – Where Campus Energy Begins',
-  icons: {
-    icon: '/gallery/Avalanche%20Logo.png',
-    shortcut: '/gallery/Avalanche%20Logo.png',
-    apple: '/gallery/Avalanche%20Logo.png',
-  },
 };
 
 // Ensures the layout scales correctly on all devices and prevents auto-zoom on mobile inputs
@@ -23,9 +18,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="icon" type="image/png" href="/gallery/Avalanche%20Logo.png" />
-        <link rel="shortcut icon" type="image/png" href="/gallery/Avalanche%20Logo.png" />
-        <link rel="apple-touch-icon" href="/gallery/Avalanche%20Logo.png" />
       </head>
       <body
         className="relative bg-white dark:bg-[#020617] text-slate-900 dark:text-white overflow-x-hidden antialiased selection:bg-cyan-500/30 transition-colors duration-400"
