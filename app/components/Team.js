@@ -37,9 +37,10 @@ const ALL_MEMBERS = [
   { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
 
   // ── Year 2 ───────────────────────────────────────────────────────────────
+    { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
+
   { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
   { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpeg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
-  { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
 
   { year: 2, name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
 
