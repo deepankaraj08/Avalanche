@@ -82,13 +82,13 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         ? <CosmicParallaxBg
             head="Team Avalanche"
             text="Radiance Coming Soon"
-            countdownTo="2026-04-30T17:15:00"
+            countdownTo="2026-04-29T17:15:00"
             loop={true}
           />
         : <LightHeroBg
             head="Team Avalanche"
             text="Radiance Coming Soon"
-            countdownTo="2026-04-30T17:15:00"
+            countdownTo="2026-04-29T17:15:00"
             loop={true}
           />
       }
@@ -332,25 +332,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
       `}</style>
 
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[38%] xl:bottom-[40%]"
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[46%] xl:bottom-[48%]"
       >
-        {/* Badge — COLORFUL */}
-        <div className="animate-fade-in delay-100 mb-6 sm:mb-8">
-          <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 backdrop-blur-md transition-all duration-300 ${
-            isDark
-              ? 'border-white/20 bg-white/5'
-              : 'border-blue-200 bg-gradient-to-r from-white/90 via-blue-50/80 to-purple-50/80 shadow-lg shadow-blue-200/30'
-          }`}>
-            <span className={`text-[10px] sm:text-xs font-semibold uppercase tracking-wider flex items-center gap-2 ${
-              isDark ? 'text-white/70' : 'text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text'
-            }`}>
-              The Official Event Powerhouse
-              <Star className={`w-3.5 h-3.5 transition-colors duration-300 ${
-                isDark ? 'text-cyan-400 fill-cyan-400' : 'text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]'
-              }`} />
-            </span>
-          </div>
-        </div>
 
         {/* Description — COLORFUL */}
         <p className={`max-w-xl flex flex-wrap justify-center text-center text-sm sm:text-base md:text-lg leading-relaxed font-medium mb-8 sm:mb-10 lg:mb-12 transition-colors duration-300 ${
@@ -368,7 +351,7 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         </p>
 
         {/* CTA Buttons — COLORFUL */}
-        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto">
+        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto lg:translate-y-8 xl:translate-y-10">
           <MagneticButton
             onClick={() => scrollTo(refs.eventsRef)}
             className={`group inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 sm:px-10 sm:py-5 text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
