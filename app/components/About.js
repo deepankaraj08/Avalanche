@@ -204,7 +204,7 @@ const About = forwardRef((props, ref) => {
           <BentoCard
             className="md:col-span-4 lg:col-start-2 lg:col-span-4 max-md:row-span-1 md:row-span-2 text-white"
             glowColor="rgba(56,189,248,0.2)"
-            bgImage="/gallery/12.jpeg"
+            bgImage="/gallery/six.png"
           >
             <div className="flex justify-between items-start mb-10">
               <div className="p-4 rounded-2xl bg-black text-white shadow-xl max-md:hidden">

@@ -16,15 +16,12 @@ import {
 import { CosmicParallaxBg } from '@/components/parallax-cosmic-background';
 import { LightHeroBg }    from '@/components/light-hero-bg';
 
-// --- MOCK BRANDS for the Marquee ---
+// --- SPONSOR CALL-TO-ACTION ---
 const CLIENTS = [
-  { name: 'Partner 1', image: '/logo.png' },
-  { name: 'Brand X', icon: Hexagon },
-  { name: 'Brand Y', icon: Triangle },
-  { name: 'Brand Z', icon: CommandIcon },
-  { name: 'Studio A', icon: Ghost },
-  { name: 'Agency b', icon: Gem },
-  { name: 'Tech C', icon: Cpu },
+  { name: "It's your chance", icon: Star },
+  { name: 'To be here', icon: Gem },
+  { name: 'Partner with Us', icon: Hexagon },
+  { name: 'Spotlight your brand', icon: CommandIcon },
 ];
 
 // Reusable Magnetic Button

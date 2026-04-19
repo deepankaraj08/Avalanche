@@ -20,12 +20,12 @@ const ALL_MEMBERS = [
   { year: 4, name: 'Chinmayee Bhatt', image: '/PHOTOS/chinmayee.jpg', instagram: null, linkedin: null },
   { year: 4, name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: 'https://www.instagram.com/yah_rishabh', linkedin: 'https://www.linkedin.com/in/rishabh-ojha-854775294' },
   { year: 4, name: 'Satyam Verma', image: '/PHOTOS/satyam.jpeg', instagram: 'https://www.instagram.com/satyam1260', linkedin: 'https://www.linkedin.com/in/satyam-verma-0b9b922aa/' },
-  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/shruti.jpg', instagram: null, linkedin: null },
+  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/Shruti.png', instagram: null, linkedin: null },
   { year: 4, name: 'Yash Kumar', image: '/PHOTOS/yash.jpg', instagram: null, linkedin: null },
 
   // ── Year 3 ───────────────────────────────────────────────────────────────
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
-  { year: 3, name: 'Harsh Raj', image: '/PHOTOS/harsh.jpg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
+  { year: 3, name: 'Harsh Raj', image: '/PHOTOS/harsh.jpeg', instagram: 'https://www.instagram.com/harshxraze', linkedin: 'https://www.linkedin.com/in/harsh-raj-346ba3202/' },
   { year: 3, name: 'Jhanvi', image: '/PHOTOS/Jnanavi.jpeg', instagram: 'https://www.instagram.com/jnanaviiii', linkedin: 'https://www.linkedin.com/in/JnanaviHarish' },
   { year: 3, name: 'Manan Agarwal', image: '/PHOTOS/Manan.jpeg', instagram: 'https://www.instagram.com/manan_agarwal06?utm_source=qr&igsh=aWF0anE4NzA4MDB1', linkedin: 'https://www.linkedin.com/in/manan-agarwal-5b290a256' },
   { year: 3, name: 'Mohammed Affan', image: '/PHOTOS/affan.jpg', instagram: null, linkedin: null },
@@ -39,7 +39,7 @@ const ALL_MEMBERS = [
   // ── Year 2 ───────────────────────────────────────────────────────────────
   { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
   { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpeg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
-    { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
+  { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
 
   { year: 2, name: 'Ankit Kumar', image: '/PHOTOS/ANKIT.jpeg', instagram: 'https://www.instagram.com/iyk.ankit', linkedin: 'https://www.linkedin.com/in/ankit-kumar-4a1b94333' },
 
@@ -54,7 +54,7 @@ const ALL_MEMBERS = [
   { year: 2, name: 'Nanditha LM', image: '/PHOTOS/nanditha copy.jpg', instagram: 'https://www.instagram.com/nanditha_mallikarjun', linkedin: 'https://www.linkedin.com/in/nanditha-l-m-905057371' },
   { year: 2, name: 'Saket Sinha', image: '/PHOTOS/saket.jpg', instagram: 'https://www.instagram.com/__saket__sinha__', linkedin: 'https://www.linkedin.com/in/saket-sinha-930506331' },
   { year: 2, name: 'Samarth Gupta', image: '/PHOTOS/samarth.jpg', instagram: 'https://www.instagram.com/samarth_542', linkedin: 'https://www.linkedin.com/in/samarth-gupta-7ab08a331' },
-  { year: 2, name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331' },
+  { year: 2, name: 'Sayan Kumar', image: '/PHOTOS/sayan.jpeg', instagram: 'https://www.instagram.com/_sayan38', linkedin: 'https://www.linkedin.com/in/sayan-kumar-342536331' },
   { year: 2, name: 'Soham Khade', image: '/PHOTOS/soham.jpg', instagram: 'https://www.instagram.com/sohamkhade0901', linkedin: 'https://www.linkedin.com/in/soham-khade-410378380' },
   { year: 2, name: 'Vishal Tiwary', image: '/PHOTOS/tiwari.jpeg', instagram: 'https://www.instagram.com/vishaltiwary016', linkedin: 'https://www.linkedin.com/in/vishal-kumar-tiwary-a0b243310' },
 
@@ -396,11 +396,10 @@ const Team = forwardRef((props, ref) => {
               <button
                 key={year}
                 onClick={() => setActiveYear(year)}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                  isActive
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
                     ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900'
                     : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-white/5 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10'
-                }`}
+                  }`}
               >
                 {label}
               </button>
