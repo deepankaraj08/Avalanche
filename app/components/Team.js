@@ -80,7 +80,7 @@ const ALL_MEMBERS = [
 // ─────────────────────────────────────────────────────────────────────────────
 const TRANSFORMED_MEMBERS = ALL_MEMBERS.map((m) => ({
   name: m.name,
-  role: 'Core Member',
+  role: 'Member',
   image: m.image,
   year: m.year,
   position: m.position ?? null,

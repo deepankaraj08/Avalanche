@@ -82,13 +82,13 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         ? <CosmicParallaxBg
             head="Team Avalanche"
             text="Radiance Coming Soon"
-            countdownTo="2026-04-29T17:15:00"
+            countdownTo="2026-04-29T15:15:00"
             loop={true}
           />
         : <LightHeroBg
             head="Team Avalanche"
             text="Radiance Coming Soon"
-            countdownTo="2026-04-29T17:15:00"
+            countdownTo="2026-04-29T15:15:00"
             loop={true}
           />
       }
