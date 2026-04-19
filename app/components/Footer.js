@@ -156,12 +156,6 @@ const Footer = () => {
                 </span>
                 Tumakuru, Karnataka, India
               </span>
-              <a
-                href="mailto:avalanche@club.sit.edu"
-                className="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors underline underline-offset-4 decoration-slate-300 dark:decoration-slate-700 hover:decoration-cyan-400/50 w-max"
-              >
-                avalanche@club.sit.edu
-              </a>
             </div>
           </div>
 

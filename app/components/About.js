@@ -162,7 +162,7 @@ const About = forwardRef((props, ref) => {
               </span>
             </div>
 
-            <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
+            <h2 className="text-[clamp(2.5rem,7vw,4.5rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
               We Build <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
                 Culture
@@ -170,8 +170,8 @@ const About = forwardRef((props, ref) => {
             </h2>
 
             <p className="mt-8 text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
-              SIT Tumkur’s event powerhouse. We engineer experiences that define
-              the campus heartbeat.
+              Where creativity meets campus culture.<br />
+              Creating events that inspire, connect, and leave a lasting impact.
             </p>
           </div>
         ) : (
@@ -183,7 +183,7 @@ const About = forwardRef((props, ref) => {
               </span>
             </div>
 
-            <h2 className="text-[clamp(3rem,10vw,6rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
+            <h2 className="text-[clamp(2.5rem,7vw,4.5rem)] font-black tracking-tighter leading-[0.9] max-w-4xl text-slate-900 dark:text-white">
               We Build <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-500 italic">
                 Culture
@@ -191,8 +191,8 @@ const About = forwardRef((props, ref) => {
             </h2>
 
             <p className="mt-8 text-slate-500 dark:text-slate-400 text-lg md:text-xl font-medium max-w-2xl leading-relaxed">
-              SIT Tumkur’s event powerhouse. We engineer experiences that define
-              the campus heartbeat.
+              Where creativity meets campus culture.<br />
+              Creating events that inspire, connect, and leave a lasting impact.
             </p>
           </motion.div>
         )}
@@ -220,8 +220,8 @@ const About = forwardRef((props, ref) => {
               </h3>
 
               <p className="text-white/80 text-lg max-w-xl">
-                The apex of creative leadership. Architects behind SIT’s most
-                iconic nights and cultural explosions.
+                The team behind SIT’s most iconic events.<br />
+                Creators of unforgettable campus experiences.
               </p>
             </div>
           </BentoCard>
@@ -241,7 +241,7 @@ const About = forwardRef((props, ref) => {
                 </h3>
 
                 <p className="text-white/80 text-lg max-w-xl">
-                  GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
+                  GOONJ connects the campus with the community through empathy, education, and meaningful impact.
                 </p>
               </div>
             </BentoCard>
@@ -264,7 +264,7 @@ const About = forwardRef((props, ref) => {
                   </h3>
 
                   <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg max-w-3xl">
-                    GOONJ bridges campus life with community needs through empathy, teaching and shared moments.
+                    GOONJ connects the campus with the community through empathy, education, and meaningful impact.
                   </p>
                 </div>
 
