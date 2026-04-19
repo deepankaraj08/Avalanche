@@ -14,11 +14,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const GALLERY_IMAGES = [
   { id: 1,  src: '/gallery/first1.png' },
-  { id: 2,  src: '/gallery/second.png' },
   { id: 4,  src: '/gallery/fourth.png' },
   { id: 5,  src: '/gallery/five.png' },
   { id: 6,  src: '/gallery/six.png' },
-  { id: 7,  src: '/gallery/seven.jpeg' },
   { id: 9,  src: '/gallery/nine1.png' },
   { id: 10, src: '/gallery/ten.jpeg' },
   { id: 11, src: '/gallery/12.jpeg' },
@@ -28,6 +26,8 @@ const GALLERY_IMAGES = [
   { id: 18, src: '/gallery/pic4.png' },
   { id: 19, src: '/gallery/pic5.png' },
   { id: 20, src: '/gallery/pic6.png' },
+  { id: 2,  src: '/gallery/second.png' },
+  { id: 7,  src: '/gallery/seven.jpeg' },
   { id: 12, src: '/gallery/aurora.png' },
   { id: 13, src: '/gallery/dmc.jpeg' },
   { id: 14, src: '/gallery/vdc.png' },
