@@ -128,6 +128,14 @@
   html {
     transition: background-color 0.4s ease;
   }
+
+  /* Optimize performance on mobile by disabling heavy filters */
+  @media (max-width: 768px) {
+    * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════

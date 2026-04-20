@@ -66,21 +66,23 @@ const AnimatedCounter = ({ value, suffix = "" }) => {
   
   useEffect(() => {
     if (isInView) {
-      let start = 0;
-      const duration = 2000;
-      const increment = value / (duration / 16);
+      const timer = setTimeout(() => {
+        let start = 0;
+        const duration = 1500;
+        const increment = value / (duration / 16);
+        
+        const counterTimer = setInterval(() => {
+          start += increment;
+          if (start >= value) {
+            setCount(value);
+            clearInterval(counterTimer);
+          } else {
+            setCount(Math.floor(start));
+          }
+        }, 16);
+      }, 100);
       
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= value) {
-          setCount(value);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 16);
-      
-      return () => clearInterval(timer);
+      return () => clearTimeout(timer);
     }
   }, [isInView, value]);
   
@@ -160,24 +162,46 @@ const TiltCard = ({ children, className, ...props }) => {
 };
 
 /* ---------------- Bento Card Content ---------------- */
-const BentoCardContent = ({ children, bgImage, overlay = true }) => (
-  <>
-    {bgImage && (
-      <>
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-90 max-md:bg-contain max-md:bg-top max-md:bg-no-repeat max-md:bg-[#0f172a] transition-transform duration-700 scale-105 group-hover:scale-100"
-          style={{ backgroundImage: `url(${bgImage})` }}
-        />
-        {overlay && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        )}
-      </>
-    )}
-    <div className={`relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10 ${bgImage ? 'max-md:pt-[70%]' : ''}`}>
-      {children}
-    </div>
-  </>
-);
+const BentoCardContent = ({ children, bgImage, overlay = true, isMobile }) => {
+  if (isMobile && bgImage) {
+    return (
+      <div className="flex flex-col w-full h-full">
+        <div className="relative w-full">
+          <img 
+            src={bgImage} 
+            alt="Content" 
+            className="w-full h-auto object-contain block"
+          />
+          {overlay && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          )}
+        </div>
+        <div className="relative z-10 p-6 flex flex-col flex-1 bg-slate-50 dark:bg-[#0f172a]">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {bgImage && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-700 scale-105 group-hover:scale-100"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+          {overlay && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1]" />
+          )}
+        </>
+      )}
+      <div className="relative z-10 h-full flex flex-col p-6 md:p-8 lg:p-10">
+        {children}
+      </div>
+    </>
+  );
+};
 
 /* ---------------- Bento Card Desktop (with tilt and glow) ---------------- */
 const BentoCardDesktop = ({
@@ -222,41 +246,28 @@ const BentoCardDesktop = ({
       onMouseMove={handleMouseMove}
       whileHover={{ scale: 0.98, transition: { duration: 0.3 } }}
     >
-      {/* Animated border gradient */}
       <motion.div
         className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{ background: borderGlow }}
       />
-      
-      {/* Main glow effect */}
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{ background: glow }}
       />
-      
-      <BentoCardContent bgImage={bgImage} overlay={!!bgImage}>
+      <BentoCardContent bgImage={bgImage} overlay={!!bgImage} isMobile={false}>
         {children}
       </BentoCardContent>
-      
-      {/* Subtle shine effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-        <div className="absolute -inset-full top-0 left-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-12 transform translate-x-full group-hover:translate-x-[200%] transition-transform duration-1000" />
-      </div>
     </CardWrapper>
   );
 };
 
 /* ---------------- Bento Card Mobile (optimized) ---------------- */
 const BentoCardMobile = ({ children, className, bgImage }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5 }}
-    className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-white to-slate-50 dark:from-white/5 dark:to-white/2 border border-slate-200/50 dark:border-white/10 shadow-xl ${className}`}
+  <div
+    className={`relative overflow-hidden rounded-3xl bg-slate-100 dark:bg-[#0f172a] border border-slate-200/50 dark:border-white/10 shadow-xl ${className}`}
   >
-    <BentoCardContent bgImage={bgImage}>{children}</BentoCardContent>
-  </motion.div>
+    <BentoCardContent bgImage={bgImage} isMobile={true}>{children}</BentoCardContent>
+  </div>
 );
 
 /* ---------------- Main About Section ---------------- */
@@ -274,7 +285,7 @@ const About = forwardRef((props, ref) => {
   // Parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const headerY = useTransform(scrollYProgress, [0, 0.3], isMobile ? [0, 0] : [100, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], isMobile ? [1, 1, 1, 1] : [0, 1, 1, 0]);
   const cardsOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
   
   // Parallax for background orbs
@@ -315,7 +326,7 @@ const About = forwardRef((props, ref) => {
         <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
       </motion.div>
       
-      <motion.h2 variants={staggerItem} className="text-[clamp(2.5rem,10vw,6rem)] font-black tracking-tighter leading-[1] max-w-5xl text-slate-900 dark:text-white flex items-center flex-wrap gap-x-2 md:gap-x-4 mb-2">
+      <motion.h2 variants={staggerItem} className="text-[clamp(2rem,7vw,4.5rem)] font-black tracking-tighter leading-[1] max-w-5xl text-slate-900 dark:text-white flex items-center flex-wrap gap-x-2 md:gap-x-4 mb-2">
         ABOUT
         <span className="relative inline-block">
           <span className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 blur-2xl opacity-50" />
@@ -350,10 +361,10 @@ const About = forwardRef((props, ref) => {
           <div className="w-full h-full border-2 border-cyan-400/50 bg-gradient-to-br from-cyan-500/10 to-transparent backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative">
-              <div className="text-3xl md:text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
+              <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
                 <AnimatedCounter value={2012} />
               </div>
-              <div className="text-[10px] md:text-sm font-bold tracking-wider text-slate-600 dark:text-slate-400 uppercase break-words leading-tight">Established</div>
+              <div className="text-[10px] md:text-xs font-bold tracking-wider text-slate-600 dark:text-slate-400 uppercase break-words leading-tight">Established</div>
             </div>
           </div>
         </MagneticButton>
@@ -362,10 +373,10 @@ const About = forwardRef((props, ref) => {
           <div className="w-full h-full border-2 border-cyan-400/50 bg-gradient-to-br from-cyan-500/10 to-transparent backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative">
-              <div className="text-3xl md:text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
+              <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
                 <AnimatedCounter value={50} suffix="+" />
               </div>
-              <div className="text-[10px] md:text-sm font-bold tracking-wider text-slate-600 dark:text-slate-400 uppercase break-words leading-tight">Active Members</div>
+              <div className="text-[10px] md:text-xs font-bold tracking-wider text-slate-600 dark:text-slate-400 uppercase break-words leading-tight">Active Members</div>
             </div>
           </div>
         </MagneticButton>
@@ -390,35 +401,37 @@ const About = forwardRef((props, ref) => {
         py-20 md:py-32 lg:py-40"
     >
       {/* Animated gradient background orbs */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <motion.div 
-          className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-gradient-to-r from-cyan-400/20 to-blue-500/20 rounded-full blur-[130px]"
-          style={{ y: orb1Y }}
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute bottom-[20%] right-[5%] w-[500px] h-[500px] bg-gradient-to-r from-indigo-400/20 to-purple-500/20 rounded-full blur-[120px]"
-          style={{ y: orb2Y }}
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 rounded-full blur-[150px]"
-          style={{ y: orb3Y }}
-          animate={{ 
-            scale: [1, 1.1, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
+      {!isMobile && (
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <motion.div 
+            className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-gradient-to-r from-cyan-400/20 to-blue-500/20 rounded-full blur-[130px]"
+            style={{ y: orb1Y }}
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute bottom-[20%] right-[5%] w-[500px] h-[500px] bg-gradient-to-r from-indigo-400/20 to-purple-500/20 rounded-full blur-[120px]"
+            style={{ y: orb2Y }}
+            animate={{ 
+              scale: [1.2, 1, 1.2],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 rounded-full blur-[150px]"
+            style={{ y: orb3Y }}
+            animate={{ 
+              scale: [1, 1.1, 1],
+              rotate: [0, 180, 360],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+      )}
       
       {/* Grid pattern with gradient mask */}
       <div
@@ -427,8 +440,8 @@ const About = forwardRef((props, ref) => {
           dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)]"
         style={{
           backgroundSize: '60px 60px',
-          maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+          maskImage: isMobile ? 'none' : 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+          WebkitMaskImage: isMobile ? 'none' : 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
         }}
       />
       

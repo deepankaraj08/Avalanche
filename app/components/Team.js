@@ -359,7 +359,7 @@ const Team = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[clamp(1.75rem,5vw,3rem)] md:text-[clamp(2.5rem,6vw,4rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center uppercase"
+              className="text-[clamp(1.5rem,4vw,2.5rem)] md:text-[clamp(2rem,5vw,3.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center uppercase"
             >
               The Minds Behind
             </motion.h2>
@@ -368,7 +368,7 @@ const Team = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[clamp(2.5rem,7vw,4.5rem)] md:text-[clamp(3.5rem,8vw,5.5rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-1 uppercase text-center"
+              className="text-[clamp(2rem,6vw,3.5rem)] md:text-[clamp(3rem,7vw,4.5rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-1 uppercase text-center"
             >
               Avalanche  
             </motion.h2>
