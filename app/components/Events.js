@@ -87,7 +87,7 @@ const FlipCard = ({ frontContent, backContent, isFlipped, onFlip }) => {
 
 const EventCardFront = ({ event, isHovered }) => {
   return (
-    <div className={`relative bg-gradient-to-br from-white to-slate-100 dark:from-white/[0.08] dark:to-white/[0.02] rounded-3xl p-8 flex flex-col border border-slate-200/50 dark:border-white/10 shadow-xl h-full transition-all duration-500 ${event.borderColor} overflow-hidden`}>
+    <div className={`relative bg-gradient-to-br from-white to-slate-50 dark:from-white/[0.08] dark:to-white/[0.02] rounded-3xl p-8 flex flex-col border border-slate-200/60 dark:border-white/10 shadow-xl h-full transition-all duration-500 ${event.borderColor} overflow-hidden`}>
       {/* Top Accent Border from Image */}
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${event.gradient}`} />
       
@@ -130,7 +130,7 @@ const EventCardFront = ({ event, isHovered }) => {
 
 const EventCardBack = ({ event }) => {
   return (
-    <div className="relative bg-slate-900 dark:bg-[#0a0f1a] rounded-3xl p-8 flex flex-col border-2 border-white/10 shadow-xl h-full">
+    <div className="relative bg-slate-900 dark:bg-[#0a0f1a] rounded-3xl p-8 flex flex-col border border-slate-200/20 dark:border-white/10 shadow-xl h-full">
       <div className="relative z-10 flex flex-col h-full text-white">
         <h3 className="text-2xl font-bold mb-6">Event Highlights</h3>
         <div className="space-y-4 mb-8 text-sm">
@@ -177,10 +177,10 @@ const Events = forwardRef((props, ref) => {
   }, []);
 
   return (
-    <section ref={ref} id="events" className="relative w-full py-20 md:py-32 bg-[#020617] overflow-hidden">
+    <section ref={ref} id="events" className="relative w-full py-20 md:py-32 bg-white dark:bg-[#020617] transition-colors duration-500 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 relative z-10">
         <div className="mb-12 md:mb-20">
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
             Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500">Events</span>
           </h2>
         </div>
@@ -188,7 +188,7 @@ const Events = forwardRef((props, ref) => {
           {EVENT_DATA.map((event, idx) => (
             <div key={event.id}>
               {isMobile ? (
-                <div className="relative p-8 rounded-3xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex flex-col shadow-xl overflow-hidden min-h-[400px]">
+                <div className="relative p-8 rounded-3xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex flex-col shadow-xl overflow-hidden min-h-[400px]">
                   <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${event.gradient}`} />
                   <div className="flex items-center justify-between mb-8">
                     <span className="text-4xl">{event.emoji}</span>

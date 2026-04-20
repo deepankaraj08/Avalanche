@@ -24,6 +24,7 @@ import {
   useSpring,
   useInView,
   AnimatePresence,
+  animate,
 } from "framer-motion";
 import { Zap, Heart, ArrowUpRight, Sparkles, Target, Users, Award } from "lucide-react";
 
@@ -61,34 +62,31 @@ const useMousePosition = () => {
 /* ---------------- Animated Counter ---------------- */
 const AnimatedCounter = ({ value, suffix = "" }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [count, setCount] = useState(0);
-  
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+  const [displayValue, setDisplayValue] = useState(0);
+
   useEffect(() => {
     if (isInView) {
-      const timer = setTimeout(() => {
-        let start = 0;
-        const duration = 1500;
-        const increment = value / (duration / 16);
-        
-        const counterTimer = setInterval(() => {
-          start += increment;
-          if (start >= value) {
-            setCount(value);
-            clearInterval(counterTimer);
-          } else {
-            setCount(Math.floor(start));
-          }
-        }, 16);
-      }, 100);
-      
-      return () => clearTimeout(timer);
+      const controls = animate(motionValue, value, {
+        duration: 2,
+        ease: "easeOut",
+        delay: 0.2,
+      });
+      return controls.stop;
     }
-  }, [isInView, value]);
-  
+  }, [isInView, value, motionValue]);
+
+  // Sync motion value to state for rendering
+  useEffect(() => {
+    return rounded.on("change", (v) => setDisplayValue(v));
+  }, [rounded]);
+
   return (
     <span ref={ref}>
-      {count}{suffix}
+      {displayValue}
+      {suffix}
     </span>
   );
 };
@@ -358,7 +356,7 @@ const About = forwardRef((props, ref) => {
       
       <motion.div variants={staggerItem} className="flex flex-wrap gap-4 md:gap-6 mt-8 md:mt-10">
         <MagneticButton className="relative group w-[calc(50%-0.5rem)] md:w-auto md:min-w-[170px]">
-          <div className="w-full h-full border-2 border-cyan-400/50 bg-gradient-to-br from-cyan-500/10 to-transparent backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
+          <div className="w-full h-full border-2 border-cyan-400/50 bg-slate-50 dark:bg-cyan-500/10 backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative">
               <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
@@ -370,7 +368,7 @@ const About = forwardRef((props, ref) => {
         </MagneticButton>
         
         <MagneticButton className="relative group w-[calc(50%-0.5rem)] md:w-auto md:min-w-[170px]">
-          <div className="w-full h-full border-2 border-cyan-400/50 bg-gradient-to-br from-cyan-500/10 to-transparent backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
+          <div className="w-full h-full border-2 border-cyan-400/50 bg-slate-50 dark:bg-cyan-500/10 backdrop-blur-sm px-3 py-4 md:px-8 md:py-5 text-center relative overflow-hidden rounded-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/20">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative">
               <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">
@@ -497,13 +495,13 @@ const About = forwardRef((props, ref) => {
                 whileHover={{ x: 5, y: -5 }}
                 transition={{ type: "spring", stiffness: 400 }}
               >
-                <ArrowUpRight className="w-7 h-7 text-white/80 hover:text-white transition-colors" />
+                <ArrowUpRight className="w-7 h-7 text-slate-400 dark:text-white/80 hover:text-slate-600 dark:hover:text-white transition-colors" />
               </motion.div>
             </div>
             
             <div className="mt-auto">
               <motion.h3 
-                className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent"
+                className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-white dark:to-cyan-200 bg-clip-text text-transparent"
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -512,7 +510,7 @@ const About = forwardRef((props, ref) => {
               </motion.h3>
               
               <motion.p 
-                className="text-white/90 text-lg max-w-xl"
+                className="text-slate-600 dark:text-white/90 text-lg max-w-xl"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
@@ -540,11 +538,11 @@ const About = forwardRef((props, ref) => {
                   </span>
                 </motion.div>
                 
-                <h3 className="text-3xl md:text-4xl font-black mb-3 text-white">
+                <h3 className="text-3xl md:text-4xl font-black mb-3 text-slate-900 dark:text-white">
                   GOONJ Initiative
                 </h3>
                 
-                <p className="text-white/80 text-sm md:text-lg leading-relaxed">
+                <p className="text-slate-600 dark:text-white/80 text-sm md:text-lg leading-relaxed">
                   GOONJ connects the campus with the community through empathy, education, and meaningful impact.
                 </p>
               </div>
