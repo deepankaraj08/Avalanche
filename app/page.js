@@ -5,12 +5,12 @@ import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
+import About from '@/app/components/About';
+import Events from '@/app/components/Events';
 
 import Preloader from '@/components/preloader';
 
 // Below-fold sections: lazy-loaded so their JS is NOT in the initial bundle
-const About = dynamic(() => import('@/app/components/About'), { ssr: false, loading: () => null });
-const Events = dynamic(() => import('@/app/components/Events'), { ssr: false, loading: () => null });
 const Gallery = dynamic(() => import('@/app/components/Gallery'), { ssr: false, loading: () => null });
 const Team = dynamic(() => import('@/app/components/Team'), { ssr: false, loading: () => null });
 const Footer = dynamic(() => import('@/app/components/Footer'), { ssr: false, loading: () => null });

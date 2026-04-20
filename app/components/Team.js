@@ -17,11 +17,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ALL_MEMBERS = [
   // ── Year 4 ─────────────────────────────────────────────
   { year: 4, name: 'Anmol Sharan', image: '/PHOTOS/anmol.jpg', instagram: null, linkedin: null },
-  { year: 4, name: 'Chinmayee Bhatt', image: '/PHOTOS/chinmayee.jpg', instagram: null, linkedin: null },
+  { year: 4, name: 'Chinmayee D', image: '/PHOTOS/Chinmayee.jpeg', instagram: null, linkedin: null },
   { year: 4, name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: 'https://www.instagram.com/yah_rishabh', linkedin: 'https://www.linkedin.com/in/rishabh-ojha-854775294' },
   { year: 4, name: 'Satyam Verma', image: '/PHOTOS/satyam.jpeg', instagram: 'https://www.instagram.com/satyam1260', linkedin: 'https://www.linkedin.com/in/satyam-verma-0b9b922aa/' },
-  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/Shruti.png', instagram: null, linkedin: null },
-  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/yash.jpg', instagram: null, linkedin: null },
+  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/ShrutiShreya.jpeg', instagram: null, linkedin: null },
+  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/YASH.jpeg', instagram: null, linkedin: null },
 
   // ── Year 3 ───────────────────────────────────────────────────────────────
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
@@ -37,7 +37,7 @@ const ALL_MEMBERS = [
   { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
 
   // ── Year 2 ───────────────────────────────────────────────────────────────
-    { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
+  { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
 
   { year: 2, name: 'Abhinav Raj', image: '/PHOTOS/abhinav.png', instagram: 'https://www.instagram.com/abhinav.en', linkedin: 'https://www.linkedin.com/in/abhinav-raj-9b789731a' },
   { year: 2, name: 'Aditya Kumar', image: '/PHOTOS/aditya.jpeg', instagram: 'https://www.instagram.com/adiiix18', linkedin: 'https://www.linkedin.com/in/aditya-kumar-289162318' },
@@ -153,7 +153,7 @@ const MemberCardContent = ({ member, onImageClick }) => (
         {member.role}
       </p>
       <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">
-        Year {member.year}
+        {member.year === 1 ? 'V15' : member.year === 2 ? 'V14' : member.year === 3 ? 'V13' : member.year === 4 ? 'V12' : `Year ${member.year}`}
       </p>
     </div>
 
@@ -350,41 +350,28 @@ const Team = forwardRef((props, ref) => {
 
         <div className="text-center mb-10 md:mb-14 flex flex-col items-center gap-3">
 
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-3"
-          >
-            <span className="h-px w-8 bg-gradient-to-r from-transparent to-cyan-500/70" />
-            <span className="text-[10px] font-black text-cyan-600 dark:text-cyan-500 uppercase tracking-[0.75em]">
-              Team Avalanche
-            </span>
-            <span className="h-px w-8 bg-gradient-to-l from-transparent to-cyan-500/70" />
-          </motion.div>
+        
 
-          {/* Mobile heading — plain HTML, zero animation overhead */}
-          <div className="flex md:hidden flex-col items-center mt-1">
-            <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
-              Meet The
-            </h2>
-            <h2 className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2">
-              Team.
-            </h2>
-          </div>
-
-          {/* Desktop heading — animated word reveal */}
-          <div className="hidden md:flex flex-col items-center mt-1">
-            <AnimatedTitle
-              text="Meet The"
-              className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
-            />
-            <AnimatedTitle
-              text="Team."
-              delay={0.15}
-              className="text-[clamp(3rem,8vw,5.5rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2"
-            />
+          {/* Consolidated Team Heading — Impactful, animated, and robust */}
+          <div className="flex flex-col items-center mt-2">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-[clamp(2.5rem,7vw,4.5rem)] md:text-[clamp(3.5rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center uppercase"
+            >
+              The Minds Behind
+            </motion.h2>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-[clamp(3.5rem,9vw,6rem)] md:text-[clamp(4.5rem,10vw,7.5rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2 uppercase text-center"
+            >
+              Avalanche  
+            </motion.h2>
           </div>
         </div>
 
@@ -398,8 +385,8 @@ const Team = forwardRef((props, ref) => {
                 key={year}
                 onClick={() => setActiveYear(year)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
-                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-white/5 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10'
+                  ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/25 dark:bg-cyan-500 dark:text-slate-900'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 dark:bg-white/5 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10'
                   }`}
               >
                 {label}

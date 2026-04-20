@@ -405,8 +405,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         >
           <div className="animate-marquee flex items-center gap-0 whitespace-nowrap">
             {[...CLIENTS, ...CLIENTS].map((client, i) => (
-              <>
-                <div key={`item-${i}`} className="sponsor-item">
+              <React.Fragment key={i}>
+                <div className="sponsor-item">
                   {client.image ? (
                     <img
                       src={client.image}
@@ -419,8 +419,8 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
                   )}
                   <span className="sponsor-name">{client.name}</span>
                 </div>
-                <div key={`dot-${i}`} className="sponsor-dot" />
-              </>
+                <div className="sponsor-dot" />
+              </React.Fragment>
             ))}
           </div>
         </div>

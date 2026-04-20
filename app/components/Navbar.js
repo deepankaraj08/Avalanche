@@ -216,10 +216,10 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`fixed inset-0 lg:hidden z-[101] ${
+                className={`fixed inset-0 lg:hidden z-[9998] ${
                   dark
-                    ? 'bg-black/40 backdrop-blur-md'
-                    : 'bg-slate-900/20 backdrop-blur-sm'
+                    ? 'bg-black/60 backdrop-blur-md'
+                    : 'bg-slate-900/40 backdrop-blur-md'
                 }`}
               />
 
@@ -229,10 +229,10 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-                className={`fixed top-0 right-0 h-full w-[80%] max-w-sm lg:hidden flex flex-col z-[105] ${
+                className={`fixed top-0 right-0 h-full w-[80%] max-w-sm lg:hidden flex flex-col z-[9999] ${
                   dark
-                    ? 'bg-white/[0.05] backdrop-blur-[24px] border-l border-white/10 shadow-[-10px_0_40px_rgba(0,0,0,0.5)]'
-                    : 'bg-white/[0.97] backdrop-blur-xl border-l border-slate-200 shadow-[-10px_0_40px_rgba(0,0,0,0.10)]'
+                    ? 'bg-[#020617]/95 backdrop-blur-[32px] border-l border-white/10 shadow-[-20px_0_60px_rgba(0,0,0,0.8)]'
+                    : 'bg-white/[0.98] backdrop-blur-xl border-l border-slate-200 shadow-[-10px_0_40px_rgba(0,0,0,0.10)]'
                 }`}
               >
                 <div className="flex flex-col pt-32 px-10 space-y-2">
@@ -256,7 +256,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                         dark ? 'border-white/10' : 'border-slate-200/80'
                       }`}
                     >
-                      <span className={`text-3xl font-black uppercase tracking-tighter transition-all duration-300 ${
+                      <span className={`text-2xl font-black uppercase tracking-tight transition-all duration-300 ${
                         activeSection === item.name
                           ? dark ? 'text-white scale-105 origin-left' : 'text-slate-900 scale-105 origin-left'
                           : dark ? 'text-white/40 group-hover:text-white/90' : 'text-slate-300 group-hover:text-slate-800'
@@ -284,7 +284,7 @@ const Navbar = ({ scrollTo, refs, openModal }) => {
                       dark ? 'border-white/10' : 'border-slate-200/80'
                     }`}
                   >
-                    <span className={`text-3xl font-black uppercase tracking-tighter transition-all duration-300 ${
+                    <span className={`text-2xl font-black uppercase tracking-tight transition-all duration-300 ${
                       dark
                         ? 'text-white/40 group-hover:text-white/90'
                         : 'text-slate-300 group-hover:text-slate-800'

@@ -158,40 +158,31 @@ const Gallery = forwardRef((props, ref) => {
 
         {/* Badge — simple motion (just opacity+scale, one element, fine on mobile) */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center justify-center gap-4 mb-6"
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center justify-center gap-6 mb-8 group"
         >
-          <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-500" />
-          <p className="text-[10px] md:text-xs font-black text-cyan-600 dark:text-cyan-500 tracking-[0.5em] md:tracking-[0.8em] uppercase">
+          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-cyan-500/50 to-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-all duration-500 group-hover:w-16" />
+          <p className="text-[10px] md:text-xs font-black text-cyan-600 dark:text-cyan-400 tracking-[0.8em] md:tracking-[1.2em] uppercase select-none whitespace-nowrap">
             Visual Archive
           </p>
-          <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-500" />
+          <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-cyan-500/50 to-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-all duration-500 group-hover:w-16" />
         </motion.div>
 
-        {/* Mobile heading — plain HTML, zero animation cost */}
-        <div className="flex md:hidden flex-col items-center">
-          <h2 className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
-            Moments In
-          </h2>
-          <h2 className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500">
-            Motion.
-          </h2>
-        </div>
-
-        {/* Desktop heading — animated word reveal */}
-        <div className="hidden md:block">
-          <AnimatedTitle
-            text="Moments In"
-            className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9]"
-          />
-          <AnimatedTitle
-            text="Motion."
-            delay={0.3}
-            className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter leading-[0.9] italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 md:drop-shadow-[0_0_30px_rgba(34,211,238,0.15)] dark:md:drop-shadow-[0_0_30px_rgba(34,211,238,0.25)]"
-          />
+        {/* Mobile & Desktop heading — Impactful white text as requested */}
+        <div className="flex flex-col items-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+            className="text-[clamp(3rem,11vw,8rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.85] uppercase text-center"
+          >
+            Stories In <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 dark:from-cyan-400 dark:to-indigo-400">Every Frame </span>
+          </motion.h2>
         </div>
       </div>
 
