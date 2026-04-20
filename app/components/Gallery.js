@@ -178,7 +178,7 @@ const Gallery = forwardRef((props, ref) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-[clamp(3rem,11vw,8rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.85] uppercase text-center"
+            className="text-[clamp(2.25rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.85] uppercase text-center"
           >
             Stories In <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 dark:from-cyan-400 dark:to-indigo-400">Every Frame </span>

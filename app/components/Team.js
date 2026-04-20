@@ -20,8 +20,8 @@ const ALL_MEMBERS = [
   { year: 4, name: 'Chinmayee D', image: '/PHOTOS/Chinmayee.jpeg', instagram: null, linkedin: null },
   { year: 4, name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: 'https://www.instagram.com/yah_rishabh', linkedin: 'https://www.linkedin.com/in/rishabh-ojha-854775294' },
   { year: 4, name: 'Satyam Verma', image: '/PHOTOS/satyam.jpeg', instagram: 'https://www.instagram.com/satyam1260', linkedin: 'https://www.linkedin.com/in/satyam-verma-0b9b922aa/' },
-  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/ShrutiShreya.jpeg', instagram: null, linkedin: null },
-  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/YASH.jpeg', instagram: null, linkedin: null },
+  { year: 4, name: 'Shruti Shreya', image: '/PHOTOS/ShrutiShreya.jpeg', instagram: 'https://www.instagram.com/_shruti_0709_', linkedin: 'https://www.linkedin.com/in/shruti-shreya-450197264/' },
+  { year: 4, name: 'Yash Kumar', image: '/PHOTOS/YASH.jpeg', instagram: 'https://www.instagram.com/This_.iz_yash', linkedin: null },
 
   // ── Year 3 ───────────────────────────────────────────────────────────────
   { year: 3, name: 'Advaita Amrit', image: '/PHOTOS/advaita.jpg', instagram: 'https://www.instagram.com/advaita_amrrit', linkedin: 'https://www.linkedin.com/in/advaita-amrit' },
@@ -34,7 +34,7 @@ const ALL_MEMBERS = [
   { year: 3, name: 'Prakhar Bansal', image: '/PHOTOS/prakhar.jpg', instagram: 'https://www.instagram.com/prakharrrr_bansal_', linkedin: 'https://www.linkedin.com/in/prakhar-bansal' },
   { year: 3, name: 'Purvi Raj', image: '/PHOTOS/purvi.jpg', instagram: 'https://www.instagram.com/raj_purvi_sd', linkedin: 'https://www.linkedin.com/in/s-d-purvi-raj-775a53331' },
   { year: 3, name: 'Vansh Jha', image: '/PHOTOS/vansh.jpeg', instagram: 'https://www.instagram.com/vanshhjhaa', linkedin: 'https://www.linkedin.com/in/vansh-jha13' },
-  { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yashjadhav.jpg', instagram: null, linkedin: null },
+  { year: 3, name: 'Yash Jadhav', image: '/PHOTOS/yash2year.jpeg', instagram: 'https://www.instagram.com/yash__1910/', linkedin: 'https://www.linkedin.com/in/yash-jadhav-7ba599264/' },
 
   // ── Year 2 ───────────────────────────────────────────────────────────────
   { year: 2, name: 'Babul Kumar', image: '/PHOTOS/babul.jpg', instagram: 'https://www.instagram.com/babulkr328', linkedin: 'https://www.linkedin.com/in/babul-kumar-a0a45a27b' },
@@ -359,7 +359,7 @@ const Team = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[clamp(2.5rem,7vw,4.5rem)] md:text-[clamp(3.5rem,8vw,5.5rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center uppercase"
+              className="text-[clamp(1.75rem,5vw,3rem)] md:text-[clamp(2.5rem,6vw,4rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center uppercase"
             >
               The Minds Behind
             </motion.h2>
@@ -368,7 +368,7 @@ const Team = forwardRef((props, ref) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-[clamp(3.5rem,9vw,6rem)] md:text-[clamp(4.5rem,10vw,7.5rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-2 uppercase text-center"
+              className="text-[clamp(2.5rem,7vw,4.5rem)] md:text-[clamp(3.5rem,8vw,5.5rem)] font-black tracking-tighter leading-none italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-400 mt-1 uppercase text-center"
             >
               Avalanche  
             </motion.h2>
