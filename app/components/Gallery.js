@@ -12,22 +12,77 @@
 import React, { forwardRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  GALLERY CARD COMPONENT
+// ─────────────────────────────────────────────────────────────────────────────
+const GalleryCard = ({ img, i, isMobile, openLightbox }) => {
+  if (isMobile) {
+    return (
+      <div
+        className="gallery-card-fadein relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 shadow-md break-inside-avoid h-fit"
+        style={{ animationDelay: `${(i % 4) * 0.06}s` }}
+      >
+        <img
+          src={img.src}
+          alt={`Archive ${i + 1}`}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-auto block rounded-[2rem]"
+        />
+        <button
+          className="gallery-expand-btn"
+          aria-label="View fullscreen"
+          onClick={() => openLightbox(img.src)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 3 21 3 21 9" />
+            <polyline points="9 21 3 21 3 15" />
+            <line x1="21" y1="3" x2="14" y2="10" />
+            <line x1="3" y1="21" x2="10" y2="14" />
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      key={img.id}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      whileHover={{ y: -5, scale: 1.01 }}
+      transition={{ delay: (i % 4) * 0.1, duration: 0.6, type: 'spring' }}
+      className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 cursor-pointer shadow-lg shadow-black/5 dark:shadow-none hover:shadow-cyan-500/20 break-inside-avoid h-fit"
+      onClick={() => openLightbox(img.src)}
+    >
+      <img
+        src={img.src}
+        alt={`Archive ${i + 1}`}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-auto block rounded-[2rem] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 group-hover:brightness-110"
+      />
+      <div className="absolute inset-0 rounded-[2rem] border border-black/5 dark:border-white/10 pointer-events-none z-20 transition-all duration-300 group-hover:border-cyan-400/50" />
+    </motion.div>
+  );
+};
+
 const GALLERY_IMAGES = [
-  { id: 1,  src: '/gallery/first1.png' },
-  { id: 4,  src: '/gallery/fourth.png' },
-  { id: 5,  src: '/gallery/five.png' },
-  { id: 6,  src: '/gallery/six.png' },
-  { id: 9,  src: '/gallery/nine1.png' },
   { id: 10, src: '/gallery/ten.jpeg' },
+  { id: 4, src: '/gallery/fourth.png' },
+  { id: 9, src: '/gallery/nine1.png' },
+  { id: 1, src: '/gallery/first1.png' },
+  { id: 5, src: '/gallery/five.png' },
+  { id: 6, src: '/gallery/six.png' },
   { id: 11, src: '/gallery/12.jpeg' },
   { id: 15, src: '/gallery/pic1.png' },
-  { id: 16, src: '/gallery/pic2.png' },
   { id: 17, src: '/gallery/pic3.png' },
   { id: 18, src: '/gallery/pic4.png' },
   { id: 19, src: '/gallery/pic5.png' },
   { id: 20, src: '/gallery/pic6.png' },
-  { id: 2,  src: '/gallery/second.png' },
-  { id: 7,  src: '/gallery/seven.jpeg' },
+  { id: 2, src: '/gallery/second.png' },
+  { id: 7, src: '/gallery/seven.jpeg' },
   { id: 12, src: '/gallery/aurora.png' },
   { id: 13, src: '/gallery/dmc.jpeg' },
   { id: 14, src: '/gallery/vdc.png' },
@@ -66,7 +121,7 @@ const Gallery = forwardRef((props, ref) => {
   const [isMobile, setIsMobile] = useState(false);
   const [lightboxSrc, setLightboxSrc] = useState(null);
 
-  const openLightbox  = useCallback((src) => setLightboxSrc(src), []);
+  const openLightbox = useCallback((src) => setLightboxSrc(src), []);
   const closeLightbox = useCallback(() => setLightboxSrc(null), []);
 
   useEffect(() => {
@@ -187,60 +242,32 @@ const Gallery = forwardRef((props, ref) => {
       </div>
 
       {/* ── Gallery Grid ── */}
-      <div className="relative z-20 max-w-[90vw] 2xl:max-w-[95vw] mx-auto w-full">
+      <div className="relative z-20 max-w-[90vw] 2xl:max-w-[95vw] mx-auto w-full flex flex-col gap-6 md:gap-10">
+
+        {/* TOP LAYER (Featured 3) — horizontal on laptop, vertical on phone */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-10">
+          {GALLERY_IMAGES.slice(0, 3).map((img, i) => (
+            <GalleryCard
+              key={img.id}
+              img={img}
+              i={i}
+              isMobile={isMobile}
+              openLightbox={openLightbox}
+            />
+          ))}
+        </div>
+
+        {/* REST OF GALLERY (Masonry) */}
         <div className="columns-1 md:columns-2 2xl:columns-3 gap-6 md:gap-10 space-y-6 md:space-y-10">
-          {GALLERY_IMAGES.map((img, i) =>
-            isMobile ? (
-              // ── MOBILE: plain div + CSS fade + expand button ──
-              <div
-                key={img.id}
-                className="gallery-card-fadein relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 shadow-md break-inside-avoid"
-                style={{ animationDelay: `${(i % 4) * 0.06}s` }}
-              >
-                <img
-                  src={img.src}
-                  alt={`Archive ${i + 1}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-auto block rounded-[2rem]"
-                />
-                {/* ── Expand / Fullscreen button ── */}
-                <button
-                  className="gallery-expand-btn"
-                  aria-label="View fullscreen"
-                  onClick={() => openLightbox(img.src)}
-                >
-                  {/* Expand icon (same as the four-corner icon in the prompt) */}
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 3 21 3 21 9" />
-                    <polyline points="9 21 3 21 3 15" />
-                    <line x1="21" y1="3" x2="14" y2="10" />
-                    <line x1="3" y1="21" x2="10" y2="14" />
-                  </svg>
-                </button>
-              </div>
-            ) : (
-              // ── DESKTOP: full framer-motion + hover effects ──
-              <motion.div
-                key={img.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ delay: (i % 4) * 0.1, duration: 0.6, type: 'spring' }}
-                className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-white/5 cursor-pointer shadow-lg shadow-black/5 dark:shadow-none hover:shadow-cyan-500/20 break-inside-avoid"
-              >
-                <img
-                  src={img.src}
-                  alt={`Archive ${i + 1}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-auto block rounded-[2rem] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 group-hover:brightness-110"
-                />
-                {/* Inner glass border */}
-                <div className="absolute inset-0 rounded-[2rem] border border-black/5 dark:border-white/10 pointer-events-none z-20 transition-all duration-300 group-hover:border-cyan-400/50" />
-              </motion.div>
-            )
-          )}
+          {GALLERY_IMAGES.slice(3).map((img, i) => (
+            <GalleryCard
+              key={img.id}
+              img={img}
+              i={i}
+              isMobile={isMobile}
+              openLightbox={openLightbox}
+            />
+          ))}
         </div>
       </div>
       {/* ── Mobile Lightbox ── */}

@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ─────────────────────────────────────────────────────────────────────────────
 const ALL_MEMBERS = [
   // ── Year 4 ─────────────────────────────────────────────
-  { year: 4, name: 'Anmol Sharan', image: '/PHOTOS/anmol.jpg', instagram: null, linkedin: null },
+  { year: 4, name: 'Anmol Sharan', image: '/PHOTOS/anmol.jpeg', instagram: 'https://www.instagram.com/anmol.0927', linkedin: 'https://www.linkedin.com/in/anmol-sharan-8a01172b7' },
   { year: 4, name: 'Chinmayee D', image: '/PHOTOS/Chinmayee.jpeg', instagram: null, linkedin: null },
   { year: 4, name: 'Rishabh Ojha', image: '/PHOTOS/rishabh.jpg', instagram: 'https://www.instagram.com/yah_rishabh', linkedin: 'https://www.linkedin.com/in/rishabh-ojha-854775294' },
   { year: 4, name: 'Satyam Verma', image: '/PHOTOS/satyam.jpeg', instagram: 'https://www.instagram.com/satyam1260', linkedin: 'https://www.linkedin.com/in/satyam-verma-0b9b922aa/' },
