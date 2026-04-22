@@ -11,7 +11,10 @@ import {
   Command as CommandIcon,
   Ghost,
   Gem,
-  Cpu
+  Cpu,
+  Eye,
+  Download,
+  FileText
 } from 'lucide-react';
 import { CosmicParallaxBg } from '@/components/parallax-cosmic-background';
 import { LightHeroBg }    from '@/components/light-hero-bg';
@@ -114,317 +117,257 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         .animate-text-reveal {
           animation: textReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        .animate-marquee { animation: marquee 40s linear infinite; }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
         .delay-400 { animation-delay: 0.4s; }
         .delay-500 { animation-delay: 0.5s; }
 
-        /* SPONSORS BAR — Pro UI with beautiful colors */
-        
-        /* Dark mode bar */
-        .sponsors-bar {
+        /* ── BROCHURE BAR ── */
+        .brochure-bar {
           background: linear-gradient(
-            to bottom,
-            rgba(2,6,23,0.0) 0%,
-            rgba(2,6,23,0.72) 100%
+            to top,
+            rgba(2,6,23,0.85) 0%,
+            rgba(2,6,23,0.50) 60%,
+            rgba(2,6,23,0.0) 100%
           );
-          border-top: 1px solid rgba(255,255,255,0.08);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          box-shadow: 0 -8px 40px rgba(0,0,0,0.25);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        :root:not(.dark) .brochure-bar {
+          background: linear-gradient(
+            to top,
+            rgba(255,255,255,0.92) 0%,
+            rgba(249,250,251,0.75) 60%,
+            rgba(255,255,255,0.0) 100%
+          );
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
         }
 
-        /* Light mode — VIBRANT COLOR PALETTE */
-        :root:not(.dark) .sponsors-bar {
-          background: linear-gradient(
-            135deg,
-            rgba(255,255,255,0) 0%,
-            rgba(249,250,251,0.85) 50%,
-            rgba(241,245,249,0.95) 100%
-          );
-          border-top: 1px solid rgba(147,197,253,0.3);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          box-shadow: 
-            0 -8px 32px rgba(59,130,246,0.06),
-            0 -2px 8px rgba(168,85,247,0.04),
-            0 -1px 0 rgba(147,197,253,0.2) inset;
-        }
-
-        /* Gradient accent line — VIBRANT */
-        .sponsors-gradient-line {
-          height: 2px;
+        /* Animated gradient line */
+        .brochure-top-line {
+          height: 1.5px;
           background: linear-gradient(
             90deg,
-            transparent  0%,
-            #22d3ee      20%,
-            #6366f1      50%,
-            #ec4899      80%,
+            transparent 0%,
+            #22d3ee 20%,
+            #6366f1 40%,
+            #ec4899 60%,
+            #f59e0b 80%,
             transparent 100%
           );
           background-size: 200% 100%;
-          animation: shimmerLine 4s linear infinite;
+          animation: shimmerLine 3s linear infinite;
         }
         @keyframes shimmerLine {
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }
         }
-        :root:not(.dark) .sponsors-gradient-line {
+        :root:not(.dark) .brochure-top-line {
+          height: 2px;
           background: linear-gradient(
             90deg,
-            transparent  0%,
-            #3b82f6      15%,
-            #8b5cf6      35%,
-            #ec4899      55%,
-            #f59e0b      75%,
-            #10b981      90%,
+            transparent 0%,
+            #3b82f6 15%,
+            #8b5cf6 35%,
+            #ec4899 55%,
+            #f59e0b 75%,
+            #10b981 90%,
             transparent 100%
           );
           background-size: 200% 100%;
-          animation: shimmerLine 4s linear infinite;
-          opacity: 1;
         }
 
-        /* Label — COLORFUL */
-        .sponsors-label {
-          font-size: 9px;
-          font-weight: 900;
-          letter-spacing: 0.5em;
-          text-transform: uppercase;
-          background: linear-gradient(90deg, #22d3ee, #6366f1);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+        /* PDF icon pulse glow */
+        @keyframes pdfPulse {
+          0%, 100% { box-shadow: 0 0 8px rgba(34,211,238,0.15), 0 0 0 rgba(99,102,241,0); }
+          50%      { box-shadow: 0 0 16px rgba(34,211,238,0.3), 0 0 30px rgba(99,102,241,0.1); }
         }
-        :root:not(.dark) .sponsors-label {
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          font-weight: 800;
-          filter: drop-shadow(0 2px 4px rgba(59,130,246,0.1));
+        .pdf-icon-wrap {
+          animation: pdfPulse 3s ease-in-out infinite;
+        }
+        :root:not(.dark) .pdf-icon-wrap {
+          animation: pdfPulseLight 3s ease-in-out infinite;
+        }
+        @keyframes pdfPulseLight {
+          0%, 100% { box-shadow: 0 0 8px rgba(99,102,241,0.1), 0 0 0 rgba(236,72,153,0); }
+          50%      { box-shadow: 0 0 16px rgba(99,102,241,0.2), 0 0 30px rgba(236,72,153,0.08); }
         }
 
-        /* Sponsor item pill */
-        .sponsor-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 7px 16px;
-          border-radius: 999px;
-          border: 1px solid transparent;
-          opacity: 0.42;
-          filter: grayscale(1);
-          transition: opacity 0.3s ease, filter 0.3s ease,
-                      transform 0.25s ease, border-color 0.3s ease,
-                      background 0.3s ease, box-shadow 0.3s ease;
-          cursor: default;
-          white-space: nowrap;
+        /* Button hover shimmer */
+        @keyframes btnShimmer {
+          0%   { background-position: -200% center; }
+          100% { background-position: 200% center; }
         }
-        .sponsor-item:hover {
-          opacity: 1;
-          filter: grayscale(0);
-          transform: translateY(-2px) scale(1.04);
-          border-color: rgba(34,211,238,0.35);
-          background: rgba(34,211,238,0.06);
-          box-shadow: 0 4px 20px rgba(34,211,238,0.12);
-        }
-
-        /* Light mode sponsor item — COLORFUL & VIBRANT */
-        :root:not(.dark) .sponsor-item {
-          opacity: 0.65;
-          border: 1px solid rgba(148,163,184,0.1);
-          background: linear-gradient(
-            135deg,
-            rgba(255,255,255,0.6),
-            rgba(249,250,251,0.4)
-          );
-          box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-        :root:not(.dark) .sponsor-item:hover {
-          opacity: 1;
-          border-color: rgba(139,92,246,0.4);
-          background: linear-gradient(
-            135deg,
-            rgba(255,255,255,0.95),
-            rgba(239,246,255,0.8)
-          );
-          box-shadow: 
-            0 8px 20px rgba(139,92,246,0.15),
-            0 2px 6px rgba(59,130,246,0.1),
-            0 0 0 1px rgba(236,72,153,0.1);
-          transform: translateY(-2px) scale(1.04);
-        }
-
-        /* Sponsor name text — COLORFUL */
-        .sponsor-name {
-          font-size: 11px;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.90);
-          line-height: 1;
-          transition: color 0.3s ease;
-        }
-        :root:not(.dark) .sponsor-name {
-          background: linear-gradient(135deg, #1e293b, #334155);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          font-weight: 700;
-        }
-        :root:not(.dark) .sponsor-item:hover .sponsor-name {
-          background: linear-gradient(135deg, #0f172a, #1e293b);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        /* Sponsor icon — COLORFUL */
-        .sponsor-icon {
-          color: rgba(255,255,255,0.80);
-          transition: all 0.3s ease;
-        }
-        :root:not(.dark) .sponsor-icon {
-          color: #64748b;
-        }
-        .sponsor-item:hover .sponsor-icon {
-          color: #22d3ee;
-        }
-        :root:not(.dark) .sponsor-item:hover .sponsor-icon {
-          color: #8b5cf6;
-          filter: drop-shadow(0 2px 4px rgba(139,92,246,0.3));
-        }
-
-        /* Dot separator — COLORFUL */
-        .sponsor-dot {
-          width: 3px;
-          height: 3px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.20);
-          flex-shrink: 0;
-        }
-        :root:not(.dark) .sponsor-dot {
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          opacity: 0.3;
-        }
-
-        /* Label dividers — COLORFUL light mode */
-        :root:not(.dark) .h-px {
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(59,130,246,0.4),
-            rgba(139,92,246,0.4),
-            rgba(236,72,153,0.3),
-            transparent
-          ) !important;
+        .brochure-btn-view:hover,
+        .brochure-btn-dl:hover {
+          animation: btnShimmer 1.5s ease-in-out;
         }
       `}</style>
 
-      <div
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-end text-center px-4 sm:px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[30%] sm:bottom-[24%] lg:bottom-[46%] xl:bottom-[48%]"
-      >
 
-        {/* Description — COLORFUL */}
-        <p className={`max-w-xl flex flex-wrap justify-center text-center text-sm sm:text-base md:text-lg leading-relaxed font-medium mb-8 sm:mb-10 lg:mb-12 transition-colors duration-300 ${
+      {/* Description + CTA Buttons */}
+
+      {/* MOBILE: anchored just below the horizon, flows downward */}
+      <div className="sm:hidden absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-start text-center px-6 w-full max-w-[90vw] pointer-events-none top-[48%]">
+        {/* Description */}
+        <p className={`max-w-xs flex flex-wrap justify-center text-center text-sm leading-relaxed font-medium mb-6 transition-colors duration-300 ${
           isDark ? 'text-white/60' : 'text-transparent bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 bg-clip-text'
         }`}>
           {"WE JUST DON'T ORGANIZE EVENTS, WE CREATE MOMENTS".split(" ").map((word, i) => (
-            <span
-              key={i}
-              className="inline-block animate-text-reveal opacity-0"
-              style={{ animationDelay: `${0.3 + i * 0.08}s` }}
-            >
+            <span key={i} className="inline-block animate-text-reveal opacity-0" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
               {word}&nbsp;
             </span>
           ))}
         </p>
-
-        {/* CTA Buttons — COLORFUL */}
-        <div className="animate-fade-in delay-400 flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center w-full max-w-xs sm:max-w-none pointer-events-auto lg:translate-y-8 xl:translate-y-10">
+        <div className="animate-fade-in delay-400 flex flex-col gap-3 justify-center w-full max-w-xs pointer-events-auto">
           <MagneticButton
             onClick={() => scrollTo(refs.eventsRef)}
-            className={`group inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 sm:px-10 sm:py-5 text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
-              isDark
-                ? 'bg-white text-[#090A0F] hover:bg-cyan-300 shadow-cyan-500/20'
-                : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 shadow-xl shadow-purple-500/25'
+            className={`group inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
+              isDark ? 'bg-white text-[#090A0F] hover:bg-cyan-300 shadow-cyan-500/20' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl shadow-purple-500/25'
             }`}
           >
             Check Events
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </MagneticButton>
-
           <MagneticButton
             onClick={() => scrollTo(refs.teamRef)}
-            className={`group inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 sm:px-10 sm:py-5 text-sm font-black uppercase tracking-widest backdrop-blur-md transition-all ${
-              isDark
-                ? 'border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30'
-                : 'border-blue-300 bg-gradient-to-r from-white/80 via-blue-50/60 to-purple-50/60 hover:border-purple-300 shadow-md hover:shadow-lg'
+            className={`group inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-sm font-black uppercase tracking-widest backdrop-blur-md transition-all ${
+              isDark ? 'border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30' : 'border-blue-300 bg-gradient-to-r from-white/80 via-blue-50/60 to-purple-50/60 hover:border-purple-300 shadow-md'
             }`}
           >
-            <Play className={`w-4 h-4 fill-current transition-transform group-hover:scale-110 ${
-              isDark ? '' : 'text-blue-600 group-hover:text-purple-600 transition-colors'
-            }`} />
-            <span className={isDark ? '' : 'text-transparent bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text'}>
-              Meet the Team
-            </span>
+            <Play className={`w-4 h-4 fill-current ${isDark ? '' : 'text-blue-600'}`} />
+            <span className={isDark ? '' : 'text-transparent bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text'}>Meet the Team</span>
           </MagneticButton>
         </div>
       </div>
 
-      {/* Sponsors Marquee */}
+      {/* DESKTOP (sm+): bottom-anchored, flows upward */}
+      <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 z-10 flex-col items-center justify-end text-center px-8 w-full max-w-[90vw] md:max-w-4xl pointer-events-none bottom-[24%] lg:bottom-[30%]">
+        <p className={`max-w-xl flex flex-wrap justify-center text-center text-base md:text-lg leading-relaxed font-medium mb-10 transition-colors duration-300 ${
+          isDark ? 'text-white/60' : 'text-transparent bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 bg-clip-text'
+        }`}>
+          {"WE JUST DON'T ORGANIZE EVENTS, WE CREATE MOMENTS".split(" ").map((word, i) => (
+            <span key={i} className="inline-block animate-text-reveal opacity-0" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+              {word}&nbsp;
+            </span>
+          ))}
+        </p>
+        <div className="animate-fade-in delay-400 flex flex-row gap-5 justify-center w-full pointer-events-auto">
+          <MagneticButton
+            onClick={() => scrollTo(refs.eventsRef)}
+            className={`group inline-flex items-center justify-center gap-2 rounded-full px-10 py-5 text-sm font-black uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
+              isDark ? 'bg-white text-[#090A0F] hover:bg-cyan-300 shadow-cyan-500/20' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 shadow-xl shadow-purple-500/25'
+            }`}
+          >
+            Check Events
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </MagneticButton>
+          <MagneticButton
+            onClick={() => scrollTo(refs.teamRef)}
+            className={`group inline-flex items-center justify-center gap-2 rounded-full border px-10 py-5 text-sm font-black uppercase tracking-widest backdrop-blur-md transition-all ${
+              isDark ? 'border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30' : 'border-blue-300 bg-gradient-to-r from-white/80 via-blue-50/60 to-purple-50/60 hover:border-purple-300 shadow-md hover:shadow-lg'
+            }`}
+          >
+            <Play className={`w-4 h-4 fill-current transition-transform group-hover:scale-110 ${isDark ? '' : 'text-blue-600 group-hover:text-purple-600 transition-colors'}`} />
+            <span className={isDark ? '' : 'text-transparent bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text'}>Meet the Team</span>
+          </MagneticButton>
+        </div>
+      </div>
+
+      {/* ── Sponsorship Brochure Bar ── */}
       <div
         ref={refs?.sponsorsRef}
-        className="sponsors-bar animate-fade-in delay-500 absolute bottom-0 left-0 right-0 z-10 w-full"
+        className="brochure-bar animate-fade-in delay-500 absolute bottom-0 left-0 right-0 z-10 w-full"
       >
-        <div className="sponsors-gradient-line" />
+        <div className="brochure-top-line" />
 
-        <div className="flex items-center justify-center gap-3 pt-3 pb-2">
-          <div className={`h-px w-8 bg-gradient-to-r from-transparent ${
+        {/* Sponsor Label */}
+        <div className="flex items-center justify-center gap-3 pt-2.5 pb-1">
+          <div className={`h-px w-6 bg-gradient-to-r from-transparent ${
             isDark ? 'to-cyan-500/50' : 'to-blue-400/40'
           }`} />
-          <span className="sponsors-label">Our Sponsors &amp; Partners</span>
-          <div className={`h-px w-8 bg-gradient-to-l from-transparent ${
+          <span className={`text-[8px] font-black uppercase tracking-[0.4em] ${
+            isDark
+              ? 'bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent'
+              : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent'
+          }`}>
+            Our Sponsors &amp; Partners
+          </span>
+          <div className={`h-px w-6 bg-gradient-to-l from-transparent ${
             isDark ? 'to-indigo-500/50' : 'to-purple-400/40'
           }`} />
         </div>
 
-        <div
-          className="relative flex overflow-hidden w-full py-2 pb-3"
-          style={{
-            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-          }}
-        >
-          <div className="animate-marquee flex items-center gap-0 whitespace-nowrap">
-            {[...CLIENTS, ...CLIENTS].map((client, i) => (
-              <React.Fragment key={i}>
-                <div className="sponsor-item">
-                  {client.image ? (
-                    <img
-                      src={client.image}
-                      alt={client.name}
-                      loading="lazy"
-                      className="h-5 w-auto sm:h-6 object-contain"
-                    />
-                  ) : (
-                    <client.icon className="sponsor-icon h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  )}
-                  <span className="sponsor-name">{client.name}</span>
-                </div>
-                <div className="sponsor-dot" />
-              </React.Fragment>
-            ))}
+        {/* Mobile: 2 rows | Desktop: 1 row */}
+        <div className="py-2 pb-3 px-4 sm:px-8">
+
+          {/* Row 1 on mobile / Left side on desktop */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-5">
+
+            {/* PDF icon + label */}
+            <div className="flex items-center gap-2.5">
+              <div className={`pdf-icon-wrap flex-shrink-0 flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl ${
+                isDark
+                  ? 'bg-gradient-to-br from-cyan-500/15 to-indigo-500/15 border border-cyan-400/20'
+                  : 'bg-gradient-to-br from-blue-100 to-purple-100 border border-blue-200/50'
+              }`}>
+                <FileText className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                  isDark ? 'text-cyan-400' : 'text-indigo-600'
+                }`} />
+              </div>
+              <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] ${
+                isDark
+                  ? 'bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent'
+                  : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent'
+              }`}>
+                Sponsorship Brochure
+              </span>
+            </div>
+
+            {/* Separator — desktop only */}
+            <div className={`hidden sm:block flex-shrink-0 w-px h-6 ${
+              isDark ? 'bg-white/10' : 'bg-slate-200'
+            }`} />
+
+            {/* Buttons */}
+            <div className="flex items-center gap-2 mt-1.5 sm:mt-0">
+              {/* View */}
+              <a
+                href="/pdf/Avalanche_Sponsor.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`brochure-btn-view group inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                  isDark
+                    ? 'bg-white/[0.06] text-white/80 border border-white/10 hover:bg-white/[0.12] hover:border-cyan-400/30 hover:text-cyan-300 hover:shadow-lg hover:shadow-cyan-500/10'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:border-purple-300 hover:text-purple-700 hover:shadow-lg hover:shadow-purple-100/50'
+                }`}
+              >
+                <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:scale-110" />
+                View
+              </a>
+
+              {/* Download */}
+              <a
+                href="/pdf/Avalanche_Sponsor.pdf"
+                download="Avalanche_Sponsor.pdf"
+                className={`brochure-btn-dl group inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                  isDark
+                    ? 'bg-gradient-to-r from-cyan-500/25 to-indigo-500/25 text-cyan-300 border border-cyan-400/25 hover:from-cyan-500/35 hover:to-indigo-500/35 hover:border-cyan-300/50 hover:shadow-lg hover:shadow-cyan-500/15'
+                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-white border-0 shadow-md shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 hover:brightness-110'
+                }`}
+              >
+                <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:translate-y-0.5" />
+                Download
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
+
+
     </section>
   );
 });

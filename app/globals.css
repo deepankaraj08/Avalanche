@@ -315,13 +315,11 @@
 /* ── Subtitle — below horizon, spaced-out tracking ── */
 #subtitle {
   position: absolute;
-  bottom: 13%;
-  /* Lowered once more as requested */
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 1rem;
-  /* Tighter gap on mobile */
   font-size: clamp(0.5rem, 1vw, 0.85rem);
   font-weight: 700;
   letter-spacing: 0.55em;
@@ -334,8 +332,7 @@
 
 @media (min-width: 640px) {
   #subtitle {
-    bottom: 18%;
-    /* Raised further for laptop as requested */
+    bottom: 14%;
     gap: 2rem;
   }
 }
