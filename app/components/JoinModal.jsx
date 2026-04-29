@@ -13,7 +13,7 @@ export default function JoinModal({ onClose }) {
     return () => { document.body.style.overflow = originalStyle; };
   }, []);
 
-  const WHATSAPP_LINK = "https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t";
+  const WHATSAPP_LINK = "https://chat.whatsapp.com/BQiSSJc3GMhDj6Q1vAMohz?mode=gi_t";
 
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 overflow-hidden">

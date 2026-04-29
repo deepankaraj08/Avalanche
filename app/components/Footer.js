@@ -23,7 +23,7 @@ const SOCIAL_LINKS = [
   },
   {
     icon: <FaWhatsapp size={18} />,
-    href: 'https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t',
+    href: 'https://chat.whatsapp.com/BQiSSJc3GMhDj6Q1vAMohz?mode=gi_t',
     label: 'WhatsApp',
     color: 'hover:text-emerald-400 hover:border-emerald-500/60 hover:shadow-emerald-500/20',
     bg: 'hover:bg-emerald-500/10',
@@ -32,7 +32,7 @@ const SOCIAL_LINKS = [
 
 const Footer = () => {
   const openWhatsApp = () => {
-    window.open('https://chat.whatsapp.com/EnEaVSW1D8mDo16ySfihHm?mode=gi_t', '_blank');
+    window.open('https://chat.whatsapp.com/BQiSSJc3GMhDj6Q1vAMohz?mode=gi_t', '_blank');
   };
 
   return (

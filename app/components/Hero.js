@@ -304,63 +304,41 @@ const Hero = forwardRef(({ scrollTo, refs }, ref) => {
         <div className="py-2 pb-3 px-4 sm:px-8">
 
           {/* Row 1 on mobile / Left side on desktop */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-5">
+          <div className="flex flex-row items-center justify-center w-full sm:w-auto">
 
-            {/* PDF icon + label */}
-            <div className="flex items-center gap-2.5">
-              <div className={`pdf-icon-wrap flex-shrink-0 flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl ${
+            {/* Sponsor Logos */}
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-8 mt-1 w-full max-w-[400px] sm:max-w-none">
+              {/* Karan Textiles */}
+              <div className={`group flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-3 px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-pointer ${
                 isDark
-                  ? 'bg-gradient-to-br from-cyan-500/15 to-indigo-500/15 border border-cyan-400/20'
-                  : 'bg-gradient-to-br from-blue-100 to-purple-100 border border-blue-200/50'
+                  ? 'bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] hover:border-cyan-400/30 shadow-[0_0_10px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(34,211,238,0.15)]'
+                  : 'bg-white/60 border border-slate-200/60 hover:bg-white hover:border-purple-300/60 shadow-sm hover:shadow-md'
               }`}>
-                <FileText className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
-                  isDark ? 'text-cyan-400' : 'text-indigo-600'
-                }`} />
+                <div className="bg-white p-0.5 sm:p-1.5 rounded-md sm:rounded-lg shrink-0">
+                  <img src="/sponsor/KARAN%20%20logo.jpeg" alt="Karan Textiles Logo" className="h-5 w-5 sm:h-8 sm:w-8 object-contain rounded-sm mix-blend-multiply" />
+                </div>
+                <span className={`text-[8px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase text-left sm:text-center leading-tight ${
+                  isDark ? 'text-slate-300 group-hover:text-cyan-300' : 'text-slate-600 group-hover:text-purple-700'
+                }`}>
+                  Karan<br className="sm:hidden" /> Textiles
+                </span>
               </div>
-              <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.25em] ${
+
+              {/* Fries Factory */}
+              <div className={`group flex flex-1 sm:flex-none items-center justify-center gap-1.5 sm:gap-3 px-2 py-1.5 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-pointer ${
                 isDark
-                  ? 'bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent'
-                  : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 bg-clip-text text-transparent'
+                  ? 'bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] hover:border-cyan-400/30 shadow-[0_0_10px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(34,211,238,0.15)]'
+                  : 'bg-white/60 border border-slate-200/60 hover:bg-white hover:border-purple-300/60 shadow-sm hover:shadow-md'
               }`}>
-                Sponsorship Brochure
-              </span>
-            </div>
-
-            {/* Separator — desktop only */}
-            <div className={`hidden sm:block flex-shrink-0 w-px h-6 ${
-              isDark ? 'bg-white/10' : 'bg-slate-200'
-            }`} />
-
-            {/* Buttons */}
-            <div className="flex items-center gap-2 mt-1.5 sm:mt-0">
-              {/* View */}
-              <a
-                href="/pdf/Avalanche_Sponsor.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`brochure-btn-view group inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 cursor-pointer ${
-                  isDark
-                    ? 'bg-white/[0.06] text-white/80 border border-white/10 hover:bg-white/[0.12] hover:border-cyan-400/30 hover:text-cyan-300 hover:shadow-lg hover:shadow-cyan-500/10'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-purple-300 hover:text-purple-700 hover:shadow-lg hover:shadow-purple-100/50'
-                }`}
-              >
-                <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:scale-110" />
-                View
-              </a>
-
-              {/* Download */}
-              <a
-                href="/pdf/Avalanche_Sponsor.pdf"
-                download="Avalanche_Sponsor.pdf"
-                className={`brochure-btn-dl group inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 cursor-pointer ${
-                  isDark
-                    ? 'bg-gradient-to-r from-cyan-500/25 to-indigo-500/25 text-cyan-300 border border-cyan-400/25 hover:from-cyan-500/35 hover:to-indigo-500/35 hover:border-cyan-300/50 hover:shadow-lg hover:shadow-cyan-500/15'
-                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-white border-0 shadow-md shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 hover:brightness-110'
-                }`}
-              >
-                <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:translate-y-0.5" />
-                Download
-              </a>
+                <div className="bg-white p-0.5 sm:p-1.5 rounded-md sm:rounded-lg shrink-0">
+                  <img src="/sponsor/fries_factory.png" alt="Fries Factory Logo" className="h-5 w-5 sm:h-8 sm:w-8 object-contain rounded-sm mix-blend-multiply" />
+                </div>
+                <span className={`text-[8px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase text-left sm:text-center leading-tight ${
+                  isDark ? 'text-slate-300 group-hover:text-cyan-300' : 'text-slate-600 group-hover:text-purple-700'
+                }`}>
+                  Fries<br className="sm:hidden" /> Factory
+                </span>
+              </div>
             </div>
 
           </div>
